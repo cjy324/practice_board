@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import container.Container;
+import controller.ArticleController;
 import controller.DownloadController;
 import controller.UploadController;
 
+@SuppressWarnings("serial")
 @WebServlet("/usr/*")
 public class UsrDispatcherServlet extends DispatcherServlet {
 
@@ -39,6 +41,19 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = downloadController.progress(request, response);
 			}
 		}
+		if (controllerName.equals("article")) {
+			ArticleController articleController = Container.articleController;
+			if(requestName.equals("list")) {
+				jspPath = articleController.list(request, response);
+			}else if(requestName.equals("detail")) {
+				jspPath = articleController.detail(request, response);
+			}else if(requestName.equals("write")) {
+				jspPath = articleController.write(request, response);
+			}else if(requestName.equals("modify")) {
+				jspPath = articleController.modify(request, response);
+			}
+		}
+		
 
 		//System.out.println("jspPath: " + jspPath);
 		

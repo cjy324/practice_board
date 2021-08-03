@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //각 서블릿의 중복되는 코드를 템플릿메서드 패턴으로 중복제거
+@SuppressWarnings("serial")
 public abstract class DispatcherServlet extends HttpServlet {
 
 	// doGet 메서드 호출
@@ -44,7 +45,7 @@ public abstract class DispatcherServlet extends HttpServlet {
 		}
 		
 		// (3) (1),(2)의 결과로 도출된 jspPath를 받고 forward 수행
-		//doAfterAction(request, response, jspPath);
+		doAfterAction(request, response, jspPath);
 //		
 //		RequestDispatcher rd = request.getRequestDispatcher(jspPath + ".jsp");
 //		rd.forward(request, response);
@@ -64,7 +65,7 @@ public abstract class DispatcherServlet extends HttpServlet {
 		String[] requestUriBits = requestURI.split("/");
 
 		// 만약, requestURIBits.length가 5보다 작으면
-		// 즉, localhost:8086/upload/usr/upload/server 와 같은 형식이 아니면 중지
+		// 즉, localhost:8086/practiceBoard/usr/upload/server 와 같은 형식이 아니면 중지
 		int minBitsCount = 5;
 
 		if (requestUriBits.length < minBitsCount) {
@@ -88,10 +89,10 @@ public abstract class DispatcherServlet extends HttpServlet {
 	private void doAfterAction(HttpServletRequest request, HttpServletResponse response, String jspPath)
 			throws ServletException, IOException {
 
-//		// DB 서버 연결 종료
+		// DB 서버 연결 종료
 //		MysqlUtil.closeConnection();
-//		RequestDispatcher rd = request.getRequestDispatcher("/" + jspPath + ".jsp");
-//		
-//		rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("/jsp/" + jspPath + ".jsp");
+		
+		rd.forward(request, response);
 	}
 }
