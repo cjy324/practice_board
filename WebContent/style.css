@@ -10,11 +10,72 @@ a{
 }
 
 /* 커스터마이징 */
-/* 업로더 */
 .main_section{
     text-align: center;
     margin-bottom: 50px;
 }
+/* 게시판 리스트 */
+:root {
+  --list_body__cell_id__width: 35px;
+  --list_body__cell_regDate__width: 90px;
+  --list_body__cell_writer__width: 70px;
+  --list_body__cell_file__width: 40px;
+  --list_body__cell_title__width: calc(100% - var(--list_body__cell_id__width) - var(--list_body__cell_regDate__width) - var(--list_body__cell_writer__width) - var(--list_body__cell_file__width));
+}
+.article_list_body{
+	display: inline-block;
+    height: 300px;
+    width: 70%;
+    border: solid black 3px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.article_list_body__head{
+	display: flex;
+	width: 100%;
+	border-bottom: 2px solid;
+}
+.article_list_body__body{
+	display: block;
+	width: 100%;
+}
+.article_list_body__cell{
+	display: flex;
+	width: 100%;
+	border-bottom: 1px solid;
+}
+.article_list_body__cell > .list_body__cell_title{
+	text-align: left;
+}
+
+
+.list_body__cell_id{
+	width: var(--list_body__cell_id__width);	
+}
+.list_body__cell_regDate{
+	border-left: 2px solid;
+	border-right: 2px solid;
+	width: var(--list_body__cell_regDate__width);	
+}
+.list_body__cell_writer{
+	border-left: 2px solid;
+	border-right: 2px solid;
+	width: var(--list_body__cell_writer__width);	
+}
+.list_body__cell_file{
+	width: var(--list_body__cell_file__width);	
+}
+.list_body__cell_title{
+	width: var(--list_body__cell_title__width);	
+}
+
+.article_list_foot{
+	display: inline-block;
+	width: 70%;
+	text-align: right;
+}
+
+/* 업로더 */
 .uploader_body{
     display: inline-block;
     height: 300px;
