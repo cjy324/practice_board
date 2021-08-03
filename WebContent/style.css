@@ -124,6 +124,23 @@ a{
 	width: 70%;
 	text-align: right;
 }
+
+
+/* 게시물 수정페이지 */
+.article_modify_body{
+	display: inline-block;
+    height: 100%;
+    width: 70%;
+    border: solid black 3px;
+    border-radius: 5px;
+}
+.article_modify_foot{
+	display: inline-block;
+	width: 70%;
+	text-align: right;
+}
+
+
 /* 에디터 */
 .editor_header{
 	width: 100%; 
