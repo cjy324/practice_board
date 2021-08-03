@@ -25,28 +25,36 @@
 				<div class="article_list_body__cell">
 					<div class="list_body__cell_id">1</div>
 					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">&nbsp 테스트 제목1</div>
+					<div class="list_body__cell_title">
+						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
+					</div>
 					<div class="list_body__cell_writer">테스터1</div>
 					<div class="list_body__cell_file">2</div>
 				</div>
 				<div class="article_list_body__cell">
 					<div class="list_body__cell_id">1</div>
 					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">&nbsp 테스트 제목1</div>
+					<div class="list_body__cell_title">
+						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
+					</div>
 					<div class="list_body__cell_writer">테스터1</div>
 					<div class="list_body__cell_file">2</div>
 				</div>
 				<div class="article_list_body__cell">
 					<div class="list_body__cell_id">1</div>
 					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">&nbsp 테스트 제목1</div>
+					<div class="list_body__cell_title">
+						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
+					</div>
 					<div class="list_body__cell_writer">테스터1</div>
 					<div class="list_body__cell_file">2</div>
 				</div>
 				<div class="article_list_body__cell">
 					<div class="list_body__cell_id">1</div>
 					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">&nbsp 테스트 제목1</div>
+					<div class="list_body__cell_title">
+						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
+					</div>
 					<div class="list_body__cell_writer">테스터1</div>
 					<div class="list_body__cell_file">2</div>
 				</div>	
