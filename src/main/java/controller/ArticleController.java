@@ -24,7 +24,7 @@ public class ArticleController {
 			
 			
 			return "usr/article/write";
-		}
+		}		
 		
 		public String modify(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
