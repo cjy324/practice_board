@@ -82,22 +82,25 @@ a{
 /* 게시물 상세페이지 */
 .article_detail_body{
 	display: inline-block;
-    height: 300px;
-    width: 70%;
+    height: 600px;
+    width: 90%;
     border: solid black 3px;
     border-radius: 5px;
     font-size: 14px;
 }
 .article_detail_body__head{
 	width: 100%;
-	border-bottom: 2px solid;
 	text-align: left;
 }
 .article_detail_body__body{
 	display: block;
 	width: 100%;
-	height: 75%;
+	height: 330px;
 	text-align: left;
+	overflow-y: scroll;
+	border-top: 2px solid;
+	border-bottom: 2px solid; 
+	margin-bottom: 3px;
 }
 .detail_body__content{
 	width: 96%;
@@ -297,21 +300,21 @@ label, button{
 /* 다운로더 */
 .downloader_body{
     display: inline-block;
-    height: 300px;
-    width: 70%;
+    height: 180px;
+    width: 98%;
     border: solid black 3px;
     border-radius: 5px;
 }
 .download_area{
-    height: 206px;
+    height: 80px;
     width: 100%;
     text-align: left;  
     border-top: solid rgb(167, 167, 167) 2px;
     border-bottom: solid rgb(167, 167, 167) 2px;
+    overflow-y: scroll; 
 }
 .downloadZone{
 	height: 100%;
-	border: 2px solid;
 	z-index: 500;
 	padding-left: 7px;
     padding-right: 7px;

@@ -25,6 +25,38 @@
 					테스트 내용입니다.
 				</div>
 			</div>
+			<div class="downloader_body">
+	            <div id="top_area" class="top_area">
+	                <input type="checkbox" checked="checked">
+	                <div>파일 이름</div>
+	                <div>파일 크기</div>
+	            </div>
+	            <div id="download_area" class="download_area">
+					<ul id="downloadZone" class="downloadZone"></ul>
+	            </div>
+	            <div id="info_area" class="info_area">
+	                <ul>
+	                    <li id="current_file_info" class="current_file_info">
+	                        <span>3</span>
+	                        개 ,
+	                        <span>230000 byte</span>
+	                    </li>
+	                </ul>
+	            </div>
+	            <div id="btn_area" class="btn_area">
+	                <table>
+	                    <tbody>
+	                        <tr>
+	                            <td>
+	                            	<button id="button_down" type="button" onclick="startDownload(0)">
+	                            		<span>다운로드</span>
+	                            	</button>
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
 		</div>
 		<div class="article_detail_foot">
 			<button type="button" onclick="location.href='../article/list'" style="cursor: pointer;">
