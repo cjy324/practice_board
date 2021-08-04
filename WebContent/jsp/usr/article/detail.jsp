@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,14 +16,14 @@
 		</div>
 		<div class="article_detail_body">
 			<div class="article_detail_body__head">
-				<div class="detail_body__cell_id">번호: 1</div>
-				<div class="detail_body__cell_regDate">작성일: 2021-08-03</div>
-				<div class="detail_body__cell_writer">작성자: 테스터1</div>
-				<div class="detail_body__cell_title">제목: 테스트 제목1</div>				
+				<div class="detail_body__cell_id">번호: ${article.id}</div>
+				<div class="detail_body__cell_regDate">작성일: ${article.regDate}</div>
+				<div class="detail_body__cell_writer">작성자: ${article.writer}</div>
+				<div class="detail_body__cell_title">제목: ${article.title}</div>				
 			</div>
 			<div class="article_detail_body__body">
 				<div class="detail_body__content">
-					테스트 내용입니다.
+					${article.body}
 				</div>
 			</div>
 			<div class="downloader_body">
@@ -62,7 +63,7 @@
 			<button type="button" onclick="location.href='../article/list'" style="cursor: pointer;">
 				글 목록
 			</button>
-			<button type="button" onclick="location.href='../article/modify?id=1'" style="cursor: pointer;">
+			<button type="button" onclick="location.href='../article/modify?id=${article.id}'" style="cursor: pointer;">
 				글 수정
 			</button>
 		</div>

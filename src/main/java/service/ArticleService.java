@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import container.Container;
@@ -16,6 +17,20 @@ public class ArticleService {
 	
 	public List<Article> getArticles(){
 		return articleDao.getArticles();
+	}
+
+	public Article getArticleById(int id) {
+		List<Article> articles = articleDao.getArticles();
+		
+		Article article = new Article();
+		
+		for(int i = 0; i < articles.size(); i++) {
+			if(articles.get(i).getId() == id) {
+				article = articles.get(i);
+			}
+		}
+		
+		return article;
 	}
 
 		

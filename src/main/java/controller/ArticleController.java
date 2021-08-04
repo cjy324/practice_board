@@ -33,7 +33,14 @@ public class ArticleController {
 		}
 		
 		public String detail(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			int id = Integer.parseInt(request.getParameter("id"));
 			
+			// article 요청
+			Article article = new Article();
+			article = articleService.getArticleById(id);
+			
+			// 클라이언트에 전달
+			request.setAttribute("article", article);
 			
 			return "usr/article/detail";
 		}

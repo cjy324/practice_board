@@ -29,7 +29,7 @@
 					<div class="list_body__cell_id">${article.id}</div>
 					<div class="list_body__cell_regDate">${article.regDate}</div>
 					<div class="list_body__cell_title">
-						&nbsp <a href="../article/detail?id=1" class="hover-underline">${article.title}</a>
+						&nbsp <a href="../article/detail?id=${article.id}" class="hover-underline">${article.title}</a>
 					</div>
 					<div class="list_body__cell_writer">${article.writer}</div>
 					<div class="list_body__cell_file">2</div>
