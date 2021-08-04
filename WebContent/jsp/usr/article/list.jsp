@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,42 +24,17 @@
 				<div class="list_body__cell_file">첨부</div>
 			</div>
 			<div class="article_list_body__body">
+			<c:forEach var="article" items="${articles}" varStatus="status">
 				<div class="article_list_body__cell">
-					<div class="list_body__cell_id">1</div>
-					<div class="list_body__cell_regDate">2021-08-03</div>
+					<div class="list_body__cell_id">${article.id}</div>
+					<div class="list_body__cell_regDate">${article.regDate}</div>
 					<div class="list_body__cell_title">
-						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
+						&nbsp <a href="../article/detail?id=1" class="hover-underline">${article.title}</a>
 					</div>
-					<div class="list_body__cell_writer">테스터1</div>
+					<div class="list_body__cell_writer">${article.writer}</div>
 					<div class="list_body__cell_file">2</div>
 				</div>
-				<div class="article_list_body__cell">
-					<div class="list_body__cell_id">1</div>
-					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">
-						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
-					</div>
-					<div class="list_body__cell_writer">테스터1</div>
-					<div class="list_body__cell_file">2</div>
-				</div>
-				<div class="article_list_body__cell">
-					<div class="list_body__cell_id">1</div>
-					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">
-						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
-					</div>
-					<div class="list_body__cell_writer">테스터1</div>
-					<div class="list_body__cell_file">2</div>
-				</div>
-				<div class="article_list_body__cell">
-					<div class="list_body__cell_id">1</div>
-					<div class="list_body__cell_regDate">2021-08-03</div>
-					<div class="list_body__cell_title">
-						&nbsp <a href="../article/detail?id=1" class="hover-underline">테스트 제목1</a>
-					</div>
-					<div class="list_body__cell_writer">테스터1</div>
-					<div class="list_body__cell_file">2</div>
-				</div>	
+			</c:forEach>
 			</div>
 		</div>
 		<div class="article_list_foot">
