@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/script.js"></script>
 <title>LIST</title>
 </head>
 <body>

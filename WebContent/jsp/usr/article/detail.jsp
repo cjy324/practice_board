@@ -6,10 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/script.js"></script>
+<script defer src="${pageContext.request.contextPath}/downloader.js"></script>
 <title>DETAIL</title>
 </head>
-<body>
+<body onload="EXAMDownloader.fileLoad()">
 	<section class="main_section">
 		<div class="article_detail_header">
 			<h4>게시물 상세페이지</h4>
@@ -49,7 +49,7 @@
 	                    <tbody>
 	                        <tr>
 	                            <td>
-	                            	<button id="button_down" type="button" onclick="startDownload(0)">
+	                            	<button id="button_down" type="button" onclick="EXAMDownloader.startDownload(0)">
 	                            		<span>다운로드</span>
 	                            	</button>
 	                            </td>
@@ -67,6 +67,7 @@
 				글 수정
 			</button>
 		</div>
+		<iframe id="download_frame" name="download_frame" style="display: none;" src=""></iframe>
 	</section>
 </body>
 </html>
