@@ -5,6 +5,9 @@
     // iframe window 가져오기
     const editWindow = document.getElementById('edit_frame').contentWindow;
 
+    // 게시물 id
+    let id = 0;
+
     // 제목 값 가져오기
     const titleInput = document.getElementById("titleInput");
 
@@ -132,7 +135,7 @@
             
         }
 
-        // 서버로 전송
+        // textContent ajax 전송
         this.saveByAjax = function(textContent) {
             const xhttp = new XMLHttpRequest();
 
@@ -149,7 +152,9 @@
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
-                        console.log(xhttp.responseText);
+                        id = Number(xhttp.responseText);
+                        console.log("id : " + id);
+                        EXAMUploader.setUploadFileList()  // 파일 업로드 시작
                     }else{
                         console.error("------통신 실패------");
                         console.error("req.status: " + req.status);
@@ -237,12 +242,7 @@
     const uploadZone = document.getElementById("uploadZone");
     const uploadFiles = document.getElementsByName("uploadFiles");
     const infoZone = document.getElementById("current_file_info");
-    const allFilesProgressBar = document.getElementById("allFilesProgressBar");
-    const allProgressBar = document.getElementById("allProgressBar");
-    const progressBar = document.getElementById("progressBar");
-    const allFilesMessage = document.getElementById("allFilesMessage");
-    const allMessage = document.getElementById("allMessage");
-    const message = document.getElementById("message");
+    const progressBarZone = document.getElementById("progressBarZone");
 
     
 
@@ -252,11 +252,13 @@
     // Prototype Link - 자신을 만들어낸 객체의 원형
     // Prototype Object - 자신을 통해 만들어질 객체의 원형
     const Uploader = function (){
+
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
             // 상속
             fileInput.click();
         }
+
         // 업로드 될 파일리스트 그리기
         this.showFiles = function(files) {
             let fileListLi = "";	// dropZone에 drop한 파일별 태그 생성
@@ -296,6 +298,7 @@
                 uploadZone.innerHTML = uploadZoneMessage; 
             }
         }
+
         // 파일 업로드를 위한 데이터 셋팅(from Input)
         this.setUploadFiles = function(e) {
             // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
@@ -306,6 +309,7 @@
             // input에 파일이 들어오면 dropZone에 업로드 될 파일리스트 그리기
             this.showFiles(globalFileList);
         }
+
         // 전체 선택/해제
         this.setAllCheckbox = function() {
             if(uploadFiles.length > 0){
@@ -321,6 +325,7 @@
                 }
             }  
         }
+
         // 선택된 파일 삭제
         this.removeSelectedFiles = function() {
             if(confirm("정말 삭제하시겠습니까?") == false){
@@ -374,6 +379,7 @@
             
             this.showFiles(globalFileList);
         }
+
         // 전체 파일 선택 및 삭제
         this.selectAllFilesAndRemove = function() {
             for(let i = 0; i < uploadFiles.length; i++){
@@ -381,6 +387,7 @@
             }
             this.removeSelectedFiles();
         }
+
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
         this.setUploadFileList = function() {
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
@@ -391,15 +398,35 @@
             }
 
             if(globalFileList.length > 0 && forUploadFileList == 0){
-                alert("새로 업로드될 파일이 없습니다.")
+                //alert("새로 업로드될 파일이 없습니다.")
                 return;
             }else if(forUploadFileList.length == 0){
-                alert("선택된 파일이 없습니다.")
+                //alert("선택된 파일이 없습니다.")
                 return;
             }else{
+                this.createProgressBarWindow();
                 this.startUpload(forUploadFileListIndex);
             }
         }
+
+        // 업로드 프로그래스바 창 생성
+        this.createProgressBarWindow = function() {
+
+            let progressTag = "<p id='allFilesMessage' style='font-weight: bold;'></p>"
+                            + "<span style='font-size: 14px;'>총 진행률</span>"
+                            + "<progress id='allFilesProgressBar' value='0' max='100' style='width:50%'></progress>"
+                            + "<br/><br/>"
+                            + "<span style='font-size: 14px;'>파일별 총 진행률</span>"
+                            + "<progress id='allProgressBar' value='0' max='100' style='width:50%'></progress>"
+                            + "<p id='allMessage'></p>"
+                            + "<span style='font-size: 14px;'>분할파일별 진행률</span>"
+                            + "<progress id='progressBar' value='0' max='100' style='width:50%'></progress>"
+                            + "<p id='message'></p>";
+
+            progressBarZone.innerHTML = progressTag;
+            
+        }
+
         // 파일 업로드
         this.startUpload = function(forUploadFileListIndex) {
 
@@ -439,7 +466,8 @@
             /* 분할 끝 */
 
             // 기본 파라미터 정보 담기
-            let params = "&limitSize=" + limitSize;
+            let params = "&relId=" + id;
+                params += "&limitSize=" + limitSize;
                 params += "&originName=" + forUploadFileList[forUploadFileListIndex].name;
                 params += "&originSize=" + forUploadFileList[forUploadFileListIndex].size;
                 params += "&originType=" + forUploadFileList[forUploadFileListIndex].type;
@@ -507,9 +535,16 @@
             /* 분할 파일 전송 끝 */
             }
         }
+
         // ajax통신
         this.startAjax = function(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex) {
 
+            const allFilesProgressBar = document.getElementById("allFilesProgressBar");
+            const allProgressBar = document.getElementById("allProgressBar");
+            const progressBar = document.getElementById("progressBar");
+            const allFilesMessage = document.getElementById("allFilesMessage");
+            const allMessage = document.getElementById("allMessage");
+            const message = document.getElementById("message");
             // console.log("indicator22222: " + indicator);
             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
@@ -606,15 +641,15 @@
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
                             slicedFileIndex++; // index 1 증가
                             // 재귀함수: 함수 내에서 자신을 다시 호출
-                            this.startAjax(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
+                            EXAMUploader.startAjax(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
                         }
                         else if(forUploadFileListIndex < forUploadFileList.length-1){
                             forUploadFileListIndex++;
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
-                            this.startUpload(forUploadFileListIndex);
+                            EXAMUploader.startUpload(forUploadFileListIndex);
                         }else{
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
-                            this.drawUploadedFileList(); // 업로드 후 대기 파일리스트 리셋
+                            EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                         }              
                         // console.log(xhttp.responseText)
                     }else if(req.status === 200 && indicator == false && slicedFileIndex < slicedFiles.length-1){
@@ -640,8 +675,9 @@
             }
             /* 파일 전송을 위한 ajax통신 끝 */
         }
+
         // 업로드 후 대기 파일리스트 리셋
-        this.drawUploadedFileList = function() {
+        this.afterUploaded = function() {
 
             let uploadZoneMessage = "";
                 uploadZoneMessage += "<li style='height:100%; justify-content: center; align-items: center;'>";
@@ -657,6 +693,7 @@
 
             infoZone.innerHTML = resetFileListInfo;
         }
+
         // 업로드 중단 버튼
         this.cancelUpload = function() {
             // xhttp.abort(); // 통신 강제 중단

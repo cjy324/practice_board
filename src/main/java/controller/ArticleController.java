@@ -78,15 +78,18 @@ public class ArticleController {
 				String title = textContent.get("title").toString();
 				String body = textContent.get("body").toString();
 				
-				// DB에 저장
-				articleService.saveContent(title, body);
+				// DB에 저장 후 id값 가져오기
+				int id = articleService.saveContent(title, body);
+				
+				// id값 클라이언트로 리턴
+				response.getWriter().append(String.valueOf(id));
 				
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			return "usr/article/list";
+			return "notJspPath";
 		}
 		
 		public String modify(HttpServletRequest request, HttpServletResponse response) throws IOException {

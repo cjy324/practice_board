@@ -45,7 +45,7 @@ public abstract class DispatcherServlet extends HttpServlet {
 		}
 		
 		// (3) (1),(2)의 결과로 도출된 jspPath를 받고 forward 수행
-		if(!jspPath.equals("download")) {
+		if(!jspPath.equals("notJspPath")) {
 			doAfterAction(request, response, jspPath);
 		}
 		

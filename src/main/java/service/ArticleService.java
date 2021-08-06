@@ -32,8 +32,8 @@ public class ArticleService {
 		return article;
 	}
 
-	public void saveContent(String title, String body) {
-		articleDao.saveContent(title, body);
+	public int saveContent(String title, String body) {
+		return articleDao.saveContent(title, body);
 		
 	}
 

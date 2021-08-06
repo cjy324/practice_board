@@ -166,6 +166,8 @@
 	                </table>
 	            </div>
 	        </div>
+	        <div id="progressBarZone">
+	        </div>
         </div>
     	<div class="article_write_foot">
 			<button type="button" onclick="EXAMEditor.doWrite()" style="cursor: pointer;">

@@ -35,23 +35,28 @@ public class ArticleDao {
 	}
 
 	// 게시물 저장하기
-	public void saveContent(String title, String body) {
+	public int saveContent(String title, String body) {
 		
 		sql = "INSERT INTO article(regDate, writer, title, body)"
 			+ "VALUES(CONVERT(date,GETDATE()),'테스터1', '"
 			+ title + "', '"
-			+ body + "');";
+			+ body + "')"
+			+ " SELECT @@IDENTITY AS id";
 		
+		int id = 0;
 		try {
-			msSqlUtil.insert(sql);
+			id = msSqlUtil.insert(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
+		
+//		int id = getArticleIdByTitleAndBody(title, body);
+		System.out.println("id: " + id);
+		
+		return id;
 		
 	}
-	
 
 		
 }

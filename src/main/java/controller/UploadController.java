@@ -20,6 +20,7 @@ public class UploadController {
 			// 파일에 대한 정보를 parameter로 받기
 			String guid = request.getParameter("guid");
 			int limitSize = Integer.parseInt(request.getParameter("limitSize"));
+			int relId = Integer.parseInt(request.getParameter("relId"));
 			String originName = request.getParameter("originName");
 			long originSize = Long.parseLong(request.getParameter("originSize"));
 			String originType = request.getParameter("originType");
@@ -29,6 +30,7 @@ public class UploadController {
 			// (테스트용)
 			System.out.println("guid : " + guid);
 			System.out.println("limitSize : " + limitSize);
+			System.out.println("relId : " + relId);
 			System.out.println("originName : " + originName);
 			System.out.println("originSize : " + originSize);
 			System.out.println("originType : " + originType);

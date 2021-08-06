@@ -70,7 +70,7 @@ public class MsSqlUtil {
 	}
 
 	// 게시물 저장
-	public void insert(String sql) throws SQLException {
+	public int insert(String sql) throws SQLException {
 		DBconnectionStart();
 
         /* executeQuery vs executeUpdate*/
@@ -78,8 +78,16 @@ public class MsSqlUtil {
         // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
         // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
 		stmt = con.createStatement();
-        stmt.executeUpdate(sql);
+		rs = stmt.executeQuery(sql);
+		int id = 0;
+		
+		while (rs.next()) {
+			id = rs.getInt("id");
+		}
     	
     	DBconnectionEnd();
+    	
+    	return id;
 	}
+
 }

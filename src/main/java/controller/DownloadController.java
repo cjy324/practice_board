@@ -107,7 +107,7 @@ public class DownloadController {
 
 			/* 파일 다운로드(브라우저로 전송) 끝 */
 			
-			return "download";
+			return "notJspPath";
 		}
 		
 		public String progress(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -162,6 +162,6 @@ public class DownloadController {
 				System.out.println("----------------다운로드 완료----------------");
 			}
 			
-			return "download";
+			return "notJspPath";
 		}
 }
