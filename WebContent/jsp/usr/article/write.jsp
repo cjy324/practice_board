@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/common.js"></script>
+<script defer src="${pageContext.request.contextPath}/writer.js"></script>
 <title>WRITE</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
 	                <div>
 	                    <span>제목</span>
 	                </div>
-	                <input type="text" placeholder="제목 입력란">
+	                <input id="titleInput" type="text" placeholder="제목 입력란">
 	            </div>
 	        </div>
         	<div class="editor_body">
@@ -168,7 +168,7 @@
 	        </div>
         </div>
     	<div class="article_write_foot">
-			<button type="button" onclick="alert('저장')" style="cursor: pointer;">
+			<button type="button" onclick="EXAMEditor.doWrite()" style="cursor: pointer;">
 				완료
 			</button>
 			<button type="button" onclick="if(confirm('정말 작성을 취소하시겠습니까?')){location.href='../article/list'}" style="cursor: pointer;">

@@ -17,6 +17,7 @@ public class ArticleDao {
 		sql = null;
 	}
 
+	// 게시물 리스트 가져오기
 	public List<Article> getArticles() {
 		
 		sql = "SELECT * FROM article";
@@ -30,8 +31,25 @@ public class ArticleDao {
 			e.printStackTrace();
 		}
 		
-		
 		return articles;
+	}
+
+	// 게시물 저장하기
+	public void saveContent(String title, String body) {
+		
+		sql = "INSERT INTO article(regDate, writer, title, body)"
+			+ "VALUES(CONVERT(date,GETDATE()),'테스터1', '"
+			+ title + "', '"
+			+ body + "');";
+		
+		try {
+			msSqlUtil.insert(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		
 	}
 	
 

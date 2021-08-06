@@ -32,7 +32,9 @@ public class MsSqlUtil {
     
     // SQLserver와 연결 종료
     private void DBconnectionEnd() throws SQLException {
-    	rs.close();
+    	if(rs != null) {
+    		rs.close();
+    	}
         stmt.close();
         con.close();
         System.out.println("MS-SQL 서버 연결을 종료했습니다.");
@@ -65,5 +67,19 @@ public class MsSqlUtil {
     	DBconnectionEnd();
 
 		return articles;	
+	}
+
+	// 게시물 저장
+	public void insert(String sql) throws SQLException {
+		DBconnectionStart();
+
+        /* executeQuery vs executeUpdate*/
+        // 출처: https://aricode.tistory.com/9 [아리의 코딩 모험]
+        // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
+        // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
+		stmt = con.createStatement();
+        stmt.executeUpdate(sql);
+    	
+    	DBconnectionEnd();
 	}
 }

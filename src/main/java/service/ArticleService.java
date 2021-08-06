@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import container.Container;
@@ -31,6 +30,11 @@ public class ArticleService {
 		}
 		
 		return article;
+	}
+
+	public void saveContent(String title, String body) {
+		articleDao.saveContent(title, body);
+		
 	}
 
 		
