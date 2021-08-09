@@ -37,6 +37,10 @@ public class ArticleDao {
 	// 게시물 저장하기
 	public int saveContent(String title, String body) {
 		
+		// query 전송 시 작은따옴표 입력으로 인한 에러 방지
+		title = title.replace("'", "''");
+		body = body.replace("'", "''");
+		
 		sql = "INSERT INTO article(regDate, writer, title, body)"
 			+ "VALUES(CONVERT(date,GETDATE()),'테스터1', '"
 			+ title + "', '"
