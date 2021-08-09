@@ -12,8 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import container.Container;
+import service.ArticleService;
+
 
 public class UploadController {
+	
+		private ArticleService articleService;
+		
+		public UploadController() {
+			articleService = Container.articleService;
+		}
 	
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
@@ -56,6 +65,9 @@ public class UploadController {
 			if(!uploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
 				uploadDir.mkdirs();
 			};
+			
+			// 파일 경로
+			String path = realPath + "\\" + originName;
 			
 			// 파일 임시 업로드 경로 설정
 			String tempPath = request.getServletContext().getRealPath("temp");
@@ -148,6 +160,17 @@ public class UploadController {
 					// 2. 임시 txt파일 삭제
 					tempTxtFile.delete();
 					System.out.println("\"" + originName + "\"" + " 업로드 완료");
+					
+					
+					
+					// 21.08.06
+					// 글 작성 시 파일 업로드 및 relId값 받아오기까지 구현 완료
+					// DB에 파일 정보 저장 로직부터 구현해야됨~~
+					
+					System.out.println("path : " + path);
+					String originSizeStr = Long.toString(originSize);
+					articleService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+					
 				}
 				
 			}else {	// 단일 파일인 경우
@@ -163,6 +186,10 @@ public class UploadController {
 				// 각 파일별 이름 받아오기
 				String fileName = multiReq.getFilesystemName("files");
 				System.out.println(fileName);
+				
+				// DB에 저장
+				String originSizeStr = Long.toString(originSize);
+				articleService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
 			
 			}
 			return null;

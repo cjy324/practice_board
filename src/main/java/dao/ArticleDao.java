@@ -58,5 +58,29 @@ public class ArticleDao {
 		
 	}
 
+	public void saveGenFileInfo(int relId, String originName, String originSizeStr, String path, String originType) {
+		
+		sql = "INSERT INTO genFile(uploaded, relId, name, size, path, type)"
+				+ "VALUES("
+				+ "'true', "
+				+ relId + ", '"
+				+ originName + "', '"
+				+ originSizeStr + "', '"
+				+ path + "', '"
+				+ originType + "')"
+				+ " SELECT @@IDENTITY AS id";
+		
+		int id = 0;
+		try {
+			id = msSqlUtil.insert(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		int id = getArticleIdByTitleAndBody(title, body);
+		System.out.println("id: " + id);
+	}
+
 		
 }

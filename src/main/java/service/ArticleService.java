@@ -37,5 +37,12 @@ public class ArticleService {
 		
 	}
 
+	// 첨부파일 정보 저장
+	public void saveGenFileInfo(int relId, String originName, String originSizeStr, String path, String originType) {
+		articleDao.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+		
+	}
+
+
 		
 }

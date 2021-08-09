@@ -21,11 +21,12 @@ VALUES('2021-08-03','테스터3', '테스트 제목3', '테스트 내용3입니다.');
 
 CREATE TABLE genFile (
 	id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+	uploaded CHAR(30) NOT NULL,
 	relId INT NOT NULL,
-	name CHAR(50) NOT NULL,
-	size INT NOT NULL,
-	path CHAR(100) NOT NULL,
-	type CHAR(30) NOT NULL
+	name CHAR(100) NOT NULL,
+	size VARCHAR(MAX) NOT NULL,
+	path CHAR(300) NOT NULL,
+	type CHAR(100) NOT NULL
 );
 
 
