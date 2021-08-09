@@ -31,7 +31,7 @@
 						&nbsp <a href="../article/detail?id=${article.id}" class="hover-underline">${article.title}</a>
 					</div>
 					<div class="list_body__cell_writer">${article.writer}</div>
-					<div class="list_body__cell_file">2</div>
+					<div class="list_body__cell_file">${genFileCounts.get(article.id-1)}</div>
 				</div>
 			</c:forEach>
 			</div>

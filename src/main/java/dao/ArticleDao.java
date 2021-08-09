@@ -25,7 +25,7 @@ public class ArticleDao {
 		List<Article> articles = new ArrayList<>();
 		
 		try {
-			articles = msSqlUtil.select(sql);
+			articles = msSqlUtil.selectArticles(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,8 +41,8 @@ public class ArticleDao {
 		title = title.replace("'", "''");
 		body = body.replace("'", "''");
 		
-		sql = "INSERT INTO article(regDate, writer, title, body)"
-			+ "VALUES(CONVERT(date,GETDATE()),'테스터1', '"
+		sql = "INSERT INTO article(regDate, updateDate, writer, title, body)"
+			+ "VALUES(CONVERT(date,GETDATE()), CONVERT(date,GETDATE()), '테스터1', '"
 			+ title + "', '"
 			+ body + "')"
 			+ " SELECT @@IDENTITY AS id";
@@ -55,36 +55,8 @@ public class ArticleDao {
 			e.printStackTrace();
 		}
 		
-//		int id = getArticleIdByTitleAndBody(title, body);
-		System.out.println("id: " + id);
-		
 		return id;
 		
 	}
-
-	public void saveGenFileInfo(int relId, String originName, String originSizeStr, String path, String originType) {
-		
-		sql = "INSERT INTO genFile(uploaded, relId, name, size, path, type)"
-				+ "VALUES("
-				+ "'true', "
-				+ relId + ", '"
-				+ originName + "', '"
-				+ originSizeStr + "', '"
-				+ path + "', '"
-				+ originType + "')"
-				+ " SELECT @@IDENTITY AS id";
-		
-		int id = 0;
-		try {
-			id = msSqlUtil.insert(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-//		int id = getArticleIdByTitleAndBody(title, body);
-		System.out.println("id: " + id);
-	}
-
 		
 }

@@ -5,7 +5,9 @@ import controller.DownloadController;
 import controller.HomeController;
 import controller.UploadController;
 import dao.ArticleDao;
+import dao.GenFileDao;
 import service.ArticleService;
+import service.GenFileService;
 
 public class Container {
 
@@ -15,11 +17,15 @@ public class Container {
 	public static ArticleController articleController;
 	public static ArticleService articleService;
 	public static ArticleDao articleDao;
+	public static GenFileService genFileService;
+	public static GenFileDao genFileDao;
 
 	static {
 		articleDao = new ArticleDao();
+		genFileDao = new GenFileDao();
 		
 		articleService = new ArticleService();
+		genFileService = new GenFileService();
 		
 		homeController = new HomeController();
 		uploadController = new UploadController();

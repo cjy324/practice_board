@@ -14,14 +14,15 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import container.Container;
 import service.ArticleService;
+import service.GenFileService;
 
 
 public class UploadController {
 	
-		private ArticleService articleService;
+		private GenFileService genFileService;
 		
 		public UploadController() {
-			articleService = Container.articleService;
+			genFileService = Container.genFileService;
 		}
 	
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -161,15 +162,10 @@ public class UploadController {
 					tempTxtFile.delete();
 					System.out.println("\"" + originName + "\"" + " 업로드 완료");
 					
-					
-					
-					// 21.08.06
-					// 글 작성 시 파일 업로드 및 relId값 받아오기까지 구현 완료
-					// DB에 파일 정보 저장 로직부터 구현해야됨~~
-					
+					// 3. DB에 파일 정보 저장
 					System.out.println("path : " + path);
 					String originSizeStr = Long.toString(originSize);
-					articleService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+					genFileService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
 					
 				}
 				
@@ -187,9 +183,9 @@ public class UploadController {
 				String fileName = multiReq.getFilesystemName("files");
 				System.out.println(fileName);
 				
-				// DB에 저장
+				// DB에 파일 정보 저장
 				String originSizeStr = Long.toString(originSize);
-				articleService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+				genFileService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
 			
 			}
 			return null;

@@ -15,14 +15,17 @@ import org.json.simple.parser.ParseException;
 import container.Container;
 import dto.Article;
 import service.ArticleService;
+import service.GenFileService;
 
 
 public class ArticleController {
 	
 		private ArticleService articleService;
+		private GenFileService genFileService;
 	
 		public ArticleController() {
 			articleService = Container.articleService;
+			genFileService = Container.genFileService;
 		}
 	
 		public String list(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -30,9 +33,16 @@ public class ArticleController {
 			// list요청
 			List<Article> articles = new ArrayList<>();
 			articles = articleService.getArticles();
+
+			// 
+			List<Integer> genFileCounts = new ArrayList<>();
+			genFileCounts = articleService.getGenFileCounts(articles);
+			
+			// 첨부파일 갯수 가져오기
 			
 			// 클라이언트에 전달
 			request.setAttribute("articles", articles);
+			request.setAttribute("genFileCounts", genFileCounts);
 			
 			return "usr/article/list";
 		}

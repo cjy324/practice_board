@@ -4,10 +4,11 @@ public class Article {
 	
 	public int id;
 	public String regDate;
+	public String updateDate;
 	public String writer;
 	public String title;
 	public String body;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -22,6 +23,14 @@ public class Article {
 
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public String getWriter() {
@@ -52,9 +61,10 @@ public class Article {
 
 	}
 	
-	public Article(int id, String regDate, String writer, String title, String body) {
+	public Article(int id, String regDate, String updateDate, String writer, String title, String body) {
 		this.id = id;
 		this.regDate = regDate;
+		this.updateDate = updateDate;
 		this.writer = writer;
 		this.title = title;
 		this.body = body;

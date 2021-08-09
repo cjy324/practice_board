@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.Article;
+import dto.GenFile;
 
 public class MsSqlUtil {
 	
@@ -41,7 +42,7 @@ public class MsSqlUtil {
 	}
 
     // 게시물 리스트 가져오기
-	public List<Article> select(String sql) throws SQLException {
+	public List<Article> selectArticles(String sql) throws SQLException {
 		DBconnectionStart();
         
 		List<Article> articles = new ArrayList<>();
@@ -56,11 +57,12 @@ public class MsSqlUtil {
     	while (rs.next()) {
     			int id = rs.getInt("id");
     			String regDate = rs.getString("regDate");
+    			String updateDate = rs.getString("updateDate");
     			String writer = rs.getString("writer");
     			String title = rs.getString("title");
     			String body = rs.getString("body");
               			
-    			Article article = new Article(id, regDate, writer, title, body);
+    			Article article = new Article(id, regDate, updateDate, writer, title, body);
     			articles.add(article);
     	}
     	
@@ -69,7 +71,7 @@ public class MsSqlUtil {
 		return articles;	
 	}
 
-	// 게시물 저장
+	// 게시물 or 첨부파일 정보 저장
 	public int insert(String sql) throws SQLException {
 		DBconnectionStart();
 
@@ -88,6 +90,39 @@ public class MsSqlUtil {
     	DBconnectionEnd();
     	
     	return id;
+	}
+
+	// 파일리스트 가져오기
+	public List<GenFile> selectGenFiles(String sql) throws SQLException {
+		DBconnectionStart();
+        
+		List<GenFile> genFiles = new ArrayList<>();
+
+        /* executeQuery vs executeUpdate*/
+        // 출처: https://aricode.tistory.com/9 [아리의 코딩 모험]
+        // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
+        // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
+		stmt = con.createStatement();
+        rs = stmt.executeQuery(sql);
+ 
+    	while (rs.next()) {
+    			int id = rs.getInt("id");
+    			String regDate = rs.getString("regDate");
+    			String updateDate = rs.getString("updateDate");
+    			String uploaded = rs.getString("uploaded");
+    			int relId = rs.getInt("relId");
+    			String name = rs.getString("name");
+    			String size = rs.getString("size");
+    			String path = rs.getString("path");
+    			String type = rs.getString("type");
+              			
+    			GenFile genFile = new GenFile(id, regDate, updateDate, uploaded, relId, name, size, path, type);
+    			genFiles.add(genFile);
+    	}
+    	
+    	DBconnectionEnd();
+
+		return genFiles;
 	}
 
 }
