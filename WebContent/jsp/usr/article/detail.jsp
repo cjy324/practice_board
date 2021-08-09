@@ -28,19 +28,23 @@
 			</div>
 			<div class="downloader_body">
 	            <div id="top_area" class="top_area">
-	                <input type="checkbox" checked="checked">
+	                <input id="allCheckbox" type="checkbox" checked="checked" onchange="EXAMDownloader.setAllCheckbox()">
 	                <div>파일 이름</div>
 	                <div>파일 크기</div>
 	            </div>
 	            <div id="download_area" class="download_area">
-					<ul id="downloadZone" class="downloadZone"></ul>
+					<ul id="downloadZone" class="downloadZone">
+						<li style="height:100%; justify-content: center; align-items: center;">
+							<span style="font-weight: normal; color: blue; font-size: 12px;">첨부 파일 없음</span>
+						</li>
+					</ul>
 	            </div>
 	            <div id="info_area" class="info_area">
 	                <ul>
 	                    <li id="current_file_info" class="current_file_info">
-	                        <span>3</span>
+	                        <span>0</span>
 	                        개 ,
-	                        <span>230000 byte</span>
+	                        <span>0 byte</span>
 	                    </li>
 	                </ul>
 	            </div>

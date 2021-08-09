@@ -35,7 +35,9 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 		}
 		if (controllerName.equals("download")) {
 			DownloadController downloadController = Container.downloadController;
-			if(requestName.equals("server")) {
+			if(requestName.equals("loadFiles")) {
+				jspPath = downloadController.loadFiles(request, response);
+			}else if(requestName.equals("server")) {
 				jspPath = downloadController.server(request, response);
 			}else if(requestName.equals("progress")) {
 				jspPath = downloadController.progress(request, response);
