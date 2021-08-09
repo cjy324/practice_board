@@ -21,6 +21,14 @@
         }
         return result;
     }
+
+    // 게시물 리스트페이지로 이동
+    function goToListPage(){
+        // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
+        // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
+        // href: 그대로 페이지 이동을 의미
+        location.replace("http://localhost:8086/practiceBoard/usr/article/list");
+    }
     
     const Editor = function() {
         // autoFocus 기능
@@ -119,15 +127,26 @@
             // 제목 값 가져오기
             const title = titleInput.value;
 
+            if(title.trim() === ""){
+                alert("제목을 입력해주세요.");
+                return;
+            }
+
             // 내용 값 가져오기
             const body = editWindow.document.getElementById('edit_area').innerHTML;
+
+            console.log(body);
+
+            if(body.trim() === "<p><br></p>"){
+                alert("내용을 입력해주세요.");
+                return;
+            }
 
             // JSON 형태로 담기
             let textContent = {
                 title: title,
                 body: body
             }
-
             textContent = JSON.stringify(textContent);
 
             // ajax통신 시작
@@ -152,9 +171,10 @@
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
+                        // 생성된 신규 게시물 ID값 받기
                         id = Number(xhttp.responseText);
                         console.log("id : " + id);
-                        EXAMUploader.setUploadFileList()  // 파일 업로드 시작
+                        EXAMUploader.setUploadFileList(id)  // 파일 업로드 시작
                     }else{
                         console.error("------통신 실패------");
                         console.error("req.status: " + req.status);
@@ -389,7 +409,7 @@
         }
 
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
-        this.setUploadFileList = function() {
+        this.setUploadFileList = function(id) {
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < globalFileList.length; i++){
                 if(globalFileList[i].uploaded === undefined){
@@ -397,11 +417,16 @@
                 }
             }
 
-            if(globalFileList.length > 0 && forUploadFileList == 0){
-                //alert("새로 업로드될 파일이 없습니다.")
+            if(globalFileList.length > 0 && forUploadFileList == 0){  // 신규 업로드될 파일이 없는 경우
+                alert("새로 업로드될 파일이 없습니다.")
                 return;
-            }else if(forUploadFileList.length == 0){
-                //alert("선택된 파일이 없습니다.")
+            }else if(forUploadFileList.length == 0){  // 선택된 파일이 없는 경우
+                if(id !== undefined){ // 게시물 작성인 경우
+                    alert(id + "번 게시물 작성 완료!!");
+                    goToListPage();
+                    return;
+                }
+                alert("선택된 파일이 없습니다.")
                 return;
             }else{
                 this.createProgressBarWindow();
@@ -570,9 +595,11 @@
                     allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     message.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     if(e.loaded == e.total && forUploadFileListIndex+1 == forUploadFileList.length){
-                        allFilesMessage.textContent = "ALL Files Upload Complete!!!";
-                        allMessage.textContent = "";
-                        message.textContent = "";
+                        if(e.loaded == e.total && forUploadFileListIndex+1 == forUploadFileList.length){
+                            allFilesMessage.textContent = "ALL Files Upload Complete!!!";
+                            allMessage.textContent = "";
+                            message.textContent = "";
+                        }
                     }
                 };
             // 분할 전송인 경우
@@ -649,7 +676,9 @@
                             EXAMUploader.startUpload(forUploadFileListIndex);
                         }else{
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
-                            EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
+                            // EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
+                            alert(id + "번 게시물 작성 완료!!");
+                            goToListPage();
                         }              
                         // console.log(xhttp.responseText)
                     }else if(req.status === 200 && indicator == false && slicedFileIndex < slicedFiles.length-1){
