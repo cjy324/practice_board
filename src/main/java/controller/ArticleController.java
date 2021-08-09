@@ -36,7 +36,7 @@ public class ArticleController {
 
 			// 
 			List<Integer> genFileCounts = new ArrayList<>();
-			genFileCounts = articleService.getGenFileCounts(articles);
+			genFileCounts = genFileService.getGenFileCounts(articles);
 			
 			// 첨부파일 갯수 가져오기
 			
