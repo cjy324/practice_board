@@ -103,9 +103,67 @@ public class ArticleController {
 		}
 		
 		public String modify(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			int id = Integer.parseInt(request.getParameter("id"));
 			
+			// article 요청
+			Article article = new Article();
+			article = articleService.getArticleById(id);
+			
+			// 클라이언트에 전달
+			request.setAttribute("article", article);
 			
 			return "usr/article/modify";
+		}
+		
+		public String getBody(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			// article 요청
+			Article article = new Article();
+			article = articleService.getArticleById(id);
+			
+			// 클라이언트에 전달
+			response.getWriter().print(article.getBody());
+			
+			return "notJspPath";
+		}
+		
+		public String modifyContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			//JSON Parsing
+			StringBuffer data = new StringBuffer();
+			String line = null;
+			
+			try {
+				// BufferedReader로 request읽기
+				BufferedReader reader = request.getReader();
+				
+				while ((line = reader.readLine()) != null) {
+					data.append(line);
+				};
+				
+				// JSONParser객체 생성
+				JSONParser parser = new JSONParser();
+				// JSONParser로 파싱 후
+				// JSONObject에 JSON형태로 담기
+				JSONObject textContent = (JSONObject) parser.parse(data.toString());
+				
+				// String 형태로 옮겨 담기
+				String title = textContent.get("title").toString();
+				String body = textContent.get("body").toString();
+				
+				// DB에 저장 후 id값 가져오기
+				articleService.modifyContent(id, title, body);
+				
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return "notJspPath";
 		}
 		
 }

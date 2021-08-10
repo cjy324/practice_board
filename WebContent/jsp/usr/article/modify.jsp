@@ -5,21 +5,21 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/common.js"></script>
+<script defer src="${pageContext.request.contextPath}/modify.js"></script>
 <title>MODIFY</title>
 </head>
-<body onload="EXAMDownloader.fileLoad()">
+<body>
 	<section class="main_section">
-		<div class="article_modify_header">
+		<div class="article_write_header">
 			<h4>게시물 수정페이지</h4>
 		</div>     
-        <div class="article_modify_body">
+        <div class="article_write_body">
         	<div class="editor_header">
 	            <div>
 	                <div>
 	                    <span>제목</span>
 	                </div>
-	                <input type="text" placeholder="제목 입력란">
+	                <input id="titleInput" type="text" value="${article.title}">
 	            </div>
 	        </div>
         	<div class="editor_body">
@@ -166,12 +166,14 @@
 	                </table>
 	            </div>
 	        </div>
+	        <div id="progressBarZone">
+	        </div>
         </div>
-    	<div class="article_modify_foot">
-			<button type="button" onclick="alert('저장')" style="cursor: pointer;">
+    	<div class="article_write_foot">
+			<button type="button" onclick="EXAMEditor.doWrite()" style="cursor: pointer;">
 				완료
 			</button>
-			<button type="button" onclick="if(confirm('정말 수정을 취소하시겠습니까?')){location.href='../article/list'}" style="cursor: pointer;">
+			<button type="button" onclick="if(confirm('정말 작성을 취소하시겠습니까?')){location.href='../article/list'}" style="cursor: pointer;">
 				취소
 			</button>
     	</div>

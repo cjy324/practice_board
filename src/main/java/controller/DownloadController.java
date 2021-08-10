@@ -55,12 +55,9 @@ public class DownloadController {
 				obj.put("path", genFile.getPath());
 				obj.put("type", genFile.getType());
 				
-				
 				jsonObj.put("genFile" + "_" + index, obj);
 				index++;
 			}
-
-			System.out.println(jsonObj.toString());
 			
 			// JSON 형태로 클라이언트에 전달
 			response.getWriter().print(jsonObj.toJSONString());

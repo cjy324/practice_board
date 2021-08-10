@@ -52,5 +52,9 @@ public class GenFileService {
 		return genFileCounts;
 	}
 
+	public void deleteFileInfo(int relId, int id) {
+		genFileDao.deleteFileInfo(relId, id);
+	}
+
 		
 }

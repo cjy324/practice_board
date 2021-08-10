@@ -30,6 +30,8 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 			UploadController uploadController = Container.uploadController;
 			if(requestName.equals("server")) {
 				jspPath = uploadController.server(request, response);
+			}else if(requestName.equals("deleteFile")) {
+				jspPath = uploadController.deleteFile(request, response);
 			}
 			
 		}
@@ -55,6 +57,10 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.saveContent(request, response);
 			}else if(requestName.equals("modify")) {
 				jspPath = articleController.modify(request, response);
+			}else if(requestName.equals("getBody")) {
+				jspPath = articleController.getBody(request, response);
+			}else if(requestName.equals("modifyContent")) {
+				jspPath = articleController.modifyContent(request, response);
 			}
 		}
 		

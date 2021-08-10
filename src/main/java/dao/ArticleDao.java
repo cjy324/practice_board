@@ -58,5 +58,27 @@ public class ArticleDao {
 		return id;
 		
 	}
+
+	// 게시물 수정하기
+	public void modifyContent(int id, String title, String body) {
+		// query 전송 시 작은따옴표 입력으로 인한 에러 방지
+		title = title.replace("'", "''");
+		body = body.replace("'", "''");
+		
+		sql = "UPDATE article "
+			+ "SET "
+			+ "updateDate = CONVERT(date,GETDATE()), "			
+			+ "title = '" + title + "', "
+			+ "body = '" + body + "' "
+			+ "WHERE id = " + id;
+		
+		try {
+			msSqlUtil.update(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 		
 }

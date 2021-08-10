@@ -58,8 +58,8 @@ public class GenFileDao {
 	
 	// 게시물 ID관련 첨부파일 리스트 가져오기
 	public List<GenFile> getGenFilesByRelId(int relId) {
-		sql = "SELECT * FROM genFile"
-			+ " WHERE relId = " + relId;
+		sql = "SELECT * FROM genFile "
+			+ "WHERE relId = " + relId;
 		
 		List<GenFile> genFiles = new ArrayList<>();
 		
@@ -71,6 +71,21 @@ public class GenFileDao {
 		}
 		
 		return genFiles;
+	}
+	
+	// 게시물 ID관련 첨부파일 삭제
+	public void deleteFileInfo(int relId, int id) {
+		sql = "DELETE genFile "
+			+ "WHERE relId = " + relId
+			+ " AND id = " + id;
+		
+		try {
+			msSqlUtil.delete(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 		

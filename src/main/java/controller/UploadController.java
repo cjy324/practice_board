@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -190,13 +191,27 @@ public class UploadController {
 			}
 			return null;
 		}
-		
-		// long을 int로 안전하게 형 변환
-		public static int safeLongToInt(long l) {
-		    int i = (int)l;
-		    if ((long)i != l) {
-		        throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
-		    }
-		    return i;
+
+		public String deleteFile(HttpServletRequest request, HttpServletResponse response) {
+			int relId = Integer.parseInt(request.getParameter("relId"));
+			int id = Integer.parseInt(request.getParameter("id"));
+			String path = request.getParameter("path");
+			
+			System.out.println("relId : " + relId);
+			System.out.println("id : " + id);
+			System.out.println("path : " + path);
+			
+			
+			// 1. DB에서 관련 정보 삭제
+			genFileService.deleteFileInfo(relId, id);
+			
+			// 2. 실제 파일 삭제
+			File file = new File(path);
+			if(file.exists()) {
+				file.delete();
+				System.out.println(id + "번 file 삭제 완료");
+			}
+	
+			return null;
 		}
 }

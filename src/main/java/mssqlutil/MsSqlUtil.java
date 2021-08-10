@@ -125,4 +125,32 @@ public class MsSqlUtil {
 		return genFiles;
 	}
 
+	public void update(String sql) throws SQLException {
+		DBconnectionStart();
+
+        /* executeQuery vs executeUpdate*/
+        // 출처: https://aricode.tistory.com/9 [아리의 코딩 모험]
+        // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
+        // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
+		stmt = con.createStatement();
+		stmt.executeUpdate(sql);
+    	
+    	DBconnectionEnd();
+		
+	}
+
+	public void delete(String sql) throws SQLException {
+		DBconnectionStart();
+
+        /* executeQuery vs executeUpdate*/
+        // 출처: https://aricode.tistory.com/9 [아리의 코딩 모험]
+        // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
+        // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
+		stmt = con.createStatement();
+		stmt.executeUpdate(sql);
+    	
+    	DBconnectionEnd();
+		
+	}
+
 }

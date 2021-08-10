@@ -39,5 +39,10 @@ public class ArticleService {
 	public int saveContent(String title, String body) {
 		return articleDao.saveContent(title, body);
 	}
+
+	// 게시물 수정
+	public void modifyContent(int id, String title, String body) {
+		articleDao.modifyContent(id, title, body);
+	}
 		
 }
