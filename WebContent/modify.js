@@ -447,11 +447,14 @@
                 }
             }
 
-            if(globalFileList.length > 0 && forUploadFileList == 0){  // 1. 신규 업로드될 파일이 없는 경우
+            if(globalFileList.length > 0 && forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
                 if(forDeleteFileList.length > 0){ // 신규 업로드될 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     this.deleteFiles(forDeleteFileIndex);
                     return;
                 }
+                alert(id + "번 게시물 수정 완료!!");
+                goToListPage();
+                return;
             }else if(forUploadFileList.length == 0){  // 2. 선택된 파일이 없는 경우
                 if(forDeleteFileList.length > 0){ // 선택된 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     this.deleteFiles(forDeleteFileIndex);
