@@ -274,11 +274,23 @@ label, button{
 	padding-top: 50px;
 }
 .uploadZone > li{
-	display: flex;
-	justify-content: space-between;
+	display: block;
+	position:relative;
+	width: 100%;
 }
 .uploadZone > li > span{
 	font-weight: bold; 
+}
+.uploadZone > li > input{
+	width: 20px;
+}
+.uploadZone > li > span:nth-child(2){
+	text-align: left;
+	text-overflow: ellipsis;
+}
+.uploadZone > li > span:last-child{
+	position:absolute;
+	right: 0;
 }
 
 .info_area{
@@ -324,9 +336,21 @@ label, button{
 	padding-top: 50px;
 }
 .downloadZone > li{
-	display: flex;
-	justify-content: space-between;
+	display: block;
+	position:relative;
+	width: 100%;
 }
 .downloadZone > li > span{
 	font-weight: bold; 
+}
+.downloadZone > li > input{
+	width: 20px;
+}
+.downloadZone > li > span:nth-child(2){
+	text-align: left;
+	text-overflow: ellipsis;
+}
+.downloadZone > li > span:last-child{
+	position:absolute;
+	right: 0;
 }

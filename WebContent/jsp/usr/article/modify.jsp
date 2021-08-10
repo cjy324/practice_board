@@ -118,8 +118,8 @@
 	            <div id="upload_area" class="upload_area">
 					<input id="fileInput" type='file' onchange="EXAMUploader.setUploadFiles(event)" name='userfile' multiple style="display: none;">
 					<ul class="uploadZone" id="uploadZone">
-						<li style="height:100%; justify-content: center; align-items: center;">
-							<span style="font-weight: normal; color: blue; font-size: 12px;">이곳에 파일을 Drag & Drop 하세요.</span>
+						<li style="height:100%; display: flex; justify-content: center; align-items: center;">
+							<span style="position: inherit; font-weight: normal; color: blue; font-size: 12px;">이곳에 파일을 Drag & Drop 하세요.</span>
 						</li>
 					</ul>
 	            </div>

@@ -22,7 +22,7 @@
 				<div class="detail_body__cell_title">제목: ${article.title}</div>				
 			</div>
 			<div class="article_detail_body__body">
-				<div class="detail_body__content">
+				<div id="detail_body__content" class="detail_body__content">
 					${article.body}
 				</div>
 			</div>
@@ -34,8 +34,8 @@
 	            </div>
 	            <div id="download_area" class="download_area">
 					<ul id="downloadZone" class="downloadZone">
-						<li style="height:100%; justify-content: center; align-items: center;">
-							<span style="font-weight: normal; color: blue; font-size: 12px;">첨부 파일 없음</span>
+						<li style="height: 100%; display: flex; justify-content: center; align-items: center;">
+							<span style="position: inherit; font-weight: normal; color: blue; font-size: 12px;">첨부 파일 없음</span>
 						</li>
 					</ul>
 	            </div>

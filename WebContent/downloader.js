@@ -25,11 +25,62 @@
         });
     }
 
+    // URL로 부터 게시물 ID값 가져오기
+    id = document.body.onload = getIdByUrl();
+
+
+    /* -------------------------------------------------------------------------------------------------------------- */
+
+
+    /* Editor */
+    
+    const Editor = function() {
+
+        // 게시물 body 받아오기
+        this.getBody = function(){
+            // http 요청 타입 / 주소 / 동기식 여부 설정
+            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/getBody?id=" + id, true); // 메서드와 주소 설정    
+            // http 요청
+            xhttp.send();   // 요청 전송
+
+            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+                const req = e.target;
+
+                if(req.readyState === 4) {
+                    if(req.status === 200) {
+                        console.log("------통신 성공------");
+                        // DB로 부터 게시물 body 가져오기
+                        const body = xhttp.responseText;
+                        EXAMEditor.setBody(body); // 게시물 body 그리기
+                    }else{
+                        console.error("------통신 실패------");
+                        console.error("req.status: " + req.status);
+                        console.error(xhttp.responseText);
+                    }
+                }
+            }
+        }
+
+        // 게시물 body 그리기
+        this.setBody = function(body){
+            document.getElementById('detail_body__content').innerHTML = body;
+            EXAMDownloader.fileLoad();
+        }
+    }
+
+    // Editor를 새 Object 객체 생성
+    const EXAMEditor = new Editor();
+
+    // windows에 이 객체 지정하기
+    window.EXAMEditor = EXAMEditor;
+
+    // 게시물 body 가져오기
+    document.body.onload = EXAMEditor.getBody;
+
     /* -------------------------------------------------------------------------------------------------------------- */
     /* 다운로더 */
 
     // 태그 가져오기
-    const fileLoadFrame = document.getElementById("fileLoad_frame");
     const downlaodFrame = document.getElementById("download_frame");
     const downloadZone = document.getElementById("downloadZone");
     const downFiles = document.getElementsByName("downFiles");
@@ -53,35 +104,32 @@
         // 파일 정보 가져와 다운로드 대상리스트 태그 그리기
         // 파일 정보를 가져와서 전역변수에 담아놓기
         this.fileLoad = function() {
-            // URL로 부터 게시물 ID값 가져오기
-            id = getIdByUrl();
-
+            
             // 서버로 DB정보 요청
             /* ajax통신 시작 */
-            const xhttp1 = xhttp;
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp1.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + id, true); // 메서드와 주소 설정    
+            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + id, true); // 메서드와 주소 설정    
             // http 요청
-            xhttp1.send();   // 요청 전송
-
+            xhttp.send();   // 요청 전송
+    
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
-            xhttp1.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req1 = e.target;
-
-                if(req1.readyState === 4) {
-                    if(req1.status === 200) {
+            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+                const req = e.target;
+    
+                if(req.readyState === 4) {
+                    if(req.status === 200) {
                         console.log("------통신 성공------");
                         // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
                         // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-                        globalFileList = Object.values(JSON.parse(xhttp1.responseText));  
+                        globalFileList = Object.values(JSON.parse(xhttp.responseText));  
                         if(globalFileList.length !== 0){
                             EXAMDownloader.drawDownloadFileList(globalFileList);
                         }
                         console.log("------첨부파일 로드 완료------");
                     }else{
                         console.error("------통신 실패------");
-                        console.error("req1.status: " + req1.status);
-                        console.error(xhttp1.responseText);
+                        console.error("req.status: " + req.status);
+                        console.error(xhttp.responseText);
                     }
                 }
             }
@@ -195,30 +243,28 @@
 
         // 현재 다운로드 진행률 모니터링
         this.checkDownProgress = function(downFileGuid, forDownloadFilelist, forDownloadFilelistIndex) {
-            
-            const xhttp2 = xhttp;
 
             /* ajax통신 시작 */
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp2.open("POST", "http://localhost:8086/practiceBoard/usr/download/progress?guid=" + downFileGuid, true); // 메서드와 주소 설정    
+            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/progress?guid=" + downFileGuid, true); // 메서드와 주소 설정    
             // http 요청
-            xhttp2.send();   // 요청 전송
+            xhttp.send();   // 요청 전송
 
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
-            xhttp2.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req2 = e.target;
+            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+                const req = e.target;
                 // console.log(req2);   // 콘솔 출력
 
-                if(req2.readyState === 4) {
-                    if(req2.status === 200) {
+                if(req.readyState === 4) {
+                    if(req.status === 200) {
                         console.log("------통신 성공------");
-                        console.log("doneByte : " + xhttp2.responseText);
-                        progressPercentage = Number(xhttp2.responseText);
+                        console.log("doneByte : " + xhttp.responseText);
+                        progressPercentage = Number(xhttp.responseText);
                         //this.drawDownloadProgressBar(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex);
                     }else{
                         console.error("------통신 실패------");
-                        console.error("req2.status: " + req2.status);
-                        console.error(xhttp2.responseText);
+                        console.error("req.status: " + req.status);
+                        console.error(xhttp.responseText);
                     }
                 }
             }
