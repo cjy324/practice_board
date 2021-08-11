@@ -253,8 +253,7 @@
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
                 const req = e.target;
-                // console.log(req2);   // 콘솔 출력
-
+    
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");

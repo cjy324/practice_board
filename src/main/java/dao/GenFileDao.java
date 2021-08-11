@@ -35,14 +35,14 @@ public class GenFileDao {
 	}
 
 	// 파일 정보 저장
-	public void saveGenFileInfo(int relId, String originName, String originSizeStr, String path, String originType) {
+	public void saveGenFileInfo(int relId, String originName, long originSize, String path, String originType) {
 		
 		sql = "INSERT INTO genFile(regDate, updateDate, uploaded, relId, name, size, path, type)"
 				+ "VALUES(CONVERT(date,GETDATE()), CONVERT(date,GETDATE()), "
 				+ "'true', "
 				+ relId + ", '"
-				+ originName + "', '"
-				+ originSizeStr + "', '"
+				+ originName + "', "
+				+ originSize + ", '"
 				+ path + "', '"
 				+ originType + "')"
 				+ " SELECT @@IDENTITY AS id";

@@ -164,9 +164,7 @@ public class UploadController {
 					System.out.println("\"" + originName + "\"" + " 업로드 완료");
 					
 					// 3. DB에 파일 정보 저장
-					System.out.println("path : " + path);
-					String originSizeStr = Long.toString(originSize);
-					genFileService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
 					
 				}
 				
@@ -185,8 +183,7 @@ public class UploadController {
 				System.out.println(fileName);
 				
 				// DB에 파일 정보 저장
-				String originSizeStr = Long.toString(originSize);
-				genFileService.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+				genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
 			
 			}
 			return null;

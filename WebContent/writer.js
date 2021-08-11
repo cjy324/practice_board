@@ -1,6 +1,19 @@
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
+    /* ----- 주요 전역 변수 모음 ----- */
+    let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
+    const xhttp = new XMLHttpRequest(); // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
+    /* ----- 주요 전역 변수 모음 ----- */
+
+    // GUID 생성 함수
+    function createGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+        });
+    }
+
     /* Editor */
     // iframe window 가져오기
     const editWindow = document.getElementById('edit_frame').contentWindow;
@@ -27,7 +40,7 @@
         // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
         // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
         // href: 그대로 페이지 이동을 의미
-        location.replace("http://localhost:8086/practiceBoard/usr/article/list");
+        location.replace("http://localhost:8086/practiceBoard/usr/article/detail?id=" + id);
     }
     
     const Editor = function() {
@@ -156,7 +169,6 @@
 
         // textContent ajax 전송
         this.saveByAjax = function(textContent) {
-            const xhttp = new XMLHttpRequest();
 
             // http 요청 타입 / 주소 / 동기식 여부 설정
             xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/saveContent", true); // 메서드와 주소 설정    
@@ -235,18 +247,7 @@
     /* ------------------------------------------------------------------------------------------- */
     /* 업로더 */
 
-    /* ----- 업로더&다운로더 공통 변수/함수 모음 ----- */
-    let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
-    const xhttp = new XMLHttpRequest(); // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
 
-    // GUID 생성 함수
-    function createGuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-        });
-    }
-    /* ----- 업로더&다운로더 공통 변수/함수 모음 ----- */
 
 
 
@@ -311,8 +312,8 @@
 
             if(files.length == 0){
                 let uploadZoneMessage = "";
-                uploadZoneMessage += "<li style='height:100%; justify-content: center; align-items: center;'>";
-                uploadZoneMessage += "<span style='font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
+                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
+                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
                 uploadZoneMessage += "</li>";
                 
                 uploadZone.innerHTML = uploadZoneMessage; 
@@ -709,8 +710,8 @@
         this.afterUploaded = function() {
 
             let uploadZoneMessage = "";
-                uploadZoneMessage += "<li style='height:100%; justify-content: center; align-items: center;'>";
-                uploadZoneMessage += "<span style='font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
+                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
+                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
                 uploadZoneMessage += "</li>";
             
             uploadZone.innerHTML = uploadZoneMessage; 
@@ -769,6 +770,7 @@
                 alert("폴더 업로드 불가");
                 return;
             }
+
             // uploadZone에 드랍된 파일들로 파일리스트 세팅
             for(let i = 0; i < droppedFiles.length; i++){
                 globalFileList.push(droppedFiles[i]);

@@ -8,7 +8,7 @@ public class GenFile {
 	public String uploaded;
 	public int relId;
 	public String name;
-	public String size;
+	public long size;
 	public String path;
 	public String type;
 
@@ -60,11 +60,11 @@ public class GenFile {
 		this.name = name;
 	}
 
-	public String getSize() {
+	public long getSize() {
 		return size;
 	}
 
-	public void setSize(String size) {
+	public void setSize(long size) {
 		this.size = size;
 	}
 
@@ -88,7 +88,7 @@ public class GenFile {
 
 	}
 	
-	public GenFile(int id, String regDate, String updateDate, String uploaded, int relId, String name, String size, String path, String type) {
+	public GenFile(int id, String regDate, String updateDate, String uploaded, int relId, String name, long size, String path, String type) {
 		this.id = id;
 		this.regDate = regDate;
 		this.updateDate = updateDate;

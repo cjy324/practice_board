@@ -112,7 +112,7 @@ public class MsSqlUtil {
     			String uploaded = rs.getString("uploaded");
     			int relId = rs.getInt("relId");
     			String name = rs.getString("name");
-    			String size = rs.getString("size");
+    			long size = rs.getLong("size");
     			String path = rs.getString("path");
     			String type = rs.getString("type");
               			

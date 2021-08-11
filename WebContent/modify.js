@@ -341,8 +341,8 @@
 
             if(files.length == 0){
                 let uploadZoneMessage = "";
-                uploadZoneMessage += "<li style='height:100%; justify-content: center; align-items: center;'>";
-                uploadZoneMessage += "<span style='font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
+                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
+                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
                 uploadZoneMessage += "</li>";
                 
                 uploadZone.innerHTML = uploadZoneMessage; 
@@ -789,8 +789,8 @@
         this.afterUploaded = function() {
 
             let uploadZoneMessage = "";
-                uploadZoneMessage += "<li style='height:100%; justify-content: center; align-items: center;'>";
-                uploadZoneMessage += "<span style='font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
+                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
+                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
                 uploadZoneMessage += "</li>";
             
             uploadZone.innerHTML = uploadZoneMessage; 

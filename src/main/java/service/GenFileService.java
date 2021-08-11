@@ -22,8 +22,8 @@ public class GenFileService {
 	}
 
 	// 첨부파일 정보 저장
-	public void saveGenFileInfo(int relId, String originName, String originSizeStr, String path, String originType) {
-		genFileDao.saveGenFileInfo(relId, originName, originSizeStr, path, originType);
+	public void saveGenFileInfo(int relId, String originName, long originSize, String path, String originType) {
+		genFileDao.saveGenFileInfo(relId, originName, originSize, path, originType);
 	}
 
 	// 게시물 ID관련 첨부파일 리스트 가져오기
