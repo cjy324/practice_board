@@ -17,39 +17,6 @@ a{
 .hover-underline:hover{
 	text-decoration: underline;
 }
-
-
-/* 에디터 */
-.editor_holder{
-	text-align: center;
-	height: 100%;
-	width: 100%;
-	display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.editor_body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    width: 95%;
-    border: solid black 3px;
-    border-radius: 5px;
-}
-.toolbar{
-    height: 55px;
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-.toolbar > table{
-    width: auto;
-}
-form{
-    display: inline-block;
-}
 label, button, select{
     margin-top: 1.5px;
     display: inline-block;
@@ -78,37 +45,17 @@ label:active, button:active, select:active{
 label, button{
     padding: 8px;
 }
-.text_area{
-    height: 405px;
-    text-align: center;  
-    border-top: solid rgb(167, 167, 167) 2px;
-    border-bottom: solid rgb(167, 167, 167) 2px;
-}
-.text_area > iframe{
-    height: 100%;
-    width: 100%;
-}
-.btn_area_bottom{
-    height: 55px;
-    text-align: left;
-    margin-top: 2px;
-    margin-left: 2px;
-}
 
-@media (min-width: 1030px) {
-	.toolbar{
-	    height: 40px;
-	    overflow-x: hidden;
-	}
-	.text_area{
-	    height: 415px;
-	}
-}
 /* 업로더 */
+.uploader_holder{
+	height: 100%;
+	width: 100%;
+	text-align:center;
+}
 .uploader_body{
     display: inline-block;
     height: 190px;
-    width: 90%;
+    width: 95%;
     border: solid black 3px;
     border-radius: 5px;
 }
