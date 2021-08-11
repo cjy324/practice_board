@@ -1,10 +1,9 @@
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
-    /* ----- 주요 전역 변수 모음 ----- */
+    /* ----- 주요 전역 변수&함수 모음 ----- */
     let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
-    const xhttp = new XMLHttpRequest(); // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
-    /* ----- 주요 전역 변수 모음 ----- */
+    let id = 0;  // 게시물 id
 
     // GUID 생성 함수
     function createGuid() {
@@ -14,27 +13,6 @@
         });
     }
 
-    /* Editor */
-    // iframe window 가져오기
-    const editWindow = document.getElementById('edit_frame').contentWindow;
-
-    // 게시물 id
-    let id = 0;
-
-    // 제목 값 가져오기
-    const titleInput = document.getElementById("titleInput");
-
-    // 현재 페이지 URL값 가져오는 함수
-    function get_query(){
-        var url = document.location.href;
-        var qs = url.substring(url.indexOf('?') + 1).split('&');
-        for(var i = 0, result = {}; i < qs.length; i++){
-            qs[i] = qs[i].split('=');
-            result[qs[i][0]] = decodeURIComponent(qs[i][1]);
-        }
-        return result;
-    }
-
     // 게시물 리스트페이지로 이동
     function goToListPage(){
         // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
@@ -42,221 +20,10 @@
         // href: 그대로 페이지 이동을 의미
         location.replace("http://localhost:8086/practiceBoard/usr/article/detail?id=" + id);
     }
-    
-    const Editor = function() {
-        // autoFocus 기능
-        this.autoFocus = function() {
-            editWindow.document.getElementById('edit_area').focus();
-        }
-
-        // 새 문서 기능
-        this.newPage = function() {
-            const answer = confirm('작성중인 문서가 삭제됩니다. 계속하시겠습니까?');
-            if(answer){
-                this.setStyle('selectAll', null);
-                this.setStyle('removeFormat', null);
-                this.setStyle('delete', null);
-                this.autoFocus();
-            }
-        }
-
-        // 버튼별 서식 적용
-        this.setStyle = function(style, value) {
-            if(value != null){
-                editWindow.document.execCommand(style, false, value);
-            }
-            else{
-                editWindow.document.execCommand(style);
-            }
-            this.autoFocus()  //서식 적용 후에도 커서 위치 유지하도록 적용
-        }
-
-        // 미리보기 창
-        this.showPreview = function(){
-            // 현재 document 내 iframe에 입력된 HTML 가져오기
-            const editedContent = editWindow.document.getElementById('edit_area').innerHTML;
-
-            // 팝업옵션 설정
-            const options = 'top=100, left=500, width=800, height=800';
-            const preview = window.open('about:blank', 'preview', options);
-
-            // 팝업창에 HTML내용 넣기
-            preview.document.write(editedContent);
-            preview.document.close();
-        }
-
-        // 이미지 업로드
-        this.doUpload = function(event){
-            // form으로부터 FormData 가져오기
-            const form = document.getElementById("uploadForm");
-            const formData = new FormData(form)
-            // ajax를 하기 위한 XmlHttpRequest 객체
-            const xhttp = new XMLHttpRequest();
-
-            // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://127.0.0.1:8085/doUpload", true); // 메서드와 주소 설정
-            // http 요청
-            xhttp.send(formData);   // 요청 전송
-            // XmlHttpRequest의 요청
-            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                // XMLHttpRequest를 이벤트 파라미터에서 취득
-                const req = e.target;
-                // console.log(req);   // 콘솔 출력
-
-                // 통신 상태가 완료가 되면...
-                if(req.readyState === XMLHttpRequest.DONE) {    // 요청이 완료되면
-                    // Http response 응답코드가 200(정상)이면..
-                    if(req.status === 200) {
-                        const imagesName = JSON.parse(req.responseText);  // parse: json타입을 object형식으로 변환
-                        const imagesNameLength = Object.keys(imagesName).length; // 내장 객체 Object를 이용하면 JSON형태의 객체 값의 개수를 확인할 수 있다.
-
-                        for(let i = 0; i < imagesNameLength; i++){
-                            // img 태그 생성
-                            const newImg = editWindow.document.createElement("img");
-                            // img 태그의 속성 설정 
-                            newImg.src = "http://127.0.0.1:8086/" + imagesName[i];
-                            const newImgWidth = prompt('가로 길이를 입력해 주세요.(단위: px)');
-                            newImg.width = newImgWidth;
-                    
-                            // img 태그의 속성 설정 완료 후 커서 위치에 img node 삽입
-                            range.insertNode(newImg);
-                        }
-
-                        // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
-                        this.autoFocus()
-                        selection = editWindow.document.getSelection();
-                        selection.removeAllRanges();
-                        selection.addRange(range);
-
-                    }else{
-                        console.error(xhttp.responseText)
-                    }
-                }
-            } 
-        };
-
-        // 글 작성
-        this.doWrite = function() {
-            // 제목 값 가져오기
-            const title = titleInput.value;
-
-            if(title.trim() === ""){
-                alert("제목을 입력해주세요.");
-                return;
-            }
-
-            // 내용 값 가져오기
-            const body = editWindow.document.getElementById('edit_area').innerHTML;
-
-            console.log(body);
-
-            if(body.trim() === "<p><br></p>"){
-                alert("내용을 입력해주세요.");
-                return;
-            }
-
-            // JSON 형태로 담기
-            let textContent = {
-                title: title,
-                body: body
-            }
-            textContent = JSON.stringify(textContent);
-
-            // ajax통신 시작
-            this.saveByAjax(textContent);
-            
-        }
-
-        // textContent ajax 전송
-        this.saveByAjax = function(textContent) {
-
-            // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/saveContent", true); // 메서드와 주소 설정    
-            // Header를 JSON으로 셋팅
-            xhttp.setRequestHeader('Content-type', 'application/json');
-            // http 요청
-            xhttp.send(textContent);   // 요청 전송(JSON 전송)
-
-            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
-
-                if(req.readyState === 4) {
-                    if(req.status === 200) {
-                        console.log("------통신 성공------");
-                        // 생성된 신규 게시물 ID값 받기
-                        id = Number(xhttp.responseText);
-                        console.log("id : " + id);
-                        EXAMUploader.setUploadFileList(id)  // 파일 업로드 시작
-                    }else{
-                        console.error("------통신 실패------");
-                        console.error("req.status: " + req.status);
-                        console.error(xhttp.responseText);
-                    }
-                }
-            }
-
-        }
-    }
-
-    // Editor를 새 Object 객체 생성
-    const EXAMEditor = new Editor();
-
-    // windows에 이 객체 지정하기
-    window.EXAMEditor = EXAMEditor;
-
-    // 에디터 첫 로드 시 자동 포커스
-    document.body.onload = EXAMEditor.autoFocus;
-
-    // caret 저장
-    let selection; //selection, range 도입
-    let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
-    document.getElementById('uploadBtnLabel').addEventListener('mouseover', function(e){
-        selection = editWindow.document.getSelection();
-        range = selection.getRangeAt(0);
-    })
-
-    // p태그 자동 생성
-    editWindow.addEventListener('keyup', function(e){
-        const editArea = editWindow.document.getElementById('edit_area')
-        if(editArea.lastElementChild == null){
-            const pTag = editWindow.document.createElement('p')
-            editArea.appendChild(pTag)
-            const brTag = editWindow.document.createElement('br')
-            editArea.getElementsByTagName('p')[0].appendChild(brTag)
-        }
-    })
-
-    // select 버튼
-    const btnFontType = document.getElementById('font_type');
-    const btnFontSize = document.getElementById('font_size');
-    const btnFontColor = document.getElementById('font_color');
-
-    // select 버튼별 이벤트 적용
-    btnFontType.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('fontName', e.target.value)
-    })
-    btnFontSize.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('fontSize', e.target.value)
-    })
-    btnFontColor.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('foreColor', e.target.value)
-    })
-
 
     
-    /* ------------------------------------------------------------------------------------------- */
+
     /* 업로더 */
-
-
-
-
-
-    
-    let forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
-    let forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
-    let forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
-    let indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
-
 
     // 태그 가져오기
     const fileInput = document.getElementById("fileInput");
@@ -266,13 +33,17 @@
     const progressBarZone = document.getElementById("progressBarZone");
 
     
-
-    // 업로더 클래스화??
+    // 업로더 클래스
     // 참고: https://mygumi.tistory.com/312
     // 자바스크립트에서 프로토타입은 자신을 만들어낸 객체의 원형을 뜻한다.
     // Prototype Link - 자신을 만들어낸 객체의 원형
     // Prototype Object - 자신을 통해 만들어질 객체의 원형
     const Uploader = function (){
+
+        let forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
+        let forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
+        let forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
+        let indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
@@ -280,12 +51,51 @@
             fileInput.click();
         }
 
+        // 드래그한 파일이 최초로 uploadZone에 진입했을 때
+        uploadZone.addEventListener("dragenter", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        })
+        // 드래그한 파일이 uploadZone을 벗어났을 때
+        uploadZone.addEventListener("dragleave", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        })
+        // 드래그한 파일이 uploadZone에 머물러 있을 때
+        uploadZone.addEventListener("dragover", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        })
+        // 드래그한 파일이 uploadZone에 드랍되었을 때
+        uploadZone.addEventListener("drop", function(e) {
+            e.preventDefault();
+            
+            const droppedFiles = e.dataTransfer && e.dataTransfer.files;
+            console.log("droppedFiles: " + droppedFiles);
+            
+            if (droppedFiles != null) {
+                // 만약 files의 갯수가 1보다 작으면 "폴더 업로드 불가" 알림
+                if (droppedFiles.length < 1) {
+                    alert("폴더 업로드 불가");
+                    return;
+                }
+
+                // uploadZone에 드랍된 파일들로 파일리스트 세팅
+                for(let i = 0; i < droppedFiles.length; i++){
+                    globalFileList.push(droppedFiles[i]);
+                }
+                EXAMUploader.showFiles(globalFileList);
+            } else {
+                alert("ERROR");
+            }
+        })
+
         // 업로드 될 파일리스트 그리기
         this.showFiles = function(files) {
             let fileListLi = "";	// dropZone에 drop한 파일별 태그 생성
         
             for(let i = 0; i < files.length; i++) {
-                console.log(files[i]);
+                // console.log(files[i]);
                 fileListLi += "<li>";
                 fileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' value='false' name='uploadFiles' checked>";
                 fileListLi += "<span>" + files[i].name + "</span>";
@@ -328,7 +138,7 @@
             }
             // console.log(globalFileList);
             // input에 파일이 들어오면 dropZone에 업로드 될 파일리스트 그리기
-            this.showFiles(globalFileList);
+            EXAMUploader.showFiles(globalFileList);
         }
 
         // 전체 선택/해제
@@ -398,7 +208,7 @@
                 return;
             }
             
-            this.showFiles(globalFileList);
+            EXAMUploader.showFiles(globalFileList);
         }
 
         // 전체 파일 선택 및 삭제
@@ -406,7 +216,7 @@
             for(let i = 0; i < uploadFiles.length; i++){
                 uploadFiles[i].checked = true;
             }
-            this.removeSelectedFiles();
+            EXAMUploader.removeSelectedFiles();
         }
 
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
@@ -430,8 +240,8 @@
                 alert("선택된 파일이 없습니다.")
                 return;
             }else{
-                this.createProgressBarWindow();
-                this.startUpload(forUploadFileListIndex);
+                EXAMUploader.createProgressBarWindow();
+                EXAMUploader.startUpload(forUploadFileListIndex);
             }
         }
 
@@ -462,7 +272,7 @@
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
-            const limitSize = 1 * 1024 * 1024;  // Byte // 약 2MB
+            const limitSize = 1 * 1024 * 1024;  // Byte // 약 1MB
             // console.log("limitSize: " + limitSize);
             
             // 분할한 파일을 담을 배열 객체
@@ -508,7 +318,7 @@
                 params += "&slicedFilesLength=" + 0;
                 
                 // ajax통신 시작
-                this.startAjax(xhttp, slicedFiles, slicedFileIndex, "0", params, forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "0", params, forUploadFileList, forUploadFileListIndex);
 
             /* 단일 파일 전송 끝 */
             }
@@ -556,14 +366,16 @@
                 params += "&slicedFilesLength=" + slicedFiles.length;
 
                 // ajax통신 시작
-                this.startAjax(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
             
             /* 분할 파일 전송 끝 */
             }
         }
 
         // ajax통신
-        this.startAjax = function(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex) {
+        this.startAjax = function(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex) {
+
+            const xhttp = new XMLHttpRequest();
 
             const allFilesProgressBar = document.getElementById("allFilesProgressBar");
             const allProgressBar = document.getElementById("allProgressBar");
@@ -669,7 +481,7 @@
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
                             slicedFileIndex++; // index 1 증가
                             // 재귀함수: 함수 내에서 자신을 다시 호출
-                            EXAMUploader.startAjax(xhttp, slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
+                            EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
                         }
                         else if(forUploadFileListIndex < forUploadFileList.length-1){
                             forUploadFileListIndex++;
@@ -706,24 +518,6 @@
             /* 파일 전송을 위한 ajax통신 끝 */
         }
 
-        // 업로드 후 대기 파일리스트 리셋
-        this.afterUploaded = function() {
-
-            let uploadZoneMessage = "";
-                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
-                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
-                uploadZoneMessage += "</li>";
-            
-            uploadZone.innerHTML = uploadZoneMessage; 
-
-            let resetFileListInfo = "";
-                resetFileListInfo += "<span>0</span>개 , ";
-                resetFileListInfo += "<span>0 byte </span>";
-                resetFileListInfo += "<span>추가됨</span>";
-
-            infoZone.innerHTML = resetFileListInfo;
-        }
-
         // 업로드 중단 버튼
         this.cancelUpload = function() {
             // xhttp.abort(); // 통신 강제 중단
@@ -740,48 +534,5 @@
 
     // windows에 이 객체 지정하기
     window.EXAMUploader = EXAMUploader;
-
-
-    // 드래그한 파일이 최초로 uploadZone에 진입했을 때
-    uploadZone.addEventListener("dragenter", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-    })
-    // 드래그한 파일이 uploadZone을 벗어났을 때
-    uploadZone.addEventListener("dragleave", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-    })
-    // 드래그한 파일이 uploadZone에 머물러 있을 때
-    uploadZone.addEventListener("dragover", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-    })
-    // 드래그한 파일이 uploadZone에 드랍되었을 때
-    uploadZone.addEventListener("drop", function(e) {
-        e.preventDefault();
-        
-        const droppedFiles = e.dataTransfer && e.dataTransfer.files;
-        console.log("droppedFiles: " + droppedFiles);
-        
-        if (droppedFiles != null) {
-            // 만약 files의 갯수가 1보다 작으면 "폴더 업로드 불가" 알림
-            if (droppedFiles.length < 1) {
-                alert("폴더 업로드 불가");
-                return;
-            }
-
-            // uploadZone에 드랍된 파일들로 파일리스트 세팅
-            for(let i = 0; i < droppedFiles.length; i++){
-                globalFileList.push(droppedFiles[i]);
-            }
-            EXAMUploader.showFiles(globalFileList);
-        } else {
-            alert("ERROR");
-        }
-    })
-    
-
-
     
 })()
