@@ -3,18 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <link rel="stylesheet" href="style.css">
-<script defer src="uploader.js"></script>
+<!-- <script defer src="uploader.js"></script> -->
 <title>Uploader Holder</title>
 </head>
 <body id="uploader_holder" class="uploader_holder">
 	<div class="uploader_body">
 		<div id="top_area" class="top_area">
-		    <input id="allCheckbox" type="checkbox" checked="checked" onchange="EXAMUploader.setAllCheckbox()">
+		    <input id="allCheckbox" type="checkbox" checked="checked" onchange="top.EXAMUploader.setAllCheckbox()">
 		    <div>파일 이름</div>
 		    <div>파일 크기</div>
 		</div>
 		<div id="upload_area" class="upload_area">
-			<input id="fileInput" type='file' onchange="EXAMUploader.setUploadFiles(event)" name='userfile' multiple style="display: none;">
+			<input id="fileInput" type='file' onchange="top.EXAMUploader.setUploadFiles(event)" name='userfile' multiple style="display: none;">
 			<ul class="uploadZone" id="uploadZone">
 				<li style="height:100%; display: flex; justify-content: center; align-items: center;">
 					<span style="position: inherit; font-weight: normal; color: blue; font-size: 12px;">이곳에 파일을 Drag & Drop 하세요.</span>
@@ -43,7 +43,7 @@
 		         <tbody>
 		             <tr>
 		                 <td>
-		                 	<button type="button" id="button_add" onclick="EXAMUploader.selectFiles()">
+		                 	<button type="button" id="button_add" onclick="top.EXAMUploader.selectFiles()">
 		                 		<span>파일추가</span>
 		                 	</button>
 		<!-- 	                            	<button type="button" id="button_send" onclick="setUploadFileList()">
@@ -52,10 +52,10 @@
 			                                <button type="button" id="button_cancel" onclick="cancelUpload()">
 			                            		<span>업로드 중단</span>
 			                            	</button> -->
-		                 	<button type="button" id="button_remove" onclick="EXAMUploader.removeSelectedFiles()">
+		                 	<button type="button" id="button_remove" onclick="top.EXAMUploader.removeSelectedFiles()">
 		                 		<span>선택 삭제</span>
 		                 	</button>
-		                 	<button type="button" id="button_removeAll" onclick="EXAMUploader.selectAllFilesAndRemove()">
+		                 	<button type="button" id="button_removeAll" onclick="top.EXAMUploader.selectAllFilesAndRemove()">
 		                    		<span>전체 삭제</span>
 		                    	</button>
 		                    </td>

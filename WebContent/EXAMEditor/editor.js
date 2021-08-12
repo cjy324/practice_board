@@ -11,30 +11,29 @@
             editorHolderFrame.src = src;
         }
 
-        // iframe window 가져오기
-        let editWindow = null;      // 처음에는 null
-        // editorHolderFrame이 그려지면 iframe window 가져오기
-        if(document.getElementById('edit_frame')){
-            editWindow = document.getElementById('edit_frame').contentWindow;
-        }
-
         // autoFocus 기능
         this.autoFocus = function() {
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             editWindow.document.getElementById('edit_area').focus();
         }
 
         // caret 저장
         let selection; //selection, range 도입
         let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
-        if(document.getElementById('uploadBtnLabel')){
-            document.getElementById('uploadBtnLabel').addEventListener('mouseover', function(e){
+        document.getElementById("editor_holder").addEventListener("load", function(e) {
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
+            editorHolderFrameWindow.document.getElementById('uploadBtnLabel').addEventListener('mouseover', function(e){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
             })
-        }
+        })
 
         // p태그 자동 생성
-        if(editWindow !== null){
+        document.getElementById('editor_holder').addEventListener("load", function(e) {
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             editWindow.addEventListener('keyup', function(e){
                 const editArea = editWindow.document.getElementById('edit_area')
                 if(editArea.lastElementChild == null){
@@ -44,7 +43,7 @@
                     editArea.getElementsByTagName('p')[0].appendChild(brTag)
                 }
             })
-        }
+        })
 
         // 새 문서 기능
         this.newPage = function() {
@@ -58,10 +57,12 @@
         }
 
         // select 버튼
-        if(editWindow !== null){
-            const btnFontType = document.getElementById('font_type');
-            const btnFontSize = document.getElementById('font_size');
-            const btnFontColor = document.getElementById('font_color');
+        document.getElementById('editor_holder').addEventListener("load", function(e) {
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+
+            const btnFontType = editorHolderFrameWindow.document.getElementById('font_type');
+            const btnFontSize = editorHolderFrameWindow.document.getElementById('font_size');
+            const btnFontColor = editorHolderFrameWindow.document.getElementById('font_color');
 
             // select 버튼별 이벤트 적용
             btnFontType.addEventListener('change', function (e) {
@@ -73,10 +74,12 @@
             btnFontColor.addEventListener('change', function (e) {
                 EXAMEditor.setStyle('foreColor', e.target.value)
             })
-        }
+        })           
                 
         // 버튼별 서식 적용
         this.setStyle = function(style, value) {
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             if(value != null){
                 editWindow.document.execCommand(style, false, value);
             }
@@ -88,6 +91,8 @@
 
         // 미리보기 창
         this.showPreview = function(){
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             // 현재 document 내 iframe에 입력된 HTML 가져오기
             const editedContent = editWindow.document.getElementById('edit_area').innerHTML;
 
@@ -163,6 +168,8 @@
 
         // 이미지 그리기
         this.drawImag = function(imagePath){
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             // img 태그 생성
             const newImg = editWindow.document.createElement("img");
             // img 태그의 속성 설정 
@@ -175,6 +182,8 @@
 
         // IE상에서 커서 위치 포커싱
         this.setFocusForIE = function(){
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             EXAMEditor.autoFocus();
             selection = editWindow.document.getSelection();
             selection.removeAllRanges();
@@ -192,9 +201,7 @@
 
     // Editor를 새 Object 객체 생성
     const EXAMEditor = new Editor();
-    // windows에 이 객체 지정하기
-    window.EXAMEditor = EXAMEditor;
-
-
+    // 최상위 windows에 이 객체 지정하기
+    top.EXAMEditor = EXAMEditor;
     
 })()

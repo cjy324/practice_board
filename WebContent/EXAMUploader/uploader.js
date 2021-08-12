@@ -1,4 +1,6 @@
 /* Uploader */
+// self close 함수
+// 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
     // 업로더 클래스
     // 참고: https://mygumi.tistory.com/312
@@ -13,28 +15,26 @@
             uploaderHolderFrame.src = src;
         }
 
-        let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
-        let id = 0;  // 게시물 id
+        // 전역변수
+        this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
+        this.id = 0;  // 게시물 id
         let forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
         let forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
         let forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
         let indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
         
-        // 태그 가져오기
-        const fileInput = document.getElementById("fileInput");
-        const uploadZone = document.getElementById("uploadZone");
-        const uploadFiles = document.getElementsByName("uploadFiles");
-        const infoZone = document.getElementById("current_file_info");
-        const progressBarZone = document.getElementById("progressBarZone");
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
-            // 상속
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const fileInput = componentWindow.document.getElementById("fileInput");
             fileInput.click();
         }
 
         // Drag & Drop
-        if(uploadZone){
+        document.getElementById('uploader_holder').addEventListener("load", function(e) {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadZone = componentWindow.document.getElementById("uploadZone");
             // 드래그한 파일이 최초로 uploadZone에 진입했을 때
             uploadZone.addEventListener("dragenter", function(e) {
                 e.stopPropagation();
@@ -66,17 +66,20 @@
 
                     // uploadZone에 드랍된 파일들로 파일리스트 세팅
                     for(let i = 0; i < droppedFiles.length; i++){
-                        globalFileList.push(droppedFiles[i]);
+                        EXAMUploader.globalFileList.push(droppedFiles[i]);
                     }
-                    EXAMUploader.showFiles(globalFileList);
+                    EXAMUploader.showFiles(EXAMUploader.globalFileList);
                 } else {
                     alert("ERROR");
                 }
             })
-        }
+        })
 
         // 업로드 될 파일리스트 그리기
         this.showFiles = function(files) {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadZone = componentWindow.document.getElementById("uploadZone");
+            const infoZone = componentWindow.document.getElementById("current_file_info");
             let fileListLi = "";	// dropZone에 drop한 파일별 태그 생성
         
             for(let i = 0; i < files.length; i++) {
@@ -119,15 +122,17 @@
         this.setUploadFiles = function(e) {
             // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
             for(let i = 0; i < e.target.files.length; i++){
-                globalFileList.push(e.target.files[i]);
+                EXAMUploader.globalFileList.push(e.target.files[i]);
             }
-            // console.log(globalFileList);
+            // console.log(EXAMUploader.globalFileList);
             // input에 파일이 들어오면 dropZone에 업로드 될 파일리스트 그리기
-            EXAMUploader.showFiles(globalFileList);
+            EXAMUploader.showFiles(EXAMUploader.globalFileList);
         }
 
         // 전체 선택/해제
         this.setAllCheckbox = function() {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             if(uploadFiles.length > 0){
                 const allCheckbox = document.getElementById("allCheckbox");
                 if(allCheckbox.checked){
@@ -144,6 +149,8 @@
 
         // 선택된 파일 삭제
         this.removeSelectedFiles = function() {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             if(confirm("정말 삭제하시겠습니까?") == false){
                 return;
             }
@@ -153,8 +160,8 @@
     
             // FileList 객체는 Array 객체가 아니므로 splice()함수를 쓸 수 없음
             // 따라서 splice()를 사용하기 위해 임시로 FileList를 Array로 담아서 진행
-            for(let x = 0; x < globalFileList.length; x++){
-                tempArray.push(globalFileList[x]);
+            for(let x = 0; x < EXAMUploader.globalFileList.length; x++){
+                tempArray.push(EXAMUploader.globalFileList[x]);
             }
     
             // tempArray 내 체크된 파일 원소의 내용만 삭제(빈 공간만 남음, index는 유지됨)
@@ -184,7 +191,7 @@
             }
     
             // 다시 원래대로 FileLiet 객체 형태로 담기
-            globalFileList = tempArray;
+            EXAMUploader.globalFileList = tempArray;
     
             // 만약, removeTargetIndex가 여전히 -1이면, 
             // 즉, 선택된 파일이 없으면...
@@ -193,11 +200,13 @@
                 return;
             }
             
-            EXAMUploader.showFiles(globalFileList);
+            EXAMUploader.showFiles(EXAMUploader.globalFileList);
         }
 
         // 전체 파일 선택 및 삭제
         this.selectAllFilesAndRemove = function() {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             for(let i = 0; i < uploadFiles.length; i++){
                 uploadFiles[i].checked = true;
             }
@@ -205,15 +214,17 @@
         }
 
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
-        this.setUploadFileList = function() {
+        this.setUploadFileList = function(id) {
+
+            EXAMUploader.id = id;
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
-            for(let i = 0; i < globalFileList.length; i++){
-                if(globalFileList[i].uploaded === undefined){
-                    forUploadFileList.push(globalFileList[i])
+            for(let i = 0; i < EXAMUploader.globalFileList.length; i++){
+                if(EXAMUploader.globalFileList[i].uploaded === undefined){
+                    forUploadFileList.push(EXAMUploader.globalFileList[i])
                 }
             }
 
-            if(globalFileList.length > 0 && forUploadFileList == 0){  // 신규 업로드될 파일이 없는 경우
+            if(EXAMUploader.globalFileList.length > 0 && forUploadFileList == 0){  // 신규 업로드될 파일이 없는 경우
                 alert("새로 업로드될 파일이 없습니다.")
                 return;
             }else if(forUploadFileList.length == 0){  // 선택된 파일이 없는 경우
@@ -232,6 +243,8 @@
 
         // 업로드 프로그래스바 창 생성
         this.createProgressBarWindow = function() {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const progressBarZone = componentWindow.document.getElementById("progressBarZone");
 
             let progressTag = "<p id='allFilesMessage' style='font-weight: bold;'></p>"
                             + "<span style='font-size: 14px;'>총 진행률</span>"
@@ -295,7 +308,7 @@
             /* 분할 끝 */
 
             // 기본 파라미터 정보 담기
-            let params = "&relId=" + id;
+            let params = "&relId=" + EXAMUploader.id;
                 params += "&limitSize=" + limitSize;
                 params += "&originName=" + forUploadFileList[forUploadFileListIndex].name;
                 params += "&originSize=" + forUploadFileList[forUploadFileListIndex].size;
@@ -370,12 +383,14 @@
 
             const xhttp = new XMLHttpRequest();
 
-            const allFilesProgressBar = document.getElementById("allFilesProgressBar");
-            const allProgressBar = document.getElementById("allProgressBar");
-            const progressBar = document.getElementById("progressBar");
-            const allFilesMessage = document.getElementById("allFilesMessage");
-            const allMessage = document.getElementById("allMessage");
-            const message = document.getElementById("message");
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+
+            const allFilesProgressBar = componentWindow.document.getElementById("allFilesProgressBar");
+            const allProgressBar = componentWindow.document.getElementById("allProgressBar");
+            const progressBar = componentWindow.document.getElementById("progressBar");
+            const allFilesMessage = componentWindow.document.getElementById("allFilesMessage");
+            const allMessage = componentWindow.document.getElementById("allMessage");
+            const message = componentWindow.document.getElementById("message");
             // console.log("indicator22222: " + indicator);
             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
@@ -525,7 +540,7 @@
     // Uploader를 새 Object 객체 생성
     const EXAMUploader = new Uploader();
 
-    // windows에 이 객체 지정하기
-    window.EXAMUploader = EXAMUploader;
+    // 최상위 windows에 이 객체 지정하기
+    top.EXAMUploader = EXAMUploader;
     
 })()
