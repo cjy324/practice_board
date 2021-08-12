@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
+<script defer="defer" src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
+<script defer="defer" src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
 <script defer="defer" src="${pageContext.request.contextPath}/writer.js"></script>
 <script type="text/javascript">
 	function start(){
@@ -34,7 +36,7 @@
 
         </div>
     	<div class="article_write_foot">
-			<button type="button" onclick="EXAMEditor.doWrite()" style="cursor: pointer;">
+			<button type="button" onclick="test()" style="cursor: pointer;">
 				완료
 			</button>
 			<button id="test" type="button" onclick="if(confirm('정말 작성을 취소하시겠습니까?')){location.href='../article/list'}" style="cursor: pointer;">

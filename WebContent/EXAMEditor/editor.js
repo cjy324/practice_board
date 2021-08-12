@@ -1,44 +1,49 @@
+/* Editor */
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
-(function () {
-    /* Editor */
-
+(function () {  
     // 에디터 클래스
     const Editor = function() {
-  
+        // 에디터 그리기
+        this.drawEditorHtml = function(){
+            const src = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html"
+            const editorHolderFrame = document.getElementById("editor_holder");
+            editorHolderFrame.src = src;
+        }
+
         // iframe window 가져오기
-	    const editWindow = document.getElementById('edit_frame').contentWindow;
-	    // 제목 값 가져오기
-	    const titleInput = document.getElementById("titleInput");
-
-
-        // caret 저장
-        let selection; //selection, range 도입
-        let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
-        document.getElementById('uploadBtnLabel').addEventListener('mouseover', function(e){
-            selection = editWindow.document.getSelection();
-            range = selection.getRangeAt(0);
-        })
-
-        // p태그 자동 생성
-        editWindow.addEventListener('keyup', function(e){
-            const editArea = editWindow.document.getElementById('edit_area')
-            if(editArea.lastElementChild == null){
-                const pTag = editWindow.document.createElement('p')
-                editArea.appendChild(pTag)
-                const brTag = editWindow.document.createElement('br')
-                editArea.getElementsByTagName('p')[0].appendChild(brTag)
-            }
-        })
-
-        // 에디터 첫 로드 시 자동 포커스
-        editWindow.addEventListener('load', function(){
-            EXAMEditor.autoFocus();
-        })
+        let editWindow = null;      // 처음에는 null
+        // editorHolderFrame이 그려지면 iframe window 가져오기
+        if(document.getElementById('edit_frame')){
+            editWindow = document.getElementById('edit_frame').contentWindow;
+        }
 
         // autoFocus 기능
         this.autoFocus = function() {
             editWindow.document.getElementById('edit_area').focus();
+        }
+
+        // caret 저장
+        let selection; //selection, range 도입
+        let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
+        if(document.getElementById('uploadBtnLabel')){
+            document.getElementById('uploadBtnLabel').addEventListener('mouseover', function(e){
+                selection = editWindow.document.getSelection();
+                range = selection.getRangeAt(0);
+            })
+        }
+
+        // p태그 자동 생성
+        if(editWindow !== null){
+            editWindow.addEventListener('keyup', function(e){
+                const editArea = editWindow.document.getElementById('edit_area')
+                if(editArea.lastElementChild == null){
+                    const pTag = editWindow.document.createElement('p')
+                    editArea.appendChild(pTag)
+                    const brTag = editWindow.document.createElement('br')
+                    editArea.getElementsByTagName('p')[0].appendChild(brTag)
+                }
+            })
         }
 
         // 새 문서 기능
@@ -52,6 +57,24 @@
             }
         }
 
+        // select 버튼
+        if(editWindow !== null){
+            const btnFontType = document.getElementById('font_type');
+            const btnFontSize = document.getElementById('font_size');
+            const btnFontColor = document.getElementById('font_color');
+
+            // select 버튼별 이벤트 적용
+            btnFontType.addEventListener('change', function (e) {
+                EXAMEditor.setStyle('fontName', e.target.value)
+            })
+            btnFontSize.addEventListener('change', function (e) {
+                EXAMEditor.setStyle('fontSize', e.target.value)
+            })
+            btnFontColor.addEventListener('change', function (e) {
+                EXAMEditor.setStyle('foreColor', e.target.value)
+            })
+        }
+                
         // 버튼별 서식 적용
         this.setStyle = function(style, value) {
             if(value != null){
@@ -158,96 +181,19 @@
             selection.addRange(range);
         }
 
-        // 글 작성
-        this.doWrite = function() {
-            // 제목 값 가져오기
-            const title = titleInput.value;
-
-            if(title.trim() === ""){
-                alert("제목을 입력해주세요.");
-                return;
-            }
-
-            // 내용 값 가져오기
-            const body = EXAMEditor.getBodyContent();
-
-            if(body.trim() === "<p><br></p>"){
-                alert("내용을 입력해주세요.");
-                return;
-            }
-
-            // JSON 형태로 담기
-            let textContent = {
-                title: title,
-                body: body
-            }
-            textContent = JSON.stringify(textContent);
-
-            // ajax통신 시작
-            EXAMEditor.saveByAjax(textContent);
-            
-        }
-
         // 글 body값 가져오기
         this.getBodyContent = function(){
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             return editWindow.document.getElementById('edit_area').innerHTML;
         }
 
-        // textContent ajax 전송
-        this.saveByAjax = function(textContent) {
-            // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
-            const xhttp = new XMLHttpRequest(); 
-            // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/saveContent", true); // 메서드와 주소 설정    
-            // Header를 JSON으로 셋팅
-            xhttp.setRequestHeader('Content-type', 'application/json');
-            // http 요청
-            xhttp.send(textContent);   // 요청 전송(JSON 전송)
-
-            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
-
-                if(req.readyState === 4) {
-                    if(req.status === 200) {
-                        console.log("------통신 성공------");
-                        // 생성된 신규 게시물 ID값 받기
-                        id = Number(xhttp.responseText);
-                        console.log("id : " + id);
-                        EXAMUploader.setUploadFileList(id)  // 파일 업로드 시작
-                    }else{
-                        console.error("------통신 실패------");
-                        console.error("req.status: " + req.status);
-                        console.error(xhttp.responseText);
-                    }
-                }
-            }
-
-        }
-
-        
     }
 
     // Editor를 새 Object 객체 생성
     const EXAMEditor = new Editor();
     // windows에 이 객체 지정하기
     window.EXAMEditor = EXAMEditor;
-
-    // select 버튼
-    const btnFontType = document.getElementById('font_type');
-    const btnFontSize = document.getElementById('font_size');
-    const btnFontColor = document.getElementById('font_color');
-
-    // select 버튼별 이벤트 적용
-    btnFontType.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('fontName', e.target.value)
-    })
-    btnFontSize.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('fontSize', e.target.value)
-    })
-    btnFontColor.addEventListener('change', function (e) {
-        EXAMEditor.setStyle('foreColor', e.target.value)
-    })
-
 
 
     

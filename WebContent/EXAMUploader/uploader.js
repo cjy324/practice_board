@@ -1,48 +1,31 @@
-// self close 함수
-// 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
+/* Uploader */
 (function () {
-    /* ----- 주요 전역 변수&함수 모음 ----- */
-    let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
-    let id = 0;  // 게시물 id
-
-    // GUID 생성 함수
-    function createGuid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-        });
-    }
-
-    // 게시물 리스트페이지로 이동
-    function goToListPage(){
-        // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
-        // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
-        // href: 그대로 페이지 이동을 의미
-        location.replace("http://localhost:8086/practiceBoard/usr/article/detail?id=" + id);
-    }
-    
-    /* ------------------------------------------------------------------------------------------- */
-    /* 업로더 */
-
-    // 태그 가져오기
-    const fileInput = document.getElementById("fileInput");
-    const uploadZone = document.getElementById("uploadZone");
-    const uploadFiles = document.getElementsByName("uploadFiles");
-    const infoZone = document.getElementById("current_file_info");
-    const progressBarZone = document.getElementById("progressBarZone");
-
-    
     // 업로더 클래스
     // 참고: https://mygumi.tistory.com/312
     // 자바스크립트에서 프로토타입은 자신을 만들어낸 객체의 원형을 뜻한다.
     // Prototype Link - 자신을 만들어낸 객체의 원형
     // Prototype Object - 자신을 통해 만들어질 객체의 원형
     const Uploader = function (){
+        // 업로더 그리기
+        this.drawUploaderHtml = function(){
+            const src = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html"
+            const uploaderHolderFrame = document.getElementById("uploader_holder");
+            uploaderHolderFrame.src = src;
+        }
 
+        let globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
+        let id = 0;  // 게시물 id
         let forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
         let forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
         let forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
         let indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
+        
+        // 태그 가져오기
+        const fileInput = document.getElementById("fileInput");
+        const uploadZone = document.getElementById("uploadZone");
+        const uploadFiles = document.getElementsByName("uploadFiles");
+        const infoZone = document.getElementById("current_file_info");
+        const progressBarZone = document.getElementById("progressBarZone");
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
@@ -50,44 +33,47 @@
             fileInput.click();
         }
 
-        // 드래그한 파일이 최초로 uploadZone에 진입했을 때
-        uploadZone.addEventListener("dragenter", function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-        })
-        // 드래그한 파일이 uploadZone을 벗어났을 때
-        uploadZone.addEventListener("dragleave", function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-        })
-        // 드래그한 파일이 uploadZone에 머물러 있을 때
-        uploadZone.addEventListener("dragover", function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-        })
-        // 드래그한 파일이 uploadZone에 드랍되었을 때
-        uploadZone.addEventListener("drop", function(e) {
-            e.preventDefault();
-            
-            const droppedFiles = e.dataTransfer && e.dataTransfer.files;
-            console.log("droppedFiles: " + droppedFiles);
-            
-            if (droppedFiles != null) {
-                // 만약 files의 갯수가 1보다 작으면 "폴더 업로드 불가" 알림
-                if (droppedFiles.length < 1) {
-                    alert("폴더 업로드 불가");
-                    return;
-                }
+        // Drag & Drop
+        if(uploadZone){
+            // 드래그한 파일이 최초로 uploadZone에 진입했을 때
+            uploadZone.addEventListener("dragenter", function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            })
+            // 드래그한 파일이 uploadZone을 벗어났을 때
+            uploadZone.addEventListener("dragleave", function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            })
+            // 드래그한 파일이 uploadZone에 머물러 있을 때
+            uploadZone.addEventListener("dragover", function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            })
+            // 드래그한 파일이 uploadZone에 드랍되었을 때
+            uploadZone.addEventListener("drop", function(e) {
+                e.preventDefault();
+                
+                const droppedFiles = e.dataTransfer && e.dataTransfer.files;
+                console.log("droppedFiles: " + droppedFiles);
+                
+                if (droppedFiles != null) {
+                    // 만약 files의 갯수가 1보다 작으면 "폴더 업로드 불가" 알림
+                    if (droppedFiles.length < 1) {
+                        alert("폴더 업로드 불가");
+                        return;
+                    }
 
-                // uploadZone에 드랍된 파일들로 파일리스트 세팅
-                for(let i = 0; i < droppedFiles.length; i++){
-                    globalFileList.push(droppedFiles[i]);
+                    // uploadZone에 드랍된 파일들로 파일리스트 세팅
+                    for(let i = 0; i < droppedFiles.length; i++){
+                        globalFileList.push(droppedFiles[i]);
+                    }
+                    EXAMUploader.showFiles(globalFileList);
+                } else {
+                    alert("ERROR");
                 }
-                EXAMUploader.showFiles(globalFileList);
-            } else {
-                alert("ERROR");
-            }
-        })
+            })
+        }
 
         // 업로드 될 파일리스트 그리기
         this.showFiles = function(files) {
@@ -219,7 +205,7 @@
         }
 
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
-        this.setUploadFileList = function(id) {
+        this.setUploadFileList = function() {
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < globalFileList.length; i++){
                 if(globalFileList[i].uploaded === undefined){
@@ -231,11 +217,11 @@
                 alert("새로 업로드될 파일이 없습니다.")
                 return;
             }else if(forUploadFileList.length == 0){  // 선택된 파일이 없는 경우
-                if(id !== undefined){ // 게시물 작성인 경우
-                    alert(id + "번 게시물 작성 완료!!");
-                    goToListPage();
-                    return;
-                }
+                // if(id !== undefined){ // 게시물 작성인 경우
+                //     alert(id + "번 게시물 작성 완료!!");
+                //     goToListPage();
+                //     return;
+                // }
                 alert("선택된 파일이 없습니다.")
                 return;
             }else{
@@ -260,6 +246,14 @@
 
             progressBarZone.innerHTML = progressTag;
             
+        }
+
+        // GUID 생성 함수
+        this.createGuid = function() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+            });
         }
 
         // 파일 업로드
@@ -326,7 +320,7 @@
             if(slicedFiles.length > 0){
                 console.log("------분할 파일 전송 시작------");
 
-                let guid = createGuid();
+                let guid = EXAMUploader.createGuid();
             
                 /* 로컬스토리지에 저장된 기존 업로드 중단된 파일 정보들 확인 시작 */
                 // Key: "resume_upload_" + guid
@@ -489,8 +483,8 @@
                         }else{
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
                             // EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
-                            alert(id + "번 게시물 작성 완료!!");
-                            goToListPage();
+                            // alert(id + "번 게시물 작성 완료!!");
+                            // goToListPage();
                         }              
                         // console.log(xhttp.responseText)
                     }else if(req.status === 200 && indicator == false && slicedFileIndex < slicedFiles.length-1){
