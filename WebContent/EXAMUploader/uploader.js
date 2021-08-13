@@ -16,7 +16,7 @@
         }
 
 
-        // ***************************************************************************
+        /* *************************************************************************** */
 
 
         // 전역변수
@@ -26,12 +26,11 @@
         this.forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
         this.forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
         this.forDeleteFileIndex = 0;  // 수정모드에서 삭제될 파일 인덱스
-        this.indicator = 0; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 4
-        // 업로더 상태를 알려주는 indicator
-        // 0: 중지, 1: 시작, 3: 에러
+        this.indicator = "DEFUALT";  // 업로더 상태를 알려주는 indicator
+        // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
 
-        // ***************************************************************************
+        /* *************************************************************************** */
 
 
 
@@ -241,23 +240,25 @@
                 }
             }
 
+            // 업로드 시나리오별 필터링
             if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
+                EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else if(EXAMUploader.forUploadFileList.length == 0){  // 2. 선택된 파일이 없는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 선택된 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
-                alert("선택된 파일이 없습니다.")
+                EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else{                                // 3. 신규 업로드할 파일이 있는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 있고 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
-                }else{
+                }else{  // 신규 업로드될 파일이 있고 기존 업로드된 파일 중 삭제할 파일이 없는 경우
                     EXAMUploader.createProgressBarWindow();
                     EXAMUploader.startUpload(EXAMUploader.forUploadFileListIndex);
                 }
@@ -293,9 +294,9 @@
                             EXAMUploader.deleteFiles(forDeleteFileIndex);
                         }else if(forDeleteFileIndex >= EXAMUploader.forDeleteFileList.length-1 && EXAMUploader.forUploadFileList.length > 0){
                             EXAMUploader.createProgressBarWindow();
-                            EXAMUploader.startUpload(forUploadFileListIndex);
+                            EXAMUploader.startUpload(EXAMUploader.forUploadFileListIndex);
                         }else{
-                            alert(EXAMUploader.relId + "번 게시물 수정 완료!!");
+                            EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                         } 
                     }else{
                         console.error("------통신 실패------");
@@ -338,7 +339,7 @@
         // 파일 업로드
         this.startUpload = function(forUploadFileListIndex) {
 
-            EXAMUploader.indicator = 1;  // 0: 중지, 1: 시작, 3: 에러
+            EXAMUploader.indicator = "START";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
             // console.log("indicator1111: " + indicator);
             console.log("startUpload--------------- forUploadFileListIndex: " + forUploadFileListIndex + " ---------------");  
 
@@ -549,7 +550,7 @@
                     // 2=loading 요청 접수된 상태, send() has been called
                     // 3=interactive 요청 처리 중 상태
                     // 4=complete 요청 완료되고 응답 준비된 상태
-                    if(req.status === 200 && EXAMUploader.indicator === 1) {
+                    if(req.status === 200 && EXAMUploader.indicator === "START") {
                         // console.log("indicator33333333: " + indicator);
                         
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
@@ -564,12 +565,12 @@
                         }else{
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
-                            EXAMUploader.indicator = 0;
+                            EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // alert(id + "번 게시물 작성 완료!!");
                             // goToListPage();
                         }              
                         // console.log(xhttp.responseText)
-                    }else if(req.status === 200 && EXAMUploader.indicator === 0 && slicedFileIndex < slicedFiles.length-1){
+                    }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);
                         console.log("---업로드 중단---");
                         console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
@@ -581,11 +582,11 @@
                         console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
                         // console.log(xhttp.responseText)
-                    }else if(req.status === 200 && EXAMUploader.indicator === 0 && slicedFileIndex == slicedFiles.length-1){
+                    }else if(req.status === 200 && EXAMUploader.indicator === "DONE" && slicedFileIndex == slicedFiles.length-1){
                         alert("이미 \"" + forUploadFileList[forUploadFileListIndex].name + "\" file의 업로드가 완료되었습니다.");  
                     }else{
                         console.error("------통신 실패------");
-                        EXAMUploader.indicator = 3;
+                        EXAMUploader.indicator = "ERROR";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
                     }
@@ -621,7 +622,7 @@
             // 만약, abort()를 통해 통신을 강제 중단시켜버리면 업로드 상태가 어떨지 알 수 없기 때문에 위험하다.
             // 따라서,
             // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
-            EXAMUploader.indicator = 0;  // 0: 중지, 1: 시작, 3: 에러
+            EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
             console.log("-------------upload canceled-------------");
         }
 

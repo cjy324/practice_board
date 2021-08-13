@@ -36,7 +36,6 @@
         	<iframe id='uploader_holder' class='uploader_holder' src="" frameborder='0'></iframe>
         </div>
     	<div class="article_write_foot">
-    	<div id="test">asd</div>
 			<button type="button" onclick="doWrite()" style="cursor: pointer;">
 				완료
 			</button>

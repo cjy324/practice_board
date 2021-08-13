@@ -11,15 +11,18 @@
             downloaderHolderFrame.src = src;
         }
 
+        /* *************************************************************************** */
+        
         // 전역변수
         this.globalFileList = []; // 다운로드 파일 정보를 담아놓을 fileList
         // let forDownloadFilelistIndex = 0; 
         this.relId = 0; // 게시물 relId
         let progressPercentage = 0; // 다운로드 진행률
         
-        // DB로 요청 후에 이미 파일 정보를 가져왔다고 가정..
-        // 파일 정보 가져와 다운로드 대상리스트 태그 그리기
-        // 파일 정보를 가져와서 전역변수에 담아놓기
+        /* *************************************************************************** */
+        
+        
+        // 파일 로드
         this.fileLoad = function(id) {
             EXAMDownloader.relId = id;
             // 서버로 DB정보 요청
@@ -109,6 +112,11 @@
         this.startDownload = function(forDownloadFilelistIndex) {
             const componentWindow = document.getElementById('downloader_holder').contentWindow;
             const downFiles = componentWindow.document.getElementsByName("downFiles");
+
+            if(EXAMDownloader.globalFileList.length == 0){
+                alert("첨부된 파일이 없습니다.")
+                return;
+            }
 
             let downloadTargetIndex = -1;
             let forDownloadFilelist = []; // 실제 다운로드를 진행할 파일들의 정보를 담을 리스트
@@ -210,7 +218,7 @@
             
         }
 
-        // 다운로드드 프로그래스바 창 생성
+        // 다운로드 프로그래스바 창 생성
         this.createProgressBarWindow = function() {
             const componentWindow = document.getElementById('downloader_holder').contentWindow;
             const progressBarZone_down = componentWindow.document.getElementById("progressBarZone_down");

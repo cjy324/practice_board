@@ -43,7 +43,7 @@ function setBody(body){
 }
 
 // 게시물 리스트페이지로 이동
-function goToListPage(){
+function goToDetailPage(){
     // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
     // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
     // href: 그대로 페이지 이동을 의미
@@ -75,6 +75,15 @@ function saveByAjax(textContent) {
             }
         }
     }
+
+    // 업로드 상태 모니터링
+    const startInterval = setInterval(function(){
+        if(EXAMUploader.indicator === "DONE"){
+            alert(id + '번 게시물 수정 완료!!!');
+            clearInterval(startInterval);
+            goToDetailPage();
+        }
+    }, 100);  // ex) 1초 = 1000
 }
 
 // 글 수정
