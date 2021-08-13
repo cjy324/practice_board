@@ -5,9 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer="defer" src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
-<script defer="defer" src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
-<script defer="defer" src="${pageContext.request.contextPath}/writer.js"></script>
+<script defer src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
+<script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
+<script defer src="${pageContext.request.contextPath}/write.js"></script>
 <script type="text/javascript">
 	function start(){
 		EXAMEditor.drawEditorHtml();
@@ -30,8 +30,9 @@
 			        <input id="titleInput" type="text" placeholder="제목 입력란">
 			    </div>
 			</div>
-			
+			<!-- Editor -->
         	<iframe id='editor_holder' class='editor_holder' src="" frameborder='0'></iframe>
+        	<!-- Uploader -->
         	<iframe id='uploader_holder' class='uploader_holder' src="" frameborder='0'></iframe>
 
         </div>

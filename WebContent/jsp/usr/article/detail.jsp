@@ -6,10 +6,21 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/downloader.js"></script>
+<script defer src="${pageContext.request.contextPath}/EXAMDownloader/downloader.js"></script>
+<script defer src="${pageContext.request.contextPath}/detail.js"></script>
+<script type="text/javascript">
+	function start(){
+		EXAMDownloader.drawDownloaderHtml();
+		
+		// 상세페이지 그리기
+		id = getIdByUrl();
+	    // 게시물 body 요청하기
+	    getBody(id);
+	}
+</script>
 <title>DETAIL</title>
 </head>
-<body onload="EXAMDownloader.fileLoad()">
+<body onload="start()">
 	<section class="main_section">
 		<div class="article_detail_header">
 			<h4>게시물 상세페이지</h4>
@@ -23,45 +34,11 @@
 			</div>
 			<div class="article_detail_body__body">
 				<div id="detail_body__content" class="detail_body__content">
-					${article.body}
 				</div>
 			</div>
-			<div class="downloader_body">
-	            <div id="top_area" class="top_area">
-	                <input id="allCheckbox" type="checkbox" checked="checked" onchange="EXAMDownloader.setAllCheckbox()">
-	                <div>파일 이름</div>
-	                <div>파일 크기</div>
-	            </div>
-	            <div id="download_area" class="download_area">
-					<ul id="downloadZone" class="downloadZone">
-						<li style="height: 100%; display: flex; justify-content: center; align-items: center;">
-							<span style="position: inherit; font-weight: normal; color: blue; font-size: 12px;">첨부 파일 없음</span>
-						</li>
-					</ul>
-	            </div>
-	            <div id="info_area" class="info_area">
-	                <ul>
-	                    <li id="current_file_info" class="current_file_info">
-	                        <span>0</span>
-	                        개 ,
-	                        <span>0 byte</span>
-	                    </li>
-	                </ul>
-	            </div>
-	            <div id="btn_area" class="btn_area">
-	                <table>
-	                    <tbody>
-	                        <tr>
-	                            <td>
-	                            	<button id="button_down" type="button" onclick="EXAMDownloader.startDownload(0)">
-	                            		<span>다운로드</span>
-	                            	</button>
-	                            </td>
-	                        </tr>
-	                    </tbody>
-	                </table>
-	            </div>
-	        </div>
+			<!-- Downloader -->
+			<iframe id='downloader_holder' class='downloader_holder' src="" frameborder='0'></iframe>
+			
 		</div>
 		<div class="article_detail_foot">
 			<button type="button" onclick="location.href='../article/list'" style="cursor: pointer;">
@@ -71,7 +48,6 @@
 				글 수정
 			</button>
 		</div>
-		<iframe id="download_frame" name="download_frame" style="display: none;" src=""></iframe>
 	</section>
 </body>
 </html>

@@ -1,0 +1,118 @@
+/* 노멀라이징 */
+body, ul, li{ 
+    margin:0; 
+    list-style:none; 
+    padding:0; 
+} 
+a{ 
+    text-decoration:none; 
+    color:inherit; 
+}
+
+/* 커스터마이징 */
+.hover-underline:hover{
+	text-decoration: underline;
+}
+label, button, select{
+    margin-top: 1.5px;
+    display: inline-block;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+    margin: 0;
+    text-decoration: none;
+    background: #8d8d8f;
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 2px 2px 0 rgb(0,0,0,0.5);
+}
+label:hover, button:hover, select:hover{
+    text-decoration: underline;
+    background-color: black;
+}
+label:active, button:active, select:active{
+    box-shadow: 0px 0px 0 rgb(0,0,0,0.5);
+}
+label, button{
+    padding: 8px;
+}
+
+
+/* 다운로더 */
+.downloader_holder{
+	height: 100%;
+	width: 100%;
+	text-align:center;
+}
+.downloader_body{
+    display: inline-block;
+    height: 180px;
+    width: 98%;
+    border: solid black 3px;
+    border-radius: 5px;
+}
+.top_area{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    padding-left: 10px;
+    padding-right: 15px;
+}
+.download_area{
+    height: 80px;
+    width: 100%;
+    text-align: left;  
+    border-top: solid rgb(167, 167, 167) 2px;
+    border-bottom: solid rgb(167, 167, 167) 2px;
+    overflow-y: scroll; 
+}
+.downloadZone{
+	height: 100%;
+	z-index: 500;
+	padding-left: 7px;
+    padding-right: 7px;
+}
+.downloadZone > span{
+	text-align: center;
+	padding-top: 50px;
+}
+.downloadZone > li{
+	display: block;
+	position:relative;
+	width: 100%;
+}
+.downloadZone > li > span{
+	font-weight: bold; 
+}
+.downloadZone > li > input{
+	width: 20px;
+}
+.downloadZone > li > span:nth-child(2){
+	text-align: left;
+	text-overflow: ellipsis;
+}
+.downloadZone > li > span:last-child{
+	position:absolute;
+	right: 0;
+}
+.info_area{
+    height: 24px;
+    border-bottom: solid rgb(167, 167, 167) 1px;
+    padding-top: 5px;
+}
+.info_area > ul{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 13px;
+}
+.btn_area{
+    height: 30px;
+    text-align: left;
+}
