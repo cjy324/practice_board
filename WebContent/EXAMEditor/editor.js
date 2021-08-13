@@ -1,4 +1,4 @@
-/* Editor */
+/* EDITOR */
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {  
@@ -9,6 +9,16 @@
             const src = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html"
             const editorHolderFrame = document.getElementById("editor_holder");
             editorHolderFrame.src = src;
+        }
+
+        // 편집영역에 컨텐츠 그리기
+        this.drawBodyContent = function(bodyContent){
+            const editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
+            const editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
+            editorHolderFrameWindow.document.getElementById('edit_frame').addEventListener("load", function(e) {
+                editWindow.document.getElementById('edit_area').innerHTML = bodyContent;
+            })
+            
         }
 
         // autoFocus 기능

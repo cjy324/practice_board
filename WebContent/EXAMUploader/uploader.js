@@ -1,4 +1,4 @@
-/* Uploader */
+/* UPLOADER */
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
@@ -17,12 +17,31 @@
 
         // 전역변수
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
-        this.id = 0;  // 게시물 id
-        let forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
-        let forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
-        let forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
-        let indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
+        this.relId = 0;  // 게시물 id
+        this.forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
+        this.forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
+        this.forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
+        this.forDeleteFileIndex = 0;  // 수정모드에서 삭제될 파일 인덱스
+        this.indicator = false; // ajax 통신이 중단됐는지 여부를 알 수 있는 indicator 변수 선언  // 기본값 false  
         
+
+
+
+
+
+
+        // ***************************************************************************
+
+        // 21.08.12
+        // 업로더 상태를 알려줄만한 indicator 전연변수 있으면 사용자 입장에서 좋을 듯
+        // 1: 시작 2: 진행중 3: 완료 4: 중지 5: 에러
+
+        // ***************************************************************************
+
+
+
+
+
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
@@ -100,7 +119,7 @@
                 fileListInfo += "</span>개 , ";
                 fileListInfo += "<span>";
                 for(let k = 0; k < files.length; k++){
-                    filesSize += files[k].size; 
+                    filesSize += Number(files[k].size); 
                 }
                 fileListInfo += filesSize;
                 fileListInfo += " byte </span>";
@@ -134,7 +153,7 @@
             const componentWindow = document.getElementById('uploader_holder').contentWindow;
             const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             if(uploadFiles.length > 0){
-                const allCheckbox = document.getElementById("allCheckbox");
+                const allCheckbox = componentWindow.document.getElementById("allCheckbox");
                 if(allCheckbox.checked){
                     for(let i = 0; i < uploadFiles.length; i++){
                         uploadFiles[i].checked = true;
@@ -171,8 +190,8 @@
                     
                     for(let k = 0; k < tempArray.length; k++){
                         if(removeTargetIndex == k){  // 체크된 파일 index와 tempArray의 index가 일치하면.....
-                            if(tempArray[k].uploaded === true){  // 1. 기존 업로드됐던 파일인 경우 실제 파일도 삭제하기 위해 forDeleteFileList에 정보 담아두기
-                                forDeleteFileList.push(tempArray[k]);  
+                            if(tempArray[k].uploaded = "true"){  // 1. 기존 업로드됐던 파일인 경우 실제 파일도 삭제하기 위해 forDeleteFileList에 정보 담아두기
+                                EXAMUploader.forDeleteFileList.push(tempArray[k]);  
                                 console.log(k + " file pushed to 'forDeleteFileList'");
                             }
                             delete tempArray[k]; // 2. tempArray의 index가 removeTargetIndex인 원소의 내용 삭제(빈 공간만 남음)
@@ -181,6 +200,8 @@
                     }
                 }
             }
+
+            console.log("EXAMUploader.forDeleteFileList.length: " + EXAMUploader.forDeleteFileList.length)
     
             // tempArray 내 비어있는 요소 삭제(공간까지 삭제, index가 순차적으로 변경됨)
             for(let y = 0; y < tempArray.length; y++){
@@ -216,29 +237,78 @@
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
         this.setUploadFileList = function(id) {
 
-            EXAMUploader.id = id;
+            EXAMUploader.relId = id;
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < EXAMUploader.globalFileList.length; i++){
                 if(EXAMUploader.globalFileList[i].uploaded === undefined){
-                    forUploadFileList.push(EXAMUploader.globalFileList[i])
+                    EXAMUploader.forUploadFileList.push(EXAMUploader.globalFileList[i])
                 }
             }
 
-            if(EXAMUploader.globalFileList.length > 0 && forUploadFileList == 0){  // 신규 업로드될 파일이 없는 경우
-                alert("새로 업로드될 파일이 없습니다.")
+            if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
+                if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
+                    EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
+                    return;
+                }
                 return;
-            }else if(forUploadFileList.length == 0){  // 선택된 파일이 없는 경우
-                // if(id !== undefined){ // 게시물 작성인 경우
-                //     alert(id + "번 게시물 작성 완료!!");
-                //     goToListPage();
-                //     return;
-                // }
+            }else if(EXAMUploader.forUploadFileList.length == 0){  // 2. 선택된 파일이 없는 경우
+                if(EXAMUploader.forDeleteFileList.length > 0){ // 선택된 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
+                    EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
+                    return;
+                }
                 alert("선택된 파일이 없습니다.")
                 return;
-            }else{
-                EXAMUploader.createProgressBarWindow();
-                EXAMUploader.startUpload(forUploadFileListIndex);
+            }else{                                // 3. 신규 업로드할 파일이 있는 경우
+                if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 있고 기존 업로드된 파일 중 삭제할 파일이 있는 경우
+                    EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
+                }else{
+                    EXAMUploader.createProgressBarWindow();
+                    EXAMUploader.startUpload(EXAMUploader.forUploadFileListIndex);
+                }
             }
+        }
+
+        // 기존 업로드된 파일 삭제
+        this.deleteFiles = function(forDeleteFileIndex){
+            console.log("forDeleteFileIndex: " + forDeleteFileIndex)
+            const params = "relId=" + EXAMUploader.relId
+                        + "&id=" + EXAMUploader.forDeleteFileList[forDeleteFileIndex].id
+                        + "&path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
+
+            EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
+        }
+
+        // 기존 업로드된 파일 삭제를 위한 ajax통신
+        this.startDeleteAjax = function(params, forDeleteFileIndex){
+            /* ajax통신 시작 */
+            const xhttp = new XMLHttpRequest();
+            // http 요청 타입 / 주소 / 동기식 여부 설정
+            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/deleteFile?" + params, true); // 메서드와 주소 설정    
+            // http 요청
+            xhttp.send();   // 요청 전송
+            // XmlHttpRequest의 요청 // 통신 상태 모니터링
+            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+                const req = e.target;
+                if(req.readyState === 4) {
+                    if(req.status === 200) {
+                        console.log("------통신 성공------");
+                        if(forDeleteFileIndex < EXAMUploader.forDeleteFileList.length-1){ // 만약, index가 forDeleteFileList.length 보다 작으면
+                            forDeleteFileIndex++; // index 1 증가
+                            EXAMUploader.deleteFiles(forDeleteFileIndex);
+                        }else if(forDeleteFileIndex >= EXAMUploader.forDeleteFileList.length-1 && EXAMUploader.forUploadFileList.length > 0){
+                            EXAMUploader.createProgressBarWindow();
+                            EXAMUploader.startUpload(forUploadFileListIndex);
+                        }else{
+                            alert(EXAMUploader.relId + "번 게시물 수정 완료!!");
+                        } 
+                    }else{
+                        console.error("------통신 실패------");
+                        console.error("req.status: " + req.status);
+                        console.error(xhttp.responseText);
+                    }
+                }
+            }
+            /* ajax통신 끝 */
         }
 
         // 업로드 프로그래스바 창 생성
@@ -272,7 +342,7 @@
         // 파일 업로드
         this.startUpload = function(forUploadFileListIndex) {
 
-            indicator = true;
+            EXAMUploader.indicator = true;
             // console.log("indicator1111: " + indicator);
             console.log("startUpload--------------- forUploadFileListIndex: " + forUploadFileListIndex + " ---------------");  
 
@@ -288,16 +358,16 @@
 
             /* 분할 시작 */
             // 만약, 파일용량이 제한용량보다 크면
-            if(forUploadFileList[forUploadFileListIndex].size >= limitSize){ 
+            if(EXAMUploader.forUploadFileList[forUploadFileListIndex].size >= limitSize){ 
                 // 용량에 따른 분할 수 계산
-                const slicedFilesNum = Math.ceil(forUploadFileList[forUploadFileListIndex].size / limitSize); 
+                const slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
                 console.log("slicedFilesNum: " + slicedFilesNum);
                 // 파일 분할
                 for(let f = 0; f < slicedFilesNum; f++){
                     // 각 분할 횟수별 분할 시작 포인트 설정
                     const startPoint = limitSize * f;
                     // slice(시작점, 자를점, Type)로 파일 분할
-                    const slicedFile = forUploadFileList[forUploadFileListIndex].slice(startPoint, startPoint + limitSize, forUploadFileList[forUploadFileListIndex].type);
+                    const slicedFile = EXAMUploader.forUploadFileList[forUploadFileListIndex].slice(startPoint, startPoint + limitSize, EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
                     // 분할된 파일 slicedFiles 배열 객체에 담기
                     slicedFiles.push(slicedFile);
                 }
@@ -308,11 +378,11 @@
             /* 분할 끝 */
 
             // 기본 파라미터 정보 담기
-            let params = "&relId=" + EXAMUploader.id;
+            let params = "&relId=" + EXAMUploader.relId;
                 params += "&limitSize=" + limitSize;
-                params += "&originName=" + forUploadFileList[forUploadFileListIndex].name;
-                params += "&originSize=" + forUploadFileList[forUploadFileListIndex].size;
-                params += "&originType=" + forUploadFileList[forUploadFileListIndex].type;
+                params += "&originName=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].name;
+                params += "&originSize=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].size;
+                params += "&originType=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].type;
 
             /* 단일 파일일 경우 단일 전송 시작 */
             if(slicedFiles.length == 0){
@@ -324,7 +394,7 @@
                 params += "&slicedFilesLength=" + 0;
                 
                 // ajax통신 시작
-                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "0", params, forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "0", params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
 
             /* 단일 파일 전송 끝 */
             }
@@ -350,7 +420,7 @@
                         canceledFileSize = localStorage.getItem(localStorage.key(l)).split("__")[3];
 
                         // 파일명과 파일크기로 파일 정보 대조
-                        if(forUploadFileList[forUploadFileListIndex].name == canceledFileName && forUploadFileList[forUploadFileListIndex].size == canceledFileSize){
+                        if(EXAMUploader.forUploadFileList[forUploadFileListIndex].name == canceledFileName && EXAMUploader.forUploadFileList[forUploadFileListIndex].size == canceledFileSize){
                             // 이어올리기 선택
                             if(confirm("기존에 업로드된 데이터가 있습니다. 이어서 업로드하시겠습니까?")){
                                 // 저장되있던 정보로 현재 파일의 정보 업데이트
@@ -372,7 +442,7 @@
                 params += "&slicedFilesLength=" + slicedFiles.length;
 
                 // ajax통신 시작
-                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
             
             /* 분할 파일 전송 끝 */
             }
@@ -483,7 +553,7 @@
                     // 2=loading 요청 접수된 상태, send() has been called
                     // 3=interactive 요청 처리 중 상태
                     // 4=complete 요청 완료되고 응답 준비된 상태
-                    if(req.status === 200 && indicator == true) {
+                    if(req.status === 200 && EXAMUploader.indicator == true) {
                         // console.log("indicator33333333: " + indicator);
                         
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
@@ -502,7 +572,7 @@
                             // goToListPage();
                         }              
                         // console.log(xhttp.responseText)
-                    }else if(req.status === 200 && indicator == false && slicedFileIndex < slicedFiles.length-1){
+                    }else if(req.status === 200 && EXAMUploader.indicator == false && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);
                         console.log("---업로드 중단---");
                         console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
@@ -514,7 +584,7 @@
                         console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
                         // console.log(xhttp.responseText)
-                    }else if(req.status === 200 && indicator == false && slicedFileIndex == slicedFiles.length-1){
+                    }else if(req.status === 200 && EXAMUploader.indicator == false && slicedFileIndex == slicedFiles.length-1){
                         alert("이미 \"" + forUploadFileList[forUploadFileListIndex].name + "\" file의 업로드가 완료되었습니다.");  
                     }else{
                         console.error("------통신 실패------");
@@ -526,14 +596,73 @@
             /* 파일 전송을 위한 ajax통신 끝 */
         }
 
+        // 업로드 후 대기 파일리스트 리셋
+        this.afterUploaded = function() {
+            const componentWindow = document.getElementById('uploader_holder').contentWindow;
+            const uploadZone = componentWindow.document.getElementById("uploadZone");
+            const infoZone = componentWindow.document.getElementById("current_file_info");
+
+            let uploadZoneMessage = "";
+                uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
+                uploadZoneMessage += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>이곳에 파일을 Drag & Drop 하세요.</span>";
+                uploadZoneMessage += "</li>";
+            
+            uploadZone.innerHTML = uploadZoneMessage; 
+
+            let resetFileListInfo = "";
+                resetFileListInfo += "<span>0</span>개 , ";
+                resetFileListInfo += "<span>0 byte </span>";
+                resetFileListInfo += "<span>추가됨</span>";
+
+            infoZone.innerHTML = resetFileListInfo;
+        }
+
         // 업로드 중단 버튼
         this.cancelUpload = function() {
             // xhttp.abort(); // 통신 강제 중단
             // 만약, abort()를 통해 통신을 강제 중단시켜버리면 업로드 상태가 어떨지 알 수 없기 때문에 위험하다.
             // 따라서,
             // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
-            indicator = false;
+            EXAMUploader.indicator = false;
             console.log("-------------upload canceled-------------");
+        }
+
+
+        // 파일 로드
+        this.fileLoad = function(id) {
+
+            EXAMUploader.relId = id;
+
+            // 서버로 DB정보 요청
+            /* ajax통신 시작 */
+            const xhttp = new XMLHttpRequest();
+            // http 요청 타입 / 주소 / 동기식 여부 설정
+            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
+            // http 요청
+            xhttp.send();   // 요청 전송
+
+            // XmlHttpRequest의 요청 // 통신 상태 모니터링
+            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+                const req = e.target;
+
+                if(req.readyState === 4) {
+                    if(req.status === 200) {
+                        console.log("------통신 성공------");
+                        // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
+                        // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
+                        EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+                        if(EXAMUploader.globalFileList.length !== 0){
+                            EXAMUploader.showFiles(EXAMUploader.globalFileList);
+                        }
+                        console.log("------첨부파일 로드 완료------");
+                    }else{
+                        console.error("------통신 실패------");
+                        console.error("req.status: " + req.status);
+                        console.error(xhttp.responseText);
+                    }
+                }
+            }
+            /* ajax통신 끝 */
         }
     }
 
