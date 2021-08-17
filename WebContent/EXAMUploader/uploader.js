@@ -664,7 +664,13 @@
             // 따라서,
             // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+            this.resetGlobalFileList();
             console.log("-------------upload canceled-------------");
+        }
+
+        // 업로드 중단 시 현재 globalFileList 리셋
+        this.resetGlobalFileList = function(){
+            EXAMUploader.globalFileList = [];
         }
         
         // 파일 로드

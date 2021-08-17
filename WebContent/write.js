@@ -42,6 +42,11 @@ function saveByAjax(textContent) {
 
     // 업로드 상태 모니터링
     const startInterval = setInterval(function(){
+        if(EXAMUploader.indicator === "STOP"){
+            alert('업로드 중단');
+            clearInterval(startInterval);
+            return;
+        }
         if(EXAMUploader.indicator === "DONE"){
             alert(id + '번 게시물 작성 완료!!!');
             clearInterval(startInterval);
