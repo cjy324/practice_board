@@ -22,6 +22,7 @@
         // 전역변수
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
         this.relId = 0;  // 게시물 id
+        this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         this.forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
         this.forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
         this.forDeleteFileList = [];  // 수정모드에서 기존 업로드되었던 파일을 삭제할 경우 실제 파일도 삭제하기 위해 이 배열도 필요
@@ -310,10 +311,13 @@
 
         // 업로드 프로그래스바 창 생성
         this.createProgressBarWindow = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const progressBarZone = componentWindow.document.getElementById("progressBarZone");
-
-            let progressTag = "<p id='allFilesMessage' style='font-weight: bold;'></p>"
+            // 팝업 창
+            // 팝업옵션 설정
+            const options = 'top=100, left=500, width=600, height=250';
+            EXAMUploader.popupWindow = window.open('about:blank', 'preview', options);
+        
+            let progressTag = "<div id='progressBarZone' style='width:100%; text-align:center;'>"
+                            + "<p id='allFilesMessage' style='font-weight: bold;'></p>"
                             + "<span style='font-size: 14px;'>총 진행률</span>"
                             + "<progress id='allFilesProgressBar' value='0' max='100' style='width:50%'></progress>"
                             + "<br/><br/>"
@@ -322,10 +326,12 @@
                             + "<p id='allMessage'></p>"
                             + "<span style='font-size: 14px;'>분할파일별 진행률</span>"
                             + "<progress id='progressBar' value='0' max='100' style='width:50%'></progress>"
-                            + "<p id='message'></p>";
+                            + "<p id='message'></p>"
+                            + "</div>";
 
-            progressBarZone.innerHTML = progressTag;
-            
+            // 팝업창에 HTML내용 넣기
+            EXAMUploader.popupWindow.document.write(progressTag);
+            EXAMUploader.popupWindow.document.close();
         }
 
         // GUID 생성 함수
@@ -450,14 +456,12 @@
 
             const xhttp = new XMLHttpRequest();
 
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-
-            const allFilesProgressBar = componentWindow.document.getElementById("allFilesProgressBar");
-            const allProgressBar = componentWindow.document.getElementById("allProgressBar");
-            const progressBar = componentWindow.document.getElementById("progressBar");
-            const allFilesMessage = componentWindow.document.getElementById("allFilesMessage");
-            const allMessage = componentWindow.document.getElementById("allMessage");
-            const message = componentWindow.document.getElementById("message");
+            const allFilesProgressBar = EXAMUploader.popupWindow.document.getElementById("allFilesProgressBar");
+            const allProgressBar = EXAMUploader.popupWindow.document.getElementById("allProgressBar");
+            const progressBar = EXAMUploader.popupWindow.document.getElementById("progressBar");
+            const allFilesMessage = EXAMUploader.popupWindow.document.getElementById("allFilesMessage");
+            const allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
+            const message = EXAMUploader.popupWindow.document.getElementById("message");
             // console.log("indicator22222: " + indicator);
             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             

@@ -17,6 +17,7 @@
         this.globalFileList = []; // 다운로드 파일 정보를 담아놓을 fileList
         // let forDownloadFilelistIndex = 0; 
         this.relId = 0; // 게시물 relId
+        this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         let progressPercentage = 0; // 다운로드 진행률
         
         /* *************************************************************************** */
@@ -220,28 +221,35 @@
 
         // 다운로드 프로그래스바 창 생성
         this.createProgressBarWindow = function() {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const progressBarZone_down = componentWindow.document.getElementById("progressBarZone_down");
 
-            let progressTag = "<p id='allFilesMessage_down' style='font-weight: bold;'></p>"
+            // 팝업 창
+            // 팝업옵션 설정
+            const options = 'top=100, left=500, width=600, height=250';
+            EXAMDownloader.popupWindow = window.open('about:blank', 'preview', options);
+
+            let progressTag = "<div id='progressBarZone_down' style='width:100%; text-align:center;'>"
+                            + "<p id='allFilesMessage_down' style='font-weight: bold;'></p>"
                             + "<span style='font-size: 14px;'>총 진행률</span>"
                             + "<progress id='allFilesProgressBar_down' value='0' max='100' style='width:50%'></progress>"
                             + "<br/><br/>"
                             + "<span style='font-size: 14px;'>파일별 진행률</span>"
                             + "<progress id='progressBar_down' value='0' max='100' style='width:50%'></progress>"
-                            + "<p id='message_down'></p>";
+                            + "<p id='message_down'></p>"
+                            + "</div>";
 
-            progressBarZone_down.innerHTML = progressTag;
+            // 팝업창에 HTML내용 넣기
+            EXAMDownloader.popupWindow.document.write(progressTag);
+            EXAMDownloader.popupWindow.document.close();
             
         }
 
         // 다운로드 프로그래스바 그리기
         this.drawDownloadProgressBar = function(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex) {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const allFilesProgressBar_down = componentWindow.document.getElementById("allFilesProgressBar_down");
-            const progressBar_down = componentWindow.document.getElementById("progressBar_down");
-            const allFilesMessage_down = componentWindow.document.getElementById("allFilesMessage_down");
-            const message_down = componentWindow.document.getElementById("message_down");
+
+            const allFilesProgressBar_down = EXAMDownloader.popupWindow.document.getElementById("allFilesProgressBar_down");
+            const progressBar_down = EXAMDownloader.popupWindow.document.getElementById("progressBar_down");
+            const allFilesMessage_down = EXAMDownloader.popupWindow.document.getElementById("allFilesMessage_down");
+            const message_down = EXAMDownloader.popupWindow.document.getElementById("message_down");
 
             progressBar_down.value = progressPercentage;
             progressBar_down.max = 100;
