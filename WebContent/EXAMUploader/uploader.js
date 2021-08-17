@@ -486,12 +486,10 @@
                 xhttp.upload.onloadend = function (e) {
                     allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     message.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
-                    if(e.loaded == e.total && forUploadFileListIndex+1 == forUploadFileList.length){
-                        if(e.loaded == e.total && forUploadFileListIndex+1 == forUploadFileList.length){
-                            allFilesMessage.textContent = "ALL Files Upload Complete!!!";
-                            allMessage.textContent = "";
-                            message.textContent = "";
-                        }
+                    if(forUploadFileListIndex+1 == forUploadFileList.length){
+                        allFilesMessage.textContent = "ALL Files Upload Complete!!!";
+                        allMessage.textContent = "";
+                        message.textContent = "";
                     }
                 };
             // 분할 전송인 경우
@@ -510,7 +508,7 @@
                         allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     }
                     message.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "[" + Number(slicedFileIndex+1) + "]" + "\"" + " file upload complete!!";
-                    if(e.loaded == e.total && forUploadFileListIndex+1 == forUploadFileList.length){
+                    if(slicedFileIndex == slicedFiles.length-1 && forUploadFileListIndex+1 == forUploadFileList.length){
                         allFilesMessage.textContent = "ALL Files Upload complete!!";
                         allMessage.textContent = "";
                         message.textContent = "";
@@ -569,6 +567,7 @@
                         }else{
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
+                            EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // alert(id + "번 게시물 작성 완료!!");
                             // goToListPage();

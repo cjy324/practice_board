@@ -183,6 +183,9 @@
                         forDownloadFilelistIndex++;
                         EXAMDownloader.startIframRequestForDownload(forDownloadFilelist, forDownloadFilelistIndex); // 다음 파일 다운로드 시작
                     }
+                    if(forDownloadFilelistIndex >= forDownloadFilelist.length-1){
+                        EXAMDownloader.popupWindow.close(); // 팝업창 닫기
+                    }
                 }
             }, 100);  // ex) 1초 = 1000
 
