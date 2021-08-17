@@ -27,10 +27,10 @@
 		</div>
 		<div class="article_detail_body">
 			<div class="article_detail_body__head">
-				<div class="detail_body__cell_id">번호: ${article.id}</div>
-				<div class="detail_body__cell_regDate">작성일: ${article.regDate}</div>
-				<div class="detail_body__cell_writer">작성자: ${article.writer}</div>
-				<div class="detail_body__cell_title">제목: ${article.title}</div>				
+				<div class="detail_body__cell_id">&nbsp 번호: ${article.id}</div>
+				<div class="detail_body__cell_regDate">&nbsp 작성일: ${article.regDate}</div>
+				<div class="detail_body__cell_writer">&nbsp 작성자: ${article.writer}</div>
+				<div class="detail_body__cell_title">&nbsp 제목: ${article.title}</div>				
 			</div>
 			<div class="article_detail_body__body">
 				<div id="detail_body__content" class="detail_body__content">
