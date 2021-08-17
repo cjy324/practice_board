@@ -157,8 +157,9 @@ public class UploadController {
 				// 모든 분할 파일 업로드가 완료 되었을 경우
 				if(index == slicedFilesLength-1 && tempTxtFile.exists()) {
 					// 1. 파일명 원본 파일명으로 변경
+					path = appendSuffixName(path, 0); // 중복파일명 넘버링 유틸
 					File uploadedFile = new File(NewFileLocation);
-					File originFileName = new File(realPath + "\\" + originName);
+					File originFileName = new File(path);
 					uploadedFile.renameTo(originFileName);
 					// 2. 임시 txt파일 삭제
 					tempTxtFile.delete();
@@ -173,16 +174,35 @@ public class UploadController {
 				// Multipart로 요청 받기 위한 객체 생성
 				MultipartRequest multiReq = new MultipartRequest(
 						request, 
-						realPath, // 파일을 저장할 디렉토리 지정
+						tempPath, // 파일을 임시 저장할 디렉토리 지정
 						sizeLimit, // 첨부파일 최대 용량 설정(bite)
-						encType, // 인코딩 방식 지정
-						new DefaultFileRenamePolicy() // 중복 파일 처리(동일한 파일명이 업로드되면 뒤에 숫자 등을 붙여 중복 회피)
+						encType // 인코딩 방식 지정
+						// new DefaultFileRenamePolicy() // 중복 파일 처리(동일한 파일명이 업로드되면 뒤에 숫자 등을 붙여 중복 회피)
 					);
-
-				// 각 파일별 이름 받아오기
-				// String fileName = multiReq.getFilesystemName("files");
-				// System.out.println(fileName);
 				
+				// 새로 들어온 파일 임시객체
+				File newFile = multiReq.getFile("files");
+				
+				// 실제 업로드 폴더에 중복파일명 있는지 검사 후 넘버링
+				path = appendSuffixName(path, 0); // 중복파일명 넘버링 유틸
+			
+				// 새로 들어온 파일 읽기
+				FileInputStream fr = new FileInputStream(newFile);
+				int fileByte;
+				// RandomAccessFile로 실제 저장할 파일 쓰기(read/write)
+				RandomAccessFile raf = new RandomAccessFile(path, "rw");
+				
+				// 1바이트씩 읽으면서 파일쓰기
+				while((fileByte = fr.read()) != -1) {
+					raf.write(fileByte); // 파일쓰기
+				}
+
+				raf.close(); // 자원 사용 종료
+				fr.close(); // 자원 사용 종료
+				
+				// 임시 파일 삭제
+				newFile.delete();
+			
 				System.out.println("\"" + originName + "\"" + " 업로드 완료");
 				
 				// DB에 파일 정보 저장
@@ -220,9 +240,9 @@ public class UploadController {
 			// 각 파일별 이름 받아오기
 			String fileName = multiReq.getFilesystemName("imgFiles");
 			// System.out.println(fileName);
-			String originFileName = multiReq.getOriginalFileName("imgFiles");
+			// String originFileName = multiReq.getOriginalFileName("imgFiles");
 			// System.out.println(originFileName);
-			String fileType = multiReq.getContentType("imgFiles");
+			// String fileType = multiReq.getContentType("imgFiles");
 			// System.out.println(fileType);
 			
 			String imgPath = "http://localhost:8086/practiceBoard/imageUpload/" + fileName;
@@ -256,4 +276,52 @@ public class UploadController {
 	
 			return null;
 		}
+		
+		/**
+	     * 동일한 파일명의 파일이 존재하는지 확인하여 존재한다면 파일명 뒤에 "_숫자" 를 
+	     * 붙이고 "_숫자"가 존재한다면 "_숫자" +1 을 더한값을 재귀적으로 카운트
+	     * @author digimon1740
+	     * */
+		// 출처: https://devsh.tistory.com/entry/파일-존재여부확인하여-시퀀스번호를-붙이는-유틸 [날샘 코딩]
+	    public static String appendSuffixName(String orgFileName, int seq) {
+	        String retFileName = "";
+	        System.out.println("orgFileName: " + orgFileName);
+	        // 파일이 존재하는지 확인한다.
+	        if (new File(orgFileName).exists()) {
+	            int plusSeq = 1;
+	 
+	            String seqStr = "_" + seq;
+	            String firstFileName = orgFileName.substring(0,
+	                    orgFileName.lastIndexOf("."));
+	            String extName = orgFileName
+	                    .substring(orgFileName.lastIndexOf("."));
+	 
+	            // 만약 파일명에 _숫자가 들어간경우라면..
+	            if (orgFileName.lastIndexOf("_") != -1
+	                    && !firstFileName.endsWith("_")) {
+	                String numStr = orgFileName.substring(
+	                        orgFileName.lastIndexOf("_") + 1,
+	                        orgFileName.lastIndexOf(extName));
+	                try {
+	                    plusSeq = Integer.parseInt(numStr);
+	                    plusSeq = plusSeq + 1;
+	                    
+	                    retFileName = firstFileName.substring(0,
+	                            firstFileName.lastIndexOf("_"))
+	                            + "_" + plusSeq + extName;
+	                } catch (NumberFormatException e) {
+	                    retFileName = firstFileName + seqStr + extName;
+	                    return appendSuffixName(retFileName, ++plusSeq);
+	                }
+	                
+	            } else {
+	                retFileName = firstFileName + seqStr + extName;
+	            }
+	            // 재귀
+	            return appendSuffixName(retFileName, ++plusSeq);
+	        } else {
+	            return orgFileName;
+	        }
+	    }
+
 }
