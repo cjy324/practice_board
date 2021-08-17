@@ -22,8 +22,8 @@
         // 전역변수
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
         this.relId = 0;  // 게시물 id
-        this.totalNum = 0;
-        this.totalSize = 0;
+        this.totalNum = 0;  // 업로드 대기리스트 수
+        this.totalSize = 0;  // 업로드 대기리스트 용량
         this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         this.forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
         this.forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
