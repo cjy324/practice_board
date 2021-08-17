@@ -97,7 +97,7 @@
                 forDownloadFileListLi += "<li>";
                 forDownloadFileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' name='downFiles' value='false' checked>";
                 forDownloadFileListLi += "<span>" + globalFileList[i].name + "</span>";
-                forDownloadFileListLi += "<span> " + globalFileList[i].size + " Byte</span>";
+                forDownloadFileListLi += "<span> " + globalFileList[i].size.toLocaleString() + " Byte</span>";
                 forDownloadFileListLi += "</li>";
             }
 
@@ -107,12 +107,12 @@
             let fileListInfo = "";
                 fileListInfo += "<span>";
                 fileListInfo += globalFileList.length;
-                fileListInfo += "</span>개 , ";
+                fileListInfo += "</span>개 / ";
                 fileListInfo += "<span>";
                 for(let k = 0; k < globalFileList.length; k++){
                     filesSize += Number(globalFileList[k].size); 
                 }
-                fileListInfo += filesSize;
+                fileListInfo += filesSize.toLocaleString();
                 fileListInfo += " byte </span>";
 
             infoZone.innerHTML = fileListInfo;

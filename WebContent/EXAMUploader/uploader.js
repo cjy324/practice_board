@@ -116,7 +116,7 @@
                 fileListLi += "<li>";
                 fileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' value='false' name='uploadFiles' checked>";
                 fileListLi += "<span>" + files[i].name + "</span>";
-                fileListLi += "<span> " + files[i].size + " Byte</span>";
+                fileListLi += "<span> " + files[i].size.toLocaleString() + " Byte</span>";
                 fileListLi += "</li>";
             }
             
@@ -126,13 +126,13 @@
             let fileListInfo = "";
                 fileListInfo += "<span>";
                 fileListInfo += files.length;
-                fileListInfo += "</span>개 , ";
+                fileListInfo += "</span>개 / ";
                 fileListInfo += "<span>";
                 for(let k = 0; k < files.length; k++){
                     filesSize += Number(files[k].size); 
                     EXAMUploader.totalNum++;
                 }
-                fileListInfo += filesSize;
+                fileListInfo += filesSize.toLocaleString();
                 fileListInfo += " byte </span>";
                 fileListInfo += "<span>추가됨</span>";
 
