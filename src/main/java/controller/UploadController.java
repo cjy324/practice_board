@@ -285,20 +285,17 @@ public class UploadController {
 		// 출처: https://devsh.tistory.com/entry/파일-존재여부확인하여-시퀀스번호를-붙이는-유틸 [날샘 코딩]
 	    public static String appendSuffixName(String orgFileName, int seq) {
 	        String retFileName = "";
-	        System.out.println("orgFileName: " + orgFileName);
+	        
 	        // 파일이 존재하는지 확인한다.
 	        if (new File(orgFileName).exists()) {
 	            int plusSeq = 1;
 	 
 	            String seqStr = "_" + seq;
-	            String firstFileName = orgFileName.substring(0,
-	                    orgFileName.lastIndexOf("."));
-	            String extName = orgFileName
-	                    .substring(orgFileName.lastIndexOf("."));
+	            String firstFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
+	            String extName = orgFileName.substring(orgFileName.lastIndexOf("."));
 	 
 	            // 만약 파일명에 _숫자가 들어간경우라면..
-	            if (orgFileName.lastIndexOf("_") != -1
-	                    && !firstFileName.endsWith("_")) {
+	            if (orgFileName.lastIndexOf("_") != -1 && !firstFileName.endsWith("_")) {
 	                String numStr = orgFileName.substring(
 	                        orgFileName.lastIndexOf("_") + 1,
 	                        orgFileName.lastIndexOf(extName));
@@ -306,9 +303,8 @@ public class UploadController {
 	                    plusSeq = Integer.parseInt(numStr);
 	                    plusSeq = plusSeq + 1;
 	                    
-	                    retFileName = firstFileName.substring(0,
-	                            firstFileName.lastIndexOf("_"))
-	                            + "_" + plusSeq + extName;
+	                    retFileName = firstFileName.substring(0, firstFileName.lastIndexOf("_"))
+	                            	+ "_" + plusSeq + extName;
 	                } catch (NumberFormatException e) {
 	                    retFileName = firstFileName + seqStr + extName;
 	                    return appendSuffixName(retFileName, ++plusSeq);

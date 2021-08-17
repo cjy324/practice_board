@@ -22,6 +22,20 @@
         
         /* *************************************************************************** */
         
+
+
+        // 단위변환 유틸 함수
+        this.formatBytes = function(bytes, decimals) {
+            if (bytes === 0) return '0 Bytes';
+        
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
         
         // 파일 로드
         this.fileLoad = function(id) {
@@ -97,7 +111,7 @@
                 forDownloadFileListLi += "<li>";
                 forDownloadFileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' name='downFiles' value='false' checked>";
                 forDownloadFileListLi += "<span>" + globalFileList[i].name + "</span>";
-                forDownloadFileListLi += "<span> " + globalFileList[i].size.toLocaleString() + " Byte</span>";
+                forDownloadFileListLi += "<span> " + this.formatBytes(globalFileList[i].size, 2) + "</span>";
                 forDownloadFileListLi += "</li>";
             }
 
@@ -112,8 +126,8 @@
                 for(let k = 0; k < globalFileList.length; k++){
                     filesSize += Number(globalFileList[k].size); 
                 }
-                fileListInfo += filesSize.toLocaleString();
-                fileListInfo += " byte </span>";
+                fileListInfo += this.formatBytes(filesSize, 2);
+                fileListInfo += " </span>";
 
             infoZone.innerHTML = fileListInfo;
         }

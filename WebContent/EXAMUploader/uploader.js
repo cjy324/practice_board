@@ -37,8 +37,18 @@
 
 
 
-
-
+        // 단위변환 유틸 함수
+        this.formatBytes = function(bytes, decimals) {
+            if (bytes === 0) return '0 Bytes';
+        
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
@@ -116,7 +126,7 @@
                 fileListLi += "<li>";
                 fileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' value='false' name='uploadFiles' checked>";
                 fileListLi += "<span>" + files[i].name + "</span>";
-                fileListLi += "<span> " + files[i].size.toLocaleString() + " Byte</span>";
+                fileListLi += "<span> " + this.formatBytes(files[i].size, 2) + "</span>";
                 fileListLi += "</li>";
             }
             
@@ -132,8 +142,8 @@
                     filesSize += Number(files[k].size); 
                     EXAMUploader.totalNum++;
                 }
-                fileListInfo += filesSize.toLocaleString();
-                fileListInfo += " byte </span>";
+                fileListInfo += this.formatBytes(filesSize, 2);
+                fileListInfo += " </span>";
                 fileListInfo += "<span>추가됨</span>";
 
             EXAMUploader.totalSize = filesSize;

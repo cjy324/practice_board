@@ -150,20 +150,20 @@
                         if(imageFileList.length == 1){
                             imagePath = req.responseText;
                             // img 태그 생성  
-                            EXAMEditor.drawImag(imagePath);
+                            EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
                             EXAMEditor.setFocusForIE();
                         }else if(imageFileList.length > 1 && imageFileListIndex < imageFileList.length-1){ // 만약, index가 imageFileList.length 보다 작으면
                             imagePath = req.responseText; 
                             // img 태그 생성
-                            EXAMEditor.drawImag(imagePath);
+                            EXAMEditor.drawImg(imagePath);
 
                             imageFileListIndex++; // index 1 증가
                             EXAMEditor.doUploadImgAjax(imageFileList, imageFileListIndex);
                         }else{
                             imagePath = req.responseText;  
                             // img 태그 생성  
-                            EXAMEditor.drawImag(imagePath);
+                            EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
                             EXAMEditor.setFocusForIE();
                         } 
@@ -175,7 +175,7 @@
         }
 
         // 이미지 그리기
-        this.drawImag = function(imagePath){
+        this.drawImg = function(imagePath){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById('edit_frame').contentWindow;
             // img 태그 생성
