@@ -7,7 +7,7 @@ let id = 0;
 // URL로 부터 게시물 ID값 가져오기
 function getIdByUrl(){
     const url = window.location.href;
-    return Number(url.split('?id=')[1]);
+    return Number(url.split("?id=")[1]);
 }
 
 // 게시물 body 받아오기
@@ -57,7 +57,7 @@ function saveByAjax(textContent) {
     // http 요청 타입 / 주소 / 동기식 여부 설정
     xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/modifyContent?id=" + id, true); // 메서드와 주소 설정    
     // Header를 JSON으로 셋팅
-    xhttp.setRequestHeader('Content-type', 'application/json');
+    xhttp.setRequestHeader("Content-type", "application/json");
     // http 요청
     xhttp.send(textContent);   // 요청 전송(JSON 전송)
 
@@ -79,12 +79,12 @@ function saveByAjax(textContent) {
     // 업로드 상태 모니터링
     const startInterval = setInterval(function(){
         if(EXAMUploader.indicator === "STOP"){
-            alert('업로드 중단');
+            alert("업로드 중단");
             clearInterval(startInterval);
             return;
         }
         if(EXAMUploader.indicator === "DONE"){
-            alert(id + '번 게시물 수정 완료!!!');
+            alert(id + "번 게시물 수정 완료!!!");
             clearInterval(startInterval);
             goToDetailPage();
         }

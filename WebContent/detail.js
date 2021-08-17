@@ -7,7 +7,7 @@ let id = 0;
 // URL로 부터 게시물 ID값 가져오기
 function getIdByUrl(){
     const url = window.location.href;
-    return Number(url.split('?id=')[1]);
+    return Number(url.split("?id=")[1]);
 }
 
 // 게시물 body 받아오기
@@ -38,6 +38,6 @@ function getBody(id){
 
 // 게시물 body 그리기
 function setBody(body){
-    document.getElementById('detail_body__content').innerHTML = body;
+    document.getElementById("detail_body__content").innerHTML = body;
     EXAMDownloader.fileLoad(id);
 }
