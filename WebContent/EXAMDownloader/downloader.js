@@ -3,11 +3,11 @@
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
     // 다운로더 클래스
-    const Downloader = function (){
+    var Downloader = function (){
         // 다운로더 그리기
         this.drawDownloaderHtml = function(){
-            const src = "http://localhost:8086/practiceBoard/EXAMDownloader/downloaderHolder.html"
-            const downloaderHolderFrame = document.getElementById("downloader_holder");
+            var src = "http://localhost:8086/practiceBoard/EXAMDownloader/downloaderHolder.html"
+            var downloaderHolderFrame = document.getElementById("downloader_holder");
             downloaderHolderFrame.src = src;
         }
 
@@ -28,7 +28,7 @@
             EXAMDownloader.relId = id;
             // 서버로 DB정보 요청
             /* ajax통신 시작 */
-            const xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
             xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + EXAMDownloader.relId, true); // 메서드와 주소 설정    
             // http 요청
@@ -36,14 +36,23 @@
     
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
+                var req = e.target;
     
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
                         // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
                         // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-                        EXAMDownloader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+                        // EXAMDownloader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+                        
+                        // 21.08.17 IE 호환을 위한 로직 수정
+                        // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
+                        // 그 값을 구하는 함수는 오류가 발생한다.
+                        // var keys = Object.keys(parameters); // 오류 발생 안함
+                        // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
+                        // 출처: https://sehoonkim.tistory.com/246 [Think Different]
+                        EXAMDownloader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
+                        
                         if(EXAMDownloader.globalFileList.length !== 0){
                             EXAMDownloader.drawDownloadFileList(EXAMDownloader.globalFileList);
                         }
@@ -60,10 +69,10 @@
 
         // 전체 선택/해제
         this.setAllCheckbox = function() {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const downFiles = componentWindow.document.getElementsByName("downFiles");
+            var componentWindow = document.getElementById("downloader_holder").contentWindow;
+            var downFiles = componentWindow.document.getElementsByName("downFiles");
             if(downFiles.length > 0){
-                const allCheckbox = componentWindow.document.getElementById("allCheckbox");
+                var allCheckbox = componentWindow.document.getElementById("allCheckbox");
                 if(allCheckbox.checked){
                     for(let i = 0; i < downFiles.length; i++){
                         downFiles[i].checked = true;
@@ -78,9 +87,9 @@
 
         // downloadZone에 그리기
         this.drawDownloadFileList = function(globalFileList) {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const downloadZone = componentWindow.document.getElementById("downloadZone");
-            const infoZone = componentWindow.document.getElementById("current_file_info");
+            var componentWindow = document.getElementById("downloader_holder").contentWindow;
+            var downloadZone = componentWindow.document.getElementById("downloadZone");
+            var infoZone = componentWindow.document.getElementById("current_file_info");
             
             let forDownloadFileListLi = "";	// uploadedZone에 upload한 파일별 태그 생성
             
@@ -111,8 +120,8 @@
 
         // 다운로드 시작("다운로드" 버튼 클릭시)
         this.startDownload = function(forDownloadFilelistIndex) {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const downFiles = componentWindow.document.getElementsByName("downFiles");
+            var componentWindow = document.getElementById("downloader_holder").contentWindow;
+            var downFiles = componentWindow.document.getElementsByName("downFiles");
 
             if(EXAMDownloader.globalFileList.length == 0){
                 alert("첨부된 파일이 없습니다.")
@@ -133,6 +142,7 @@
                     }
                 }
             }
+
             if(forDownloadFilelist.length == 0){
                 alert("선택된 파일이 없습니다.")
                 return;
@@ -145,15 +155,15 @@
         // GUID 생성 함수
         this.createGuid = function() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
             });
         }
 
         // iframe으로 다운로드 요청 보내기
         this.startIframRequestForDownload = function(forDownloadFilelist, forDownloadFilelistIndex) {
-            const componentWindow = document.getElementById('downloader_holder').contentWindow;
-            const downlaodFrame = componentWindow.document.getElementById("download_frame");
+            var componentWindow = document.getElementById("downloader_holder").contentWindow;
+            var downlaodFrame = componentWindow.document.getElementById("download_frame");
 
             // 선택된 파일들에 대한 정보 URL로 담기
             // iframe에 URL 세팅
@@ -173,7 +183,7 @@
             // 일정한 시간 간격으로 작업을 수행하기 위해서 사용
             // clearInterval 함수를 사용하여 중지
             // 지정된 작업은 모두 실행되고 다음 작업 스케쥴이 중지
-            const startInterval = setInterval(function(){
+            var startInterval = setInterval(function(){
                 if(progressPercentage < 100){  // 다운로드 진행률 값이 100보다 작으면..
                     EXAMDownloader.checkDownProgress(downFileGuid, forDownloadFilelist, forDownloadFilelistIndex);
                 }else if(progressPercentage == 100){  // 다운로드 진행률 값이 100이면...종료
@@ -182,9 +192,6 @@
                         progressPercentage = 0;
                         forDownloadFilelistIndex++;
                         EXAMDownloader.startIframRequestForDownload(forDownloadFilelist, forDownloadFilelistIndex); // 다음 파일 다운로드 시작
-                    }
-                    if(forDownloadFilelistIndex >= forDownloadFilelist.length-1){
-                        EXAMDownloader.popupWindow.close(); // 팝업창 닫기
                     }
                 }
             }, 100);  // ex) 1초 = 1000
@@ -195,7 +202,7 @@
         this.checkDownProgress = function(downFileGuid, forDownloadFilelist, forDownloadFilelistIndex) {
 
             /* ajax통신 시작 */
-            const xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
             xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/progress?guid=" + downFileGuid, true); // 메서드와 주소 설정    
             // http 요청
@@ -203,7 +210,7 @@
 
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
+                var req = e.target;
     
                 if(req.readyState === 4) {
                     if(req.status === 200) {
@@ -227,8 +234,8 @@
 
             // 팝업 창
             // 팝업옵션 설정
-            const options = 'top=100, left=500, width=600, height=250';
-            EXAMDownloader.popupWindow = window.open('about:blank', 'preview', options);
+            var options = 'top=100, left=500, width=600, height=250';
+            EXAMDownloader.popupWindow = window.open('about:blank', 'progress', options);
 
             let progressTag = "<div id='progressBarZone_down' style='width:100%; text-align:center;'>"
                             + "<p id='allFilesMessage_down' style='font-weight: bold;'></p>"
@@ -249,10 +256,10 @@
         // 다운로드 프로그래스바 그리기
         this.drawDownloadProgressBar = function(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex) {
 
-            const allFilesProgressBar_down = EXAMDownloader.popupWindow.document.getElementById("allFilesProgressBar_down");
-            const progressBar_down = EXAMDownloader.popupWindow.document.getElementById("progressBar_down");
-            const allFilesMessage_down = EXAMDownloader.popupWindow.document.getElementById("allFilesMessage_down");
-            const message_down = EXAMDownloader.popupWindow.document.getElementById("message_down");
+            var allFilesProgressBar_down = EXAMDownloader.popupWindow.document.getElementById("allFilesProgressBar_down");
+            var progressBar_down = EXAMDownloader.popupWindow.document.getElementById("progressBar_down");
+            var allFilesMessage_down = EXAMDownloader.popupWindow.document.getElementById("allFilesMessage_down");
+            var message_down = EXAMDownloader.popupWindow.document.getElementById("message_down");
 
             progressBar_down.value = progressPercentage;
             progressBar_down.max = 100;
@@ -263,12 +270,13 @@
             if(progressPercentage == 100 && forDownloadFilelistIndex+1 == forDownloadFilelist.length){
                 allFilesMessage_down.textContent = "ALL Files Download complete!!";
                 message_down.textContent = "";
+                EXAMDownloader.popupWindow.close(); // 팝업창 닫기
             }
         }
     }
 
     // Downloader를 새 Object 객체 생성
-    const EXAMDownloader = new Downloader();
+    var EXAMDownloader = new Downloader();
 
     // 최상위 window에 이 객체 지정하기
     top.EXAMDownloader = EXAMDownloader;

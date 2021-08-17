@@ -27,7 +27,7 @@ a{
 }
 .article_list_body{
 	display: inline-block;
-    height: 300px;
+    min-height: 300px;
     width: 70%;
     border: solid black 3px;
     border-radius: 5px;
@@ -48,10 +48,9 @@ a{
 	border-bottom: 1px solid;
 }
 .article_list_body__cell > .list_body__cell_title{
+	width: var(--list_body__cell_title__width);	
 	text-align: left;
 }
-
-
 .list_body__cell_id{
 	width: var(--list_body__cell_id__width);	
 }
@@ -76,13 +75,14 @@ a{
 	display: inline-block;
 	width: 70%;
 	text-align: right;
+	margin-top: 5px;
 }
 
 
 /* 게시물 상세페이지 */
 .article_detail_body{
 	display: inline-block;
-    height: 600px;
+    min-height: 600px;
     width: 90%;
     border: solid black 3px;
     border-radius: 5px;
@@ -111,6 +111,7 @@ a{
 	display: inline-block;
 	width: 90%;
 	text-align: right;
+	margin-top: 5px;
 }
 
 
@@ -126,6 +127,7 @@ a{
 	display: inline-block;
 	width: 70%;
 	text-align: right;
+	margin-top: 5px;
 }
 
 

@@ -75,12 +75,12 @@ public class DownloadController {
 			String originType = request.getParameter("originType");
 			
 			// (테스트용)
-			System.out.println("index : " + index);
-			System.out.println("guid : " + guid);
-			System.out.println("originName : " + originName);
-			System.out.println("originSize : " + originSize);
-			System.out.println("originPath : " + originPath);
-			System.out.println("originType : " + originType);
+//			System.out.println("index : " + index);
+//			System.out.println("guid : " + guid);
+//			System.out.println("originName : " + originName);
+//			System.out.println("originSize : " + originSize);
+//			System.out.println("originPath : " + originPath);
+//			System.out.println("originType : " + originType);
 			
 			/* HTTP 헤더 셋팅 시작 */
 			response.reset();
@@ -99,7 +99,7 @@ public class DownloadController {
 			
 			// 파일 임시 업로드 경로 설정
 			String tempPath = request.getServletContext().getRealPath("temp");
-			System.out.println("tempPath : " + tempPath); //(테스트용)
+			// System.out.println("tempPath : " + tempPath); //(테스트용)
 
 			File tempDir = new File(tempPath);
 			if(!tempDir.exists()){	// 만약, tempPath 경로에 폴더가 없으면 폴더 생성
@@ -165,7 +165,7 @@ public class DownloadController {
 			String guid = request.getParameter("guid");
 			
 			// (테스트용)
-			System.out.println("guid : " + guid);
+			// System.out.println("guid : " + guid);
 			
 			// 다운로드 상태를 임시 저장해 놓을 txt파일 읽기
 			String tempPath = request.getServletContext().getRealPath("temp");

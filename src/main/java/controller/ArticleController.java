@@ -34,11 +34,9 @@ public class ArticleController {
 			List<Article> articles = new ArrayList<>();
 			articles = articleService.getArticles();
 
-			// 
+			// 첨부파일 갯수 가져오기
 			List<Integer> genFileCounts = new ArrayList<>();
 			genFileCounts = genFileService.getGenFileCounts(articles);
-			
-			// 첨부파일 갯수 가져오기
 			
 			// 클라이언트에 전달
 			request.setAttribute("articles", articles);
@@ -156,9 +154,6 @@ public class ArticleController {
 				
 				// DB에 저장 후 id값 가져오기
 				articleService.modifyContent(id, title, body);
-				
-				
-				
 				
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block

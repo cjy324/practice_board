@@ -6,6 +6,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!-- ie css root변수적용 --> 
+<script> 
+window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\/script>'); 
+</script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
 <title>LIST</title>
 </head>

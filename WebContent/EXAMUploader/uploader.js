@@ -7,11 +7,11 @@
     // 자바스크립트에서 프로토타입은 자신을 만들어낸 객체의 원형을 뜻한다.
     // Prototype Link - 자신을 만들어낸 객체의 원형
     // Prototype Object - 자신을 통해 만들어질 객체의 원형
-    const Uploader = function (){
+    var Uploader = function (){
         // 업로더 그리기
         this.drawUploaderHtml = function(){
-            const src = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html"
-            const uploaderHolderFrame = document.getElementById("uploader_holder");
+            var src = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html"
+            var uploaderHolderFrame = document.getElementById("uploader_holder");
             uploaderHolderFrame.src = src;
         }
 
@@ -40,15 +40,15 @@
 
         // 버튼으로 파일추가input 불러오기
         this.selectFiles = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const fileInput = componentWindow.document.getElementById("fileInput");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var fileInput = componentWindow.document.getElementById("fileInput");
             fileInput.click();
         }
 
         // Drag & Drop
         document.getElementById('uploader_holder').addEventListener("load", function(e) {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadZone = componentWindow.document.getElementById("uploadZone");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadZone = componentWindow.document.getElementById("uploadZone");
             // 드래그한 파일이 최초로 uploadZone에 진입했을 때
             uploadZone.addEventListener("dragenter", function(e) {
                 e.stopPropagation();
@@ -68,7 +68,7 @@
             uploadZone.addEventListener("drop", function(e) {
                 e.preventDefault();
                 
-                const droppedFiles = e.dataTransfer && e.dataTransfer.files;
+                var droppedFiles = e.dataTransfer && e.dataTransfer.files;
                 console.log("droppedFiles: " + droppedFiles);
                 
                 if (droppedFiles != null) {
@@ -91,13 +91,12 @@
 
         // 업로드 될 파일리스트 그리기
         this.showFiles = function(files) {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadZone = componentWindow.document.getElementById("uploadZone");
-            const infoZone = componentWindow.document.getElementById("current_file_info");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadZone = componentWindow.document.getElementById("uploadZone");
+            var infoZone = componentWindow.document.getElementById("current_file_info");
             let fileListLi = "";	// dropZone에 drop한 파일별 태그 생성
         
             for(let i = 0; i < files.length; i++) {
-                // console.log(files[i]);
                 fileListLi += "<li>";
                 fileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' value='false' name='uploadFiles' checked>";
                 fileListLi += "<span>" + files[i].name + "</span>";
@@ -138,17 +137,16 @@
             for(let i = 0; i < e.target.files.length; i++){
                 EXAMUploader.globalFileList.push(e.target.files[i]);
             }
-            // console.log(EXAMUploader.globalFileList);
             // input에 파일이 들어오면 dropZone에 업로드 될 파일리스트 그리기
             EXAMUploader.showFiles(EXAMUploader.globalFileList);
         }
 
         // 전체 선택/해제
         this.setAllCheckbox = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             if(uploadFiles.length > 0){
-                const allCheckbox = componentWindow.document.getElementById("allCheckbox");
+                var allCheckbox = componentWindow.document.getElementById("allCheckbox");
                 if(allCheckbox.checked){
                     for(let i = 0; i < uploadFiles.length; i++){
                         uploadFiles[i].checked = true;
@@ -163,8 +161,9 @@
 
         // 선택된 파일 삭제
         this.removeSelectedFiles = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
+
             if(confirm("정말 삭제하시겠습니까?") == false){
                 return;
             }
@@ -178,7 +177,7 @@
                 tempArray.push(EXAMUploader.globalFileList[x]);
             }
     
-            // tempArray 내 체크된 파일 원소의 내용만 삭제(빈 공간만 남음, index는 유지됨)
+            // 1. tempArray 내 체크된 파일 원소의 내용만 삭제(빈 공간만 남음, index는 유지됨)
             for(let i = 0; i < uploadFiles.length; i++){
                 if(uploadFiles[i].checked){  // 체크된 파일만 필터링
                     removeTargetIndex = Number(uploadFiles[i].id.split("_")[2]);
@@ -196,10 +195,9 @@
                     }
                 }
             }
-
             console.log("EXAMUploader.forDeleteFileList.length: " + EXAMUploader.forDeleteFileList.length)
     
-            // tempArray 내 비어있는 요소 삭제(공간까지 삭제, index가 순차적으로 변경됨)
+            // 2. tempArray 내 비어있는 요소 삭제(공간까지 삭제, index가 순차적으로 변경됨)
             for(let y = 0; y < tempArray.length; y++){
                 if(tempArray[y] === undefined){
                     tempArray.splice(y, 1);
@@ -222,8 +220,8 @@
 
         // 전체 파일 선택 및 삭제
         this.selectAllFilesAndRemove = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
             for(let i = 0; i < uploadFiles.length; i++){
                 uploadFiles[i].checked = true;
             }
@@ -269,7 +267,7 @@
         // 기존 업로드된 파일 삭제
         this.deleteFiles = function(forDeleteFileIndex){
             console.log("forDeleteFileIndex: " + forDeleteFileIndex)
-            const params = "relId=" + EXAMUploader.relId
+            var params = "relId=" + EXAMUploader.relId
                         + "&id=" + EXAMUploader.forDeleteFileList[forDeleteFileIndex].id
                         + "&path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
 
@@ -279,14 +277,14 @@
         // 기존 업로드된 파일 삭제를 위한 ajax통신
         this.startDeleteAjax = function(params, forDeleteFileIndex){
             /* ajax통신 시작 */
-            const xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
             xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/deleteFile?" + params, true); // 메서드와 주소 설정    
             // http 요청
             xhttp.send();   // 요청 전송
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
+                var req = e.target;
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
@@ -313,8 +311,8 @@
         this.createProgressBarWindow = function() {
             // 팝업 창
             // 팝업옵션 설정
-            const options = 'top=100, left=500, width=600, height=250';
-            EXAMUploader.popupWindow = window.open('about:blank', 'preview', options);
+            var options = 'top=100, left=500, width=600, height=250';
+            EXAMUploader.popupWindow = window.open('about:blank', 'progress', options);
         
             let progressTag = "<div id='progressBarZone' style='width:100%; text-align:center;'>"
                             + "<p id='allFilesMessage' style='font-weight: bold;'></p>"
@@ -337,7 +335,7 @@
         // GUID 생성 함수
         this.createGuid = function() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
             });
         }
@@ -351,11 +349,10 @@
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
-            const limitSize = 1 * 1024 * 1024;  // Byte // 약 1MB
-            // console.log("limitSize: " + limitSize);
+            var limitSize = 1 * 1024 * 1024;  // Byte // 약 1MB
             
             // 분할한 파일을 담을 배열 객체
-            const slicedFiles = [];
+            var slicedFiles = [];
             // 분할 전송시 사용할 index
             let slicedFileIndex = 0;
 
@@ -363,14 +360,14 @@
             // 만약, 파일용량이 제한용량보다 크면
             if(EXAMUploader.forUploadFileList[forUploadFileListIndex].size >= limitSize){ 
                 // 용량에 따른 분할 수 계산
-                const slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
+                var slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
                 console.log("slicedFilesNum: " + slicedFilesNum);
                 // 파일 분할
                 for(let f = 0; f < slicedFilesNum; f++){
                     // 각 분할 횟수별 분할 시작 포인트 설정
-                    const startPoint = limitSize * f;
+                    var startPoint = limitSize * f;
                     // slice(시작점, 자를점, Type)로 파일 분할
-                    const slicedFile = EXAMUploader.forUploadFileList[forUploadFileListIndex].slice(startPoint, startPoint + limitSize, EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                    var slicedFile = EXAMUploader.forUploadFileList[forUploadFileListIndex].slice(startPoint, startPoint + limitSize, EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
                     // 분할된 파일 slicedFiles 배열 객체에 담기
                     slicedFiles.push(slicedFile);
                 }
@@ -454,14 +451,14 @@
         // ajax통신
         this.startAjax = function(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex) {
 
-            const xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest();
 
-            const allFilesProgressBar = EXAMUploader.popupWindow.document.getElementById("allFilesProgressBar");
-            const allProgressBar = EXAMUploader.popupWindow.document.getElementById("allProgressBar");
-            const progressBar = EXAMUploader.popupWindow.document.getElementById("progressBar");
-            const allFilesMessage = EXAMUploader.popupWindow.document.getElementById("allFilesMessage");
-            const allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
-            const message = EXAMUploader.popupWindow.document.getElementById("message");
+            var allFilesProgressBar = EXAMUploader.popupWindow.document.getElementById("allFilesProgressBar");
+            var allProgressBar = EXAMUploader.popupWindow.document.getElementById("allProgressBar");
+            var progressBar = EXAMUploader.popupWindow.document.getElementById("progressBar");
+            var allFilesMessage = EXAMUploader.popupWindow.document.getElementById("allFilesMessage");
+            var allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
+            var message = EXAMUploader.popupWindow.document.getElementById("message");
             // console.log("indicator22222: " + indicator);
             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
@@ -519,7 +516,7 @@
 
             /* 파일 전송을 위한 ajax통신 시작 */
             // file 전송 정보를 담을 formData 객체 생성
-            const newFormData = new FormData();
+            var newFormData = new FormData();
             // 각 file을 formData 객체에 담기
             if(slicedFiles.length == 0){ // 단일 전송인 경우
                 newFormData.append("files", forUploadFileList[forUploadFileListIndex]);
@@ -529,9 +526,9 @@
 
             // http 요청 타입 / 주소 / 동기식 여부 설정
             if(slicedFiles.length == 0){    // 단일 전송인 경우
-                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + 0 + params, true); // 메서드와 주소 설정    
+                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + 0 + encodeURI(params), true); // 메서드와 주소 설정    
             }else{      // 분할 전송인 경우
-                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + slicedFileIndex + params, true); // 메서드와 주소 설정
+                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + slicedFileIndex + encodeURI(params), true); // 메서드와 주소 설정
             }
             
             // http 요청
@@ -541,8 +538,7 @@
             // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
                 // XMLHttpRequest를 이벤트 파라미터에서 취득
-                const req = e.target;
-                // console.log(req);   // 콘솔 출력
+                var req = e.target;
 
                 // 통신 상태가 완료가 되면...
                 if(req.readyState === 4) {    // 요청이 완료되면
@@ -569,10 +565,7 @@
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-                            // alert(id + "번 게시물 작성 완료!!");
-                            // goToListPage();
                         }              
-                        // console.log(xhttp.responseText)
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);
                         console.log("---업로드 중단---");
@@ -584,7 +577,6 @@
                         localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
-                        // console.log(xhttp.responseText)
                     }else if(req.status === 200 && EXAMUploader.indicator === "DONE" && slicedFileIndex == slicedFiles.length-1){
                         alert("이미 \"" + forUploadFileList[forUploadFileListIndex].name + "\" file의 업로드가 완료되었습니다.");  
                     }else{
@@ -600,9 +592,9 @@
 
         // 업로드 후 대기 파일리스트 리셋
         this.afterUploaded = function() {
-            const componentWindow = document.getElementById('uploader_holder').contentWindow;
-            const uploadZone = componentWindow.document.getElementById("uploadZone");
-            const infoZone = componentWindow.document.getElementById("current_file_info");
+            var componentWindow = document.getElementById('uploader_holder').contentWindow;
+            var uploadZone = componentWindow.document.getElementById("uploadZone");
+            var infoZone = componentWindow.document.getElementById("current_file_info");
 
             let uploadZoneMessage = "";
                 uploadZoneMessage += "<li style='height:100%; display: flex; justify-content: center; align-items: center;'>";
@@ -628,8 +620,7 @@
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
             console.log("-------------upload canceled-------------");
         }
-
-
+        
         // 파일 로드
         this.fileLoad = function(id) {
 
@@ -637,7 +628,7 @@
 
             // 서버로 DB정보 요청
             /* ajax통신 시작 */
-            const xhttp = new XMLHttpRequest();
+            var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
             xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
             // http 요청
@@ -645,14 +636,23 @@
 
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                const req = e.target;
+                var req = e.target;
 
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
                         // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
                         // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-                        EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+                        // EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+
+                        // 21.08.17 IE 호환을 위한 로직 수정
+                        // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
+                        // 그 값을 구하는 함수는 오류가 발생한다.
+                        // var keys = Object.keys(parameters); // 오류 발생 안함
+                        // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
+                        // 출처: https://sehoonkim.tistory.com/246 [Think Different]
+                        EXAMUploader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
+
                         if(EXAMUploader.globalFileList.length !== 0){
                             EXAMUploader.showFiles(EXAMUploader.globalFileList);
                         }
@@ -669,7 +669,7 @@
     }
 
     // Uploader를 새 Object 객체 생성
-    const EXAMUploader = new Uploader();
+    var EXAMUploader = new Uploader();
 
     // 최상위 windows에 이 객체 지정하기
     top.EXAMUploader = EXAMUploader;

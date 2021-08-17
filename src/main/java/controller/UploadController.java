@@ -40,14 +40,14 @@ public class UploadController {
 			int slicedFilesLength = Integer.parseInt(request.getParameter("slicedFilesLength"));
 			
 			// (테스트용)
-			System.out.println("guid : " + guid);
-			System.out.println("limitSize : " + limitSize);
-			System.out.println("relId : " + relId);
-			System.out.println("originName : " + originName);
-			System.out.println("originSize : " + originSize);
-			System.out.println("originType : " + originType);
-			System.out.println("index : " + index);
-			System.out.println("slicedFilesLength : " + slicedFilesLength);
+//			System.out.println("guid : " + guid);
+//			System.out.println("limitSize : " + limitSize);
+//			System.out.println("relId : " + relId);
+//			System.out.println("originName : " + originName);
+//			System.out.println("originSize : " + originSize);
+//			System.out.println("originType : " + originType);
+//			System.out.println("index : " + index);
+//			System.out.println("slicedFilesLength : " + slicedFilesLength);
 
 			// multipartRequest로 파일 생성시 용량
 			int sizeLimit = 10 * 1024 * 1024; // 약 10MB
@@ -83,7 +83,7 @@ public class UploadController {
 			
 			// 분할 파일 여부 체크
 			String isSliced = request.getParameter("sliced");
-			System.out.println("isSliced? : " + isSliced); //(테스트용)
+			// System.out.println("isSliced? : " + isSliced); //(테스트용)
 			
 			// 분할 파일인 경우...
 			if(isSliced != null && isSliced.equals("true")) {
@@ -125,7 +125,7 @@ public class UploadController {
 				
 				// 새로 들어온 분할 파일 객체 생성
 				File newFile = multiReq.getFile("slicedFiles");
-				System.out.println("newFile : " + newFile.getName()); //(테스트용)
+				// System.out.println("newFile : " + newFile.getName()); //(테스트용)
 			
 				// 새로 들어온 분할 파일 읽기
 				FileInputStream fr = new FileInputStream(newFile);
@@ -142,7 +142,7 @@ public class UploadController {
 				}
 
 				// (테스트용)
-				System.out.println("getFilePointer : " + raf.getFilePointer());
+				// System.out.println("getFilePointer : " + raf.getFilePointer());
 
 				raf.close(); // 자원 사용 종료
 				fr.close(); // 자원 사용 종료
@@ -180,8 +180,10 @@ public class UploadController {
 					);
 
 				// 각 파일별 이름 받아오기
-				String fileName = multiReq.getFilesystemName("files");
-				System.out.println(fileName);
+				// String fileName = multiReq.getFilesystemName("files");
+				// System.out.println(fileName);
+				
+				System.out.println("\"" + originName + "\"" + " 업로드 완료");
 				
 				// DB에 파일 정보 저장
 				genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
@@ -217,11 +219,11 @@ public class UploadController {
 
 			// 각 파일별 이름 받아오기
 			String fileName = multiReq.getFilesystemName("imgFiles");
-			System.out.println(fileName);
+			// System.out.println(fileName);
 			String originFileName = multiReq.getOriginalFileName("imgFiles");
-			System.out.println(originFileName);
+			// System.out.println(originFileName);
 			String fileType = multiReq.getContentType("imgFiles");
-			System.out.println(fileType);
+			// System.out.println(fileType);
 			
 			String imgPath = "http://localhost:8086/practiceBoard/imageUpload/" + fileName;
 			
@@ -237,10 +239,10 @@ public class UploadController {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String path = request.getParameter("path");
 			
-			System.out.println("relId : " + relId);
-			System.out.println("id : " + id);
-			System.out.println("path : " + path);
-			
+			// (테스트용)
+			// System.out.println("relId : " + relId);
+			// System.out.println("id : " + id);
+			// System.out.println("path : " + path);
 			
 			// 1. DB에서 관련 정보 삭제
 			genFileService.deleteFileInfo(relId, id);
