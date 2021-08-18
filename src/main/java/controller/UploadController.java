@@ -14,7 +14,6 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import container.Container;
-import service.ArticleService;
 import service.GenFileService;
 
 
@@ -164,9 +163,8 @@ public class UploadController {
 					tempTxtFile.delete();
 					System.out.println("\"" + originName + "\"" + " 업로드 완료");
 					
-//					// 3. DB에 파일 정보 저장(사용자용)
-//					int relId = Integer.parseInt(request.getParameter("relId"));
-//					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+					// 업로드된 파일 경로 리턴
+					response.getWriter().append(URLEncoder.encode(path, "UTF-8"));
 					
 				}
 				
@@ -205,13 +203,11 @@ public class UploadController {
 			
 				System.out.println("\"" + originName + "\"" + " 업로드 완료");
 				
-
-//				// DB에 파일 정보 저장(사용자용)
-//				int relId = Integer.parseInt(request.getParameter("relId"));
-//				genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+				// 업로드된 파일 경로 리턴
+				response.getWriter().append(URLEncoder.encode(path, "UTF-8"));
 			
 			}
-			return null;
+			return "notJspPath";
 		}
 		
 		// 이미지 업로드 서버
@@ -257,8 +253,8 @@ public class UploadController {
 		
 		// 파일 삭제
 		public String deleteFile(HttpServletRequest request, HttpServletResponse response) {
-			int relId = Integer.parseInt(request.getParameter("relId"));
-			int id = Integer.parseInt(request.getParameter("id"));
+//			int relId = Integer.parseInt(request.getParameter("relId"));
+//			int id = Integer.parseInt(request.getParameter("id"));
 			String path = request.getParameter("path");
 			
 			// (테스트용)
@@ -266,14 +262,14 @@ public class UploadController {
 			// System.out.println("id : " + id);
 			// System.out.println("path : " + path);
 			
-			// 1. DB에서 관련 정보 삭제
-			genFileService.deleteFileInfo(relId, id);
+//			// 1. DB에서 관련 정보 삭제
+//			genFileService.deleteFileInfo(relId, id);
 			
 			// 2. 실제 파일 삭제
 			File file = new File(path);
 			if(file.exists()) {
 				file.delete();
-				System.out.println(id + "번 file 삭제 완료");
+				System.out.println("file 삭제 완료");
 			}
 	
 			return null;

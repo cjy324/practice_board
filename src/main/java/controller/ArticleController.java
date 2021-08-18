@@ -3,17 +3,21 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import container.Container;
 import dto.Article;
+import dto.GenFile;
 import service.ArticleService;
 import service.GenFileService;
 
@@ -96,6 +100,52 @@ public class ArticleController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			return "notJspPath";
+		}
+		
+		public String mappingFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			
+			int relId = Integer.parseInt(request.getParameter("relId"));
+			
+			//JSON Parsing
+			StringBuffer data = new StringBuffer();
+			String line = null;
+			
+			try {
+				// BufferedReader로 request읽기
+				BufferedReader reader = request.getReader();
+				
+				while ((line = reader.readLine()) != null) {
+					data.append(line);
+				};
+				
+				// JSONParser객체 생성
+				JSONParser parser = new JSONParser();
+				// JSONParser로 파싱 후
+				// JSONObject에 JSON형태로 담기
+				JSONArray files = (JSONArray) parser.parse(data.toString());
+				JSONObject json = new JSONObject();
+
+				for(int i = 0; i < files.size(); i++) {
+					json = (JSONObject) files.get(i);
+					
+					String originName = json.get("name").toString();
+					long originSize = Long.parseLong(json.get("size").toString());
+					String path = json.get("path").toString();
+					String originType = json.get("type").toString();
+					
+					// DB에 파일 정보 저장
+					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+				}
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// 클라이언트로 완료 메시지 전달
+			response.getWriter().append("DONE");
 
 			return "notJspPath";
 		}

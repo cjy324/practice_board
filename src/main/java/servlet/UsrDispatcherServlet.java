@@ -57,6 +57,8 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.write(request, response);
 			}else if(requestName.equals("saveContent")) {
 				jspPath = articleController.saveContent(request, response);
+			}else if(requestName.equals("mappingFiles")) {
+				jspPath = articleController.mappingFiles(request, response);
 			}else if(requestName.equals("modify")) {
 				jspPath = articleController.modify(request, response);
 			}else if(requestName.equals("getBody")) {

@@ -22,7 +22,9 @@
 
         // 전역변수
         this.usrServerPath = "";  // 사용자 업로더 서버 경로
+        this.forDeleteFilePath = "";  // 서버상 업로더된 파일들을 삭제하기 위한 경로
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
+        this.uploadCompleteList = []  // 업로드 완료 파일리스트
         this.relId = 0;  // 게시물 id
         this.totalNum = 0;  // 업로드 대기리스트 수
         this.totalSize = 0;  // 업로드 대기리스트 용량
@@ -161,6 +163,9 @@
                 
                 uploadZone.innerHTML = uploadZoneMessage; 
             }
+
+            // 파일리스트 셋팅
+            EXAMUploader.globalFileList = files;
         }
 
         // 파일 업로드를 위한 데이터 셋팅(from Input)
@@ -294,14 +299,18 @@
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
-                EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+                // 완료 함수 호출
+                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                // EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else if(EXAMUploader.forUploadFileList.length == 0){  // 2. 선택된 파일이 없는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 선택된 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
-                EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+                // 완료 함수 호출
+                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                // EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else{                                // 3. 신규 업로드할 파일이 있는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 있고 기존 업로드된 파일 중 삭제할 파일이 있는 경우
@@ -316,9 +325,7 @@
         // 기존 업로드된 파일 삭제
         this.deleteFiles = function(forDeleteFileIndex){
             console.log("forDeleteFileIndex: " + forDeleteFileIndex)
-            var params = "relId=" + EXAMUploader.relId
-                        + "&id=" + EXAMUploader.forDeleteFileList[forDeleteFileIndex].id
-                        + "&path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
+            var params = "path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
 
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
         }
@@ -328,7 +335,7 @@
             /* ajax통신 시작 */
             var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/deleteFile?" + params, true); // 메서드와 주소 설정    
+            xhttp.open("POST", EXAMUploader.forDeleteFilePath + "?" + params, true); // 메서드와 주소 설정    
             // http 요청
             xhttp.send();   // 요청 전송
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
@@ -345,6 +352,8 @@
                             EXAMUploader.startUpload(EXAMUploader.forUploadFileListIndex);
                         }else{
                             EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+                            // 완료 함수 호출
+                            window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);    
                         } 
                     }else{
                         console.error("------통신 실패------");
@@ -598,24 +607,42 @@
                     // 4=complete 요청 완료되고 응답 준비된 상태
                     if(req.status === 200 && EXAMUploader.indicator === "START") {
                         // console.log("indicator33333333: " + indicator);
+                        var uploadedFile = null;
                         
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
                             slicedFileIndex++; // index 1 증가
                             // 재귀함수: 함수 내에서 자신을 다시 호출
                             EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
-                        }
-                        else if(forUploadFileListIndex < forUploadFileList.length-1){
+                        }else if(forUploadFileListIndex < forUploadFileList.length-1){
+                            // 업로드된 파일 경로 받아 저장하기
+                            uploadedFile = {
+                                name: forUploadFileList[forUploadFileListIndex].name,
+                                size: forUploadFileList[forUploadFileListIndex].size,
+                                type: forUploadFileList[forUploadFileListIndex].type,
+                                path: decodeURI(xhttp.responseText).replace("%3A", ":")
+                            }
+                            EXAMUploader.uploadCompleteList.push(uploadedFile);
+
                             forUploadFileListIndex++;
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
                             EXAMUploader.startUpload(forUploadFileListIndex);
                         }else{
+                            // 업로드된 파일 경로 받아 저장하기
+                            uploadedFile = {
+                                name: forUploadFileList[forUploadFileListIndex].name,
+                                size: forUploadFileList[forUploadFileListIndex].size,
+                                type: forUploadFileList[forUploadFileListIndex].type,
+                                path: decodeURI(xhttp.responseText).replace("%3A", ":")
+                            }
+                            EXAMUploader.uploadCompleteList.push(uploadedFile);
+
                             console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
                             // 완료 함수 호출
-                            window.EXAMUploader_UploadComplete(forUploadFileList);
+                            window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);
@@ -678,51 +705,51 @@
             EXAMUploader.globalFileList = [];
         }
         
-        // 파일 로드(게시판용)
-        this.fileLoad = function(id, usrLoadServerPath) {
-            usrLoadServerPath = "http://localhost:8086/practiceBoard/usr/download/loadFiles"; // (임시)
-            EXAMUploader.relId = id;
+        // // 파일 로드(게시판용)
+        // this.fileLoad = function(id, usrLoadServerPath) {
+        //     usrLoadServerPath = "http://localhost:8086/practiceBoard/usr/download/loadFiles"; // (임시)
+        //     EXAMUploader.relId = id;
 
-            // 서버로 DB정보 요청
-            /* ajax통신 시작 */
-            var xhttp = new XMLHttpRequest();
-            // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", usrLoadServerPath + "?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
-            // http 요청
-            xhttp.send();   // 요청 전송
+        //     // 서버로 DB정보 요청
+        //     /* ajax통신 시작 */
+        //     var xhttp = new XMLHttpRequest();
+        //     // http 요청 타입 / 주소 / 동기식 여부 설정
+        //     xhttp.open("POST", usrLoadServerPath + "?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
+        //     // http 요청
+        //     xhttp.send();   // 요청 전송
 
-            // XmlHttpRequest의 요청 // 통신 상태 모니터링
-            xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-                var req = e.target;
+        //     // XmlHttpRequest의 요청 // 통신 상태 모니터링
+        //     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+        //         var req = e.target;
 
-                if(req.readyState === 4) {
-                    if(req.status === 200) {
-                        console.log("------통신 성공------");
-                        // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
-                        // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-                        // EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
+        //         if(req.readyState === 4) {
+        //             if(req.status === 200) {
+        //                 console.log("------통신 성공------");
+        //                 // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
+        //                 // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
+        //                 // EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
 
-                        // 21.08.17 IE 호환을 위한 로직 수정
-                        // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
-                        // 그 값을 구하는 함수는 오류가 발생한다.
-                        // var keys = Object.keys(parameters); // 오류 발생 안함
-                        // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
-                        // 출처: https://sehoonkim.tistory.com/246 [Think Different]
-                        EXAMUploader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
+        //                 // 21.08.17 IE 호환을 위한 로직 수정
+        //                 // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
+        //                 // 그 값을 구하는 함수는 오류가 발생한다.
+        //                 // var keys = Object.keys(parameters); // 오류 발생 안함
+        //                 // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
+        //                 // 출처: https://sehoonkim.tistory.com/246 [Think Different]
+        //                 EXAMUploader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
 
-                        if(EXAMUploader.globalFileList.length !== 0){
-                            EXAMUploader.showFiles(EXAMUploader.globalFileList);
-                        }
-                        console.log("------첨부파일 로드 완료------");
-                    }else{
-                        console.error("------통신 실패------");
-                        console.error("req.status: " + req.status);
-                        console.error(xhttp.responseText);
-                    }
-                }
-            }
-            /* ajax통신 끝 */
-        }
+        //                 if(EXAMUploader.globalFileList.length !== 0){
+        //                     EXAMUploader.showFiles(EXAMUploader.globalFileList);
+        //                 }
+        //                 console.log("------첨부파일 로드 완료------");
+        //             }else{
+        //                 console.error("------통신 실패------");
+        //                 console.error("req.status: " + req.status);
+        //                 console.error(xhttp.responseText);
+        //             }
+        //         }
+        //     }
+        //     /* ajax통신 끝 */
+        // }
     }
 
     // Uploader를 새 Object 객체 생성

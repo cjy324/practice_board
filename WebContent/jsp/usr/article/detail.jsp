@@ -10,7 +10,13 @@
 <script defer src="${pageContext.request.contextPath}/detail.js"></script>
 <script type="text/javascript">
 	function start(){
-		EXAMDownloader.drawDownloaderHtml();
+
+		// 다운로더 적용	
+		var downloaderPath = "http://localhost:8086/practiceBoard/EXAMDownloader/downloaderHolder.html";
+		var downloaderServerPath = "http://localhost:8086/practiceBoard/usr/download/server";
+		var downloadProgressPath = "http://localhost:8086/practiceBoard/usr/download/progress";
+			
+		EXAMDownloader.drawDownloaderHtml(downloaderPath, downloaderServerPath, downloadProgressPath);
 		
 		// 상세페이지 그리기
 		id = getIdByUrl();

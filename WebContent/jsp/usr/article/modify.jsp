@@ -10,8 +10,19 @@
 <script defer src="${pageContext.request.contextPath}/modify.js"></script>
 <script type="text/javascript">
 	function start(){
-		EXAMEditor.drawEditorHtml();
-		EXAMUploader.drawUploaderHtml();
+		// 에디터 적용
+		var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
+		var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+		
+		EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+		
+		// 업로더 적용
+		var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+		var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+		
+		EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+		EXAMUploader.forDeleteFilePath = "http://localhost:8086/practiceBoard/usr/upload/deleteFile";
+		
 		// 상세페이지 그리기
 		id = getIdByUrl();
 	    // 게시물 body 요청하기
