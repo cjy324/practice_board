@@ -31,7 +31,7 @@ function saveByAjax(textContent) {
                 // 생성된 신규 게시물 ID값 받기
                 id = Number(xhttp.responseText);
                 console.log("id : " + id);
-                EXAMUploader.setUploadFileList(id);  // 파일 업로드 시작
+                EXAMUploader.setUploadFileList();  // 파일 업로드 시작
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -40,19 +40,28 @@ function saveByAjax(textContent) {
         }
     }
 
-    // 업로드 상태 모니터링
-    const startInterval = setInterval(function(){
-        if(EXAMUploader.indicator === "STOP"){
-            alert("업로드 중단");
-            clearInterval(startInterval);
-            return;
-        }
-        if(EXAMUploader.indicator === "DONE"){
-            alert(id + "번 게시물 작성 완료!!!");
-            clearInterval(startInterval);
-            goToDetailPage();
-        }
-    }, 100);  // ex) 1초 = 1000
+    // // 업로드 상태 모니터링
+    // const startInterval = setInterval(function(){
+    //     if(EXAMUploader.indicator === "STOP"){
+    //         alert("업로드 중단");
+    //         clearInterval(startInterval);
+    //         return;
+    //     }
+    //     if(EXAMUploader.indicator === "DONE"){
+    //         alert(id + "번 게시물 작성 완료!!!");
+    //         clearInterval(startInterval);
+    //         goToDetailPage();
+    //     }
+    // }, 100);  // ex) 1초 = 1000
+}
+
+function EXAMUploader_UploadComplete(resultArray) {
+    for(let i = 0; i < resultArray.length; i++){
+        console.log(resultArray[i]);
+    }
+    
+
+    // [{name: 'file1.txt', uploadPath: '/aa/bb/file1.txt', size: 100}, {}]
 }
 
 // 글 작성

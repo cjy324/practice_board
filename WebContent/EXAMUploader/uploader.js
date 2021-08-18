@@ -9,10 +9,11 @@
     // Prototype Object - 자신을 통해 만들어질 객체의 원형
     var Uploader = function (){
         // 업로더 그리기
-        this.drawUploaderHtml = function(){
-            var src = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html"
+        this.drawUploaderHtml = function(usrUploaderPath, usrServerPath){
+            var src = usrUploaderPath;
             var uploaderHolderFrame = document.getElementById("uploader_holder");
             uploaderHolderFrame.src = src;
+            EXAMUploader.usrServerPath = usrServerPath;
         }
 
 
@@ -20,6 +21,7 @@
 
 
         // 전역변수
+        this.usrServerPath = "";  // 사용자 업로더 서버 경로
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
         this.relId = 0;  // 게시물 id
         this.totalNum = 0;  // 업로드 대기리스트 수
@@ -275,9 +277,10 @@
         }
 
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
-        this.setUploadFileList = function(id) {
+        this.setUploadFileList = function() {
 
-            EXAMUploader.relId = id;
+            //EXAMUploader.relId = id;
+
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < EXAMUploader.globalFileList.length; i++){
                 if(EXAMUploader.globalFileList[i].uploaded === undefined){
@@ -424,8 +427,7 @@
             /* 분할 끝 */
 
             // 기본 파라미터 정보 담기
-            let params = "&relId=" + EXAMUploader.relId;
-                params += "&limitSize=" + limitSize;
+            let params = "&limitSize=" + limitSize;
                 params += "&originName=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].name;
                 params += "&originSize=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].size;
                 params += "&originType=" + EXAMUploader.forUploadFileList[forUploadFileListIndex].type;
@@ -572,9 +574,9 @@
 
             // http 요청 타입 / 주소 / 동기식 여부 설정
             if(slicedFiles.length == 0){    // 단일 전송인 경우
-                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + 0 + encodeURI(params), true); // 메서드와 주소 설정    
+                xhttp.open("POST", EXAMUploader.usrServerPath + "?index=" + 0 + encodeURI(params), true); // 메서드와 주소 설정    
             }else{      // 분할 전송인 경우
-                xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/server?index=" + slicedFileIndex + encodeURI(params), true); // 메서드와 주소 설정
+                xhttp.open("POST", EXAMUploader.usrServerPath + "?index=" + slicedFileIndex + encodeURI(params), true); // 메서드와 주소 설정
             }
             
             // http 요청
@@ -611,6 +613,9 @@
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+
+                            // 완료 함수 호출
+                            window.EXAMUploader_UploadComplete(forUploadFileList);
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);
@@ -673,16 +678,16 @@
             EXAMUploader.globalFileList = [];
         }
         
-        // 파일 로드
-        this.fileLoad = function(id) {
-
+        // 파일 로드(게시판용)
+        this.fileLoad = function(id, usrLoadServerPath) {
+            usrLoadServerPath = "http://localhost:8086/practiceBoard/usr/download/loadFiles"; // (임시)
             EXAMUploader.relId = id;
 
             // 서버로 DB정보 요청
             /* ajax통신 시작 */
             var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
+            xhttp.open("POST", usrLoadServerPath + "?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
             // http 요청
             xhttp.send();   // 요청 전송
 

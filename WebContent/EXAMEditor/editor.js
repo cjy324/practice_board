@@ -4,11 +4,16 @@
 (function () {  
     // 에디터 클래스
     var Editor = function() {
+
+        // 이미지 업로드 경로
+        this.usrImgUploadPath = "";
+
         // 에디터 그리기
-        this.drawEditorHtml = function(){
-            var src = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html"
+        this.drawEditorHtml = function(usrEditorPath, usrImgUploadPath){
+            var src = usrEditorPath;
             var editorHolderFrame = document.getElementById("editor_holder");
             editorHolderFrame.src = src;
+            EXAMEditor.usrImgUploadPath = usrImgUploadPath;
         }
 
         // 편집영역에 컨텐츠 그리기
@@ -19,6 +24,7 @@
             var startInterval = setInterval(function(){  
                 if(editWindow.document.getElementById("edit_area")){
                     editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
+                    console.log("------Draw Body Content Complete!!------");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -138,7 +144,7 @@
             // ajax를 하기 위한 XmlHttpRequest 객체
             var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/upload/imageUpload", true); // 메서드와 주소 설정
+            xhttp.open("POST", EXAMEditor.usrImgUploadPath, true); // 메서드와 주소 설정
             // http 요청
             xhttp.send(formData);   // 요청 전송
             // XmlHttpRequest의 요청

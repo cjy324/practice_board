@@ -10,8 +10,17 @@
 <script defer src="${pageContext.request.contextPath}/write.js"></script>
 <script type="text/javascript">
 	function start(){
-		EXAMEditor.drawEditorHtml();
-		EXAMUploader.drawUploaderHtml();
+		// 에디터 적용
+		var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
+		var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+		
+		EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+		
+		// 업로더 적용
+		var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+		var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+		
+		EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
 	}
 </script>
 <title>WRITE</title>

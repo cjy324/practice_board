@@ -32,7 +32,6 @@ public class UploadController {
 			// 파일에 대한 정보를 parameter로 받기
 			String guid = request.getParameter("guid");
 			int limitSize = Integer.parseInt(request.getParameter("limitSize"));
-			int relId = Integer.parseInt(request.getParameter("relId"));
 			String originName = request.getParameter("originName");
 			long originSize = Long.parseLong(request.getParameter("originSize"));
 			String originType = request.getParameter("originType");
@@ -165,8 +164,9 @@ public class UploadController {
 					tempTxtFile.delete();
 					System.out.println("\"" + originName + "\"" + " 업로드 완료");
 					
-					// 3. DB에 파일 정보 저장
-					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+//					// 3. DB에 파일 정보 저장(사용자용)
+//					int relId = Integer.parseInt(request.getParameter("relId"));
+//					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
 					
 				}
 				
@@ -205,8 +205,10 @@ public class UploadController {
 			
 				System.out.println("\"" + originName + "\"" + " 업로드 완료");
 				
-				// DB에 파일 정보 저장
-				genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+
+//				// DB에 파일 정보 저장(사용자용)
+//				int relId = Integer.parseInt(request.getParameter("relId"));
+//				genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
 			
 			}
 			return null;
