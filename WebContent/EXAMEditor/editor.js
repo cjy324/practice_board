@@ -15,9 +15,13 @@
         this.drawBodyContent = function(bodyContent){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
-            editorHolderFrameWindow.document.getElementById("edit_frame").addEventListener("load", function(e) {
-                editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
-            })
+            // 편집영역 로드 상태 모니터링
+            var startInterval = setInterval(function(){  
+                if(editWindow.document.getElementById("edit_area")){
+                    editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
+                    clearInterval(startInterval);
+                }
+            }, 100);  // ex) 1초 = 1000
         }
 
         // autoFocus 기능
