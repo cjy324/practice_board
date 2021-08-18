@@ -36,7 +36,16 @@ a{
 .article_list_body__head{
 	display: flex;
 	width: 100%;
-	border-bottom: 2px solid;
+	border-bottom: 3px outset black;
+}
+.article_list_body__head > div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 25px;
+	background-color: gray;	
+	color: white;
+	font-weight: bold;
 }
 .article_list_body__body{
 	display: block;
@@ -47,21 +56,26 @@ a{
 	width: 100%;
 	border-bottom: 1px solid;
 }
-.article_list_body__cell > .list_body__cell_title{
-	width: var(--list_body__cell_title__width);	
-	text-align: left;
+.article_list_body__cell > div{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 25px;
 }
 .list_body__cell_id{
 	width: var(--list_body__cell_id__width);	
 }
 .list_body__cell_regDate{
-	border-left: 2px solid;
-	border-right: 2px solid;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
 	width: var(--list_body__cell_regDate__width);	
 }
+.list_body__cell_title{
+	width: var(--list_body__cell_title__width);	
+}
 .list_body__cell_writer{
-	border-left: 2px solid;
-	border-right: 2px solid;
+	border-left: 2px solid black;
+	border-right: 2px solid black;
 	width: var(--list_body__cell_writer__width);	
 }
 .list_body__cell_file{
@@ -90,7 +104,10 @@ a{
 }
 .article_detail_body__head{
 	width: 100%;
+	background-color: rgba(200, 200, 200, 1);
 	text-align: left;
+	font-size: 15px;
+	font-weight: bold;
 }
 .article_detail_body__body{
 	display: block;
@@ -98,8 +115,8 @@ a{
 	height: 320px;
 	text-align: left;
 	overflow-y: scroll;
-	border-top: 2px solid;
-	border-bottom: 2px solid; 
+	border-top: 3px solid;
+	border-bottom: 3px solid; 
 	margin-bottom: 3px;
 }
 .detail_body__content{
@@ -150,9 +167,7 @@ a{
 .editor_holder{
 	display: inline-block;
     height: 530px;
-    width: 90%;
-	border: solid black 3px;
-    border-radius: 5px;
+    width: 100%;
 }
 
 .editor_header{
@@ -180,9 +195,7 @@ a{
 .uploader_holder{
     display: inline-block;
     height: 205px;
-    width: 90%;
-    border: solid black 3px;
-    border-radius: 5px;
+    width: 100%;
 }
 
 
@@ -190,6 +203,6 @@ a{
 .downloader_holder{
 	display: inline-block;
     height: 190px;
-    width: 98%;
+    width: 99%;
 
 }

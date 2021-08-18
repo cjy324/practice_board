@@ -119,10 +119,10 @@
 
             let filesSize = 0;
             let fileListInfo = "";
-                fileListInfo += "<span>";
+                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
                 fileListInfo += globalFileList.length;
                 fileListInfo += "</span>개 / ";
-                fileListInfo += "<span>";
+                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
                 for(let k = 0; k < globalFileList.length; k++){
                     filesSize += Number(globalFileList[k].size); 
                 }

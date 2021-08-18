@@ -19,7 +19,7 @@
 <body onload="start()">
 	<section class="main_section">
 		<div class="article_write_header">
-			<h4>게시물 작성페이지</h4>
+			<h3>게시물 작성페이지</h3>
 		</div>     
         <div class="article_write_body">
         	<div class="editor_header">

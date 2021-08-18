@@ -134,10 +134,10 @@
 
             let filesSize = 0;
             let fileListInfo = "";
-                fileListInfo += "<span>";
+                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
                 fileListInfo += files.length;
                 fileListInfo += "</span>개 / ";
-                fileListInfo += "<span>";
+                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
                 for(let k = 0; k < files.length; k++){
                     filesSize += Number(files[k].size); 
                     EXAMUploader.totalNum++;

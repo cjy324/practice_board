@@ -23,14 +23,16 @@
 <body onload="start()">
 	<section class="main_section">
 		<div class="article_detail_header">
-			<h4>게시물 상세페이지</h4>
+			<h3>게시물 상세페이지</h3>
 		</div>
 		<div class="article_detail_body">
 			<div class="article_detail_body__head">
+				<br/>
 				<div class="detail_body__cell_id">&nbsp 번호: ${article.id}</div>
 				<div class="detail_body__cell_regDate">&nbsp 작성일: ${article.regDate}</div>
 				<div class="detail_body__cell_writer">&nbsp 작성자: ${article.writer}</div>
-				<div class="detail_body__cell_title">&nbsp 제목: ${article.title}</div>				
+				<div class="detail_body__cell_title">&nbsp 제목: ${article.title}</div>
+				<br/>				
 			</div>
 			<div class="article_detail_body__body">
 				<div id="detail_body__content" class="detail_body__content">

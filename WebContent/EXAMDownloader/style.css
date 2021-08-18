@@ -63,6 +63,7 @@ label, button{
     height: 30px;
     padding-left: 10px;
     padding-right: 15px;
+    font-weight: bold;
 }
 .download_area{
     height: 80px;
@@ -88,6 +89,7 @@ label, button{
 	width: 100%;
 }
 .downloadZone > li > span{
+	font-size: 14px;
 	font-weight: bold; 
 }
 .downloadZone > li > input{
@@ -110,7 +112,7 @@ label, button{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    font-size: 13px;
+    font-size: 14px;
 }
 .btn_area{
     height: 30px;
