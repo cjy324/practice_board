@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <h3 class="title">K Upload :: ExecuteDownloadEvent</h3>
+            <p class="ttl">void ExecuteDownloadEvent(EventVo eventVo)</p>
+            <p class="txt">
+                다운로드 파일을 서버에서 구해지는 Stream 다운로드로 처리할 경우 Stream을 설정할 이벤트 입니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">eventVo</span>&nbsp;&nbsp;다운로드 요청시 정보를 추출할 수 있고 정보를 변경할 수 있는 Object를 의미합니다.<br />
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                raonkhandler.ashx에서 "upload.Process(context);" 전에<br />아래와 같이 이벤트 처리기가 등록되면 이벤트가 발생됩니다.<br /><br />upload.ExecuteDownloadEvent += new ExecuteDownloadEventDelegate(ExecuteDownloadEvent);
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+upload.ExecuteDownloadEvent += new ExecuteDownloadEventDelegate(ExecuteDownloadEvent);
+upload.Process(context);
+        
+private void ExecuteDownloadEvent(EventVo eventVo)
+{
+    //다운로드 요청 Context 정보를 추출합니다.
+    HttpContext context = eventVo.GetContext();
+    //다운로드 받을 파일의 경로를 추출합니다.
+    string[] aryDownloadFilePath = eventVo.GetDownloadFilePath();
+    //다운로드 받을 파일의 Custom Value를 추출합니다.
+    string[] aryDownloadCustomValue = eventVo.GetDownloadCustomValue();
+            
+    //다운로드 파일을 서버에서 구해지는 Stream 다운로드로 처리할 경우 파일 Stream 설정
+    System.IO.Stream[] aryDownloadFileStream;
+    eventVo.SetDownloadFileStream(aryDownloadFileStream);
+}
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

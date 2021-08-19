@@ -1,0 +1,494 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+    <title>K Upload Sample</title>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+    <link href="../css/sample.common.css" rel="stylesheet" />    
+    <script src="../vender/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="../js/sample.common.js" type="text/javascript"></script>
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+
+    <script src="../../../js/raonkupload.js" type="text/javascript"></script>
+    
+    <!-- Extend Function 설정 -->
+    <script src="patent.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var G_UploadID;
+
+        /////////////////////// API Sample ///////////////////////
+        function fn_SetExceptionPath() {
+            // 예외 처리 경로 설정
+            //RAONKUPLOAD.SetExceptionPath("Windows,system,System32,Program Files,EPS.");
+            DirControl.BLACK_LIST = "Windows,system,System32,Program Files,EPS.";
+        }
+
+        function fn_GetCompressionType() {
+            var path = "D:\\22temp\\01.jpg";
+
+            // patent.js 에서 함수 매핑을 하시면 아래처럼 원하는 함수명으로 사용하실 수 있습니다.
+            //var rtn = RAONKUPLOAD.GetCompressionType(path);
+            var rtn = CMYKControl.GetCompressionType(path);
+            alert(rtn);
+        }
+
+        function fn_GetLocalDirList() {
+            var path = "D:\\22temp\\*.*";
+
+            var rtn = RAONKUPLOAD.GetLocalDirList(path);
+            alert(rtn);
+        }
+
+
+        function fn_MakeDir() {
+            var path = "D:\\22temp\\makefolder";
+
+            var rtn = RAONKUPLOAD.MakeDir(path);
+            alert(rtn);
+        }
+
+        function fn_RemoveDir() {
+            var path = "D:\\22temp\\makefolder";
+
+            var rtn = RAONKUPLOAD.RemoveDir(path);
+            alert(rtn);
+        }
+
+        function fn_RemoveFile() {
+            var path = "D:\\22temp\\1.zip";
+
+            var rtn = RAONKUPLOAD.RemoveFile(path);
+            alert(rtn);
+        }
+
+        function fn_Rename() {
+            var oldPath = "D:\\22temp\\old.txt";
+            var newPath = "D:\\22temp\\new.txt";
+
+            var rtn = RAONKUPLOAD.Rename(oldPath, newPath);
+            alert(rtn);
+        }
+
+        function fn_ExcuteFile() {
+            var path = "D:\\22temp\\IntegrationViewer.exe";
+
+            RAONKUPLOAD.ExcuteFile(path);
+        }
+
+        function fn_ExecViewer() {
+            var path = "D:\\22temp\\IntegrationViewer.exe";
+            var optionValue = "";
+
+            var rtn = RAONKUPLOAD.ExcuteViewer(path, optionValue);
+            alert(rtn);
+        }
+
+        function fn_OpenLocalFile() {
+            var path = "D:\\22temp\\open.txt";
+            var optionValue = "2";
+
+            var rtn = RAONKUPLOAD.OpenLocalFile(path, optionValue);
+            alert(rtn);
+        }
+
+        function fn_CloseLocalFile() {
+            var rtn = RAONKUPLOAD.CloseLocalFile();
+            alert(rtn);
+        }
+
+        function fn_WriteString() {
+            var stringData = "fn_WriteString 쓰기 입니다.";
+
+            var rtn = RAONKUPLOAD.WriteString(stringData);
+            alert(rtn);
+        }
+
+        function fn_WritelnString() {
+            var stringData = "fn_WritelnString 쓰기 입니다.";
+
+            var rtn = RAONKUPLOAD.WritelnString(stringData);
+            alert(rtn);
+        }
+
+        function fn_ReadString() {
+            // ReadString() 무한루프 확인 함수입니다.
+            var callback = function (rtnValue) {
+                readLine = rtnValue;
+                if (readLine.indexOf("2") != 0) {
+                    var rtn = RAONKUPLOAD.ReadString();
+                }
+            };
+
+            var rtn = RAONKUPLOAD.ReadString();
+            alert(rtn);
+        }
+
+        function fn_SaveUTF8() {
+            var path = "D:\\22temp\\open.txt";
+
+            RAONKUPLOAD.SaveUTF8(path);
+        }
+
+        function fn_OpenFileToBrowser() {
+            var path = "D:\\22temp\\open.txt";
+
+            RAONKUPLOAD.OpenFileToBrowser(path);
+        }
+
+        function fn_OpenFileToBrowser2() {
+            var path = "D:\\22temp\\open.txt";
+
+            RAONKUPLOAD.OpenFileToBrowser2(path);
+        }
+
+        function fn_ZipFile() {
+            var folderPath = "D:\\22temp\\";
+            var path = "D:\\33temp\\test.zip";
+
+            var rtn = RAONKUPLOAD.ZipFile(folderPath, path);
+            alert(rtn);
+        }
+
+        function fn_UnZipFile() {
+            var path = "D:\\22temp\\test.zip";
+            var folderPath = "D:\\33temp\\";
+
+            var rtn = RAONKUPLOAD.UnZipFile(path, folderPath);
+            alert(rtn);
+        }
+
+        function fn_SetUnZipPaperInfo() {
+            // UnZipPaperInfo 관련 변수 설정
+            var SendDelFileList = "d:\\33temp\\sub";
+            var ZipSourceDir = "d:\\22temp\\";
+            var ZipSourceFile = "test한글.zip";
+            var UnZipTargetFile = "d:\\33temp";
+            RAONKUPLOAD.SetUnZipPaperInfo(SendDelFileList, ZipSourceDir, ZipSourceFile, UnZipTargetFile);
+        }
+
+        function fn_UnZipPaperInfo() {
+            var rtn = RAONKUPLOAD.UnZipPaperInfo();
+            alert(rtn);
+        }
+
+        function fn_GetZipFileDir() {
+            alert(RAONKUPLOAD.GetZipSourceDir());
+        }
+
+        function fn_GetUnZipTargetFile() {
+            alert(RAONKUPLOAD.GetUnZipTargetFile());
+        }
+
+        function fn_GetZipSourceFile() {
+            alert(RAONKUPLOAD.GetZipSourceFile());
+        }
+
+        function fn_GetSendDelFileList() {
+            alert(RAONKUPLOAD.GetSendDelFileList());
+        }
+
+        function fn_OpenDialogMultiSelect() {
+            var rtn = RAONKUPLOAD.OpenDialogMultiSelect();
+            alert(rtn);
+        }
+
+        function fn_OpenFolderDialog() {
+            var rtn = RAONKUPLOAD.OpenFolderDialog();
+            alert(rtn);
+        }
+
+        function fn_OpenDialogSingleSelect() {
+            var rtn = RAONKUPLOAD.OpenDialogSingleSelect();
+            alert(rtn);
+        }
+
+        function fn_OpenSaveDialog() {
+            var rtn = RAONKUPLOAD.OpenSaveDialog();
+            alert(rtn);
+        }
+
+        function fn_GetDialogFilePath() {
+            alert(RAONKUPLOAD.GetDialogFilePath());
+        }
+
+        function fn_GetDialogFileSize() {
+            alert(RAONKUPLOAD.GetDialogFileSize());
+        }
+
+        function fn_GetDialogFileExt() {
+            alert(RAONKUPLOAD.GetDialogFileExt());
+        }
+
+        function fn_GetDialogFolderPath() {
+            alert(RAONKUPLOAD.GetDialogFolderPath());
+        }
+
+        function fn_GetRegValue() {
+            // 레지스트리 값 얻기
+            var regPath = 'Software\\Microsoft\\Internet Explorer\\PageSetup';
+            var regName = 'footer';
+
+            var rtn = RAONKUPLOAD.GetRegValue(regPath, regName);
+            alert(rtn);
+        }
+
+        function fn_SetRegValue() {
+            // 레지스트리 값  설정
+            var regPath = 'Software\\Microsoft\\Internet Explorer\\PageSetup';
+            var regName = 'footer';
+            var regValue = 'test';
+
+            RAONKUPLOAD.SetRegValue(regPath, regName, regValue);
+        }
+
+        function fn_SetAllowExecFile() {
+            // 실행 허용할 파일 설정
+            RAONKUPLOAD.SetAllowExecFile("StartKeaps.exe,ADI.exe,KEditor.exe,GEditor.exe, raonksetup.exe");
+        }
+
+        function fn_SetAllowViewerFile() {
+            // 허용할 뷰어 파일 설정
+            RAONKUPLOAD.SetAllowViewerFile("IntegrationViewer.exe,ADI.exe,KEditor.exe,GEditor.exe");
+        }
+
+        function fn_SetDialogInitDir() {
+            // 다이얼로그 기본 경로
+            var initDir = 'd:\\22temp';
+            RAONKUPLOAD.SetDialogInitDir(initDir);
+        }
+
+        function fn_SetDialogTitle() {
+            // SetDialogTitle 설정
+            var dialogTitle = '사용자 타이틀';
+            RAONKUPLOAD.SetDialogTitle(dialogTitle);
+        }
+
+        function fn_SetDialogFilter() {
+            // SetDialogFilter 설정
+            //var filterValue = 'ATT File(*.att)|*.att|JPG File(*.jpg)|*.jpg|TIF File(*.tif)|*.tif';
+            var filterValue = 'ATT File(*.doc)|*.doc';
+            RAONKUPLOAD.SetDialogFilter(filterValue);
+        }
+        /////////////////////////////////////////////////////////
+
+
+        // 생성완료 이벤트
+        function RAONKUPLOAD_CreationComplete(uploadID) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML = '업로드 생성 완료 : ' + uploadID + '<br/>';
+        }
+
+        // 전송 전 이벤트
+        function RAONKUPLOAD_BeforeUpload(uploadID) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += '업로드 시작 : ' + uploadID + '<br/>';
+        }
+
+        // 전송완료 이벤트
+        function RAONKUPLOAD_UploadComplete(uploadID) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+
+            // K Upload는 array, json, xml, text delimit 방식으로 결과값을 제공합니다.
+            var dataArray = RAONKUPLOAD.GetListInfo('array', uploadID);
+            //var dataJson = RAONKUPLOAD.GetListInfo('json', uploadID);
+            //var dataText = RAONKUPLOAD.GetListInfo('text', uploadID);
+            //var dataXml = RAONKUPLOAD.GetListInfo('xml', uploadID);
+            
+            // 신규 업로드된 파일
+            var arrayNew = dataArray.newFile;
+            if (arrayNew) fn_newArrayToString(arrayNew);
+            //var jsonNew = dataJson.newFile;
+            //if (jsonNew) fn_newJsonToString(jsonNew);
+            //var xmlNew = dataXml.newFile;
+            //if (xmlNew) fn_newXmlToString(xmlNew);
+            //var textNew = dataText.newFile;
+            //if (textNew) fn_newTextToString(textNew);
+
+            // 삭제된 파일
+            var arrayDel = dataArray.deleteFile;
+            if (arrayDel) fn_delArrayToString(arrayDel);
+            //var jsonDel = dataJson.deleteFile;
+            //if (jsonDel) fn_delJsonToString(jsonDel);
+            //var xmlDel = dataXml.deleteFile;
+            //if (xmlDel) fn_delXmlToString(xmlDel);
+            //var textDel = dataText.deleteFile;
+            //if (textDel) fn_delTextToString(textDel);
+
+            logBox.innerHTML += '<br/>' + '업로드 완료 : ' + G_UploadID + '<br/>';
+        }
+
+        // 오류 이벤트
+        function RAONKUPLOAD_OnError(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += 'Error : ' + paramObj.strCode + ', ' + paramObj.strMessage + '<br/>';
+
+            if (paramObj.arrUploadedFileList != null && paramObj.arrUploadedFileList != '') {
+                logBox.innerHTML += '업로드 된 파일 리스트 - <br/>';
+                var uploadedFileLen = paramObj.arrUploadedFileList.length;
+                for (var i = 0; i < uploadedFileLen; i++) {
+                    logBox.innerHTML += paramObj.arrUploadedFileList[i].uploadName + ', ' + paramObj.arrUploadedFileList[i].uploadPath + '</br>';
+
+                    // originName: paramObj.arrUploadedFileList[i].originName
+                    // fileSize: paramObj.arrUploadedFileList[i].fileSize
+                    // uploadName: paramObj.arrUploadedFileList[i].uploadName
+                    // uploadPath: paramObj.arrUploadedFileList[i].uploadPath
+                    // logicalPath: paramObj.arrUploadedFileList[i].logicalPath
+                    // order: paramObj.arrUploadedFileList[i].order
+                    // status: paramObj.arrUploadedFileList[i].status
+                    // customValue: paramObj.arrUploadedFileList[i].customValue
+                    // responseCustomValue: paramObj.arrUploadedFileList[i].responseCustomValue
+                }
+            }
+        }
+
+        // 취소 이벤트
+        function RAONKUPLOAD_UploadingCancel(uploadID, paramObj) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += '전송 취소 이벤트 : ' + G_UploadID + '<br/>';
+
+            if (paramObj.arrUploadedFileList != null && paramObj.arrUploadedFileList != '') {
+                logBox.innerHTML += '업로드 된 파일 리스트 - <br/>';
+                var uploadedFileLen = paramObj.arrUploadedFileList.length;
+                for (var i = 0; i < uploadedFileLen; i++) {
+                    logBox.innerHTML += paramObj.arrUploadedFileList[i].uploadName + ', ' + paramObj.arrUploadedFileList[i].uploadPath + '</br>';
+
+                    // originName: paramObj.arrUploadedFileList[i].originName
+                    // fileSize: paramObj.arrUploadedFileList[i].fileSize
+                    // uploadName: paramObj.arrUploadedFileList[i].uploadName
+                    // uploadPath: paramObj.arrUploadedFileList[i].uploadPath
+                    // logicalPath: paramObj.arrUploadedFileList[i].logicalPath
+                    // order: paramObj.arrUploadedFileList[i].order
+                    // status: paramObj.arrUploadedFileList[i].status
+                    // customValue: paramObj.arrUploadedFileList[i].customValue
+                    // responseCustomValue: paramObj.arrUploadedFileList[i].responseCustomValue
+                }
+            }
+        }
+    </script>
+</head>
+<body style="text-align:center;">
+    <ul class="info_lst_box">
+        <li>• 업로드를 생성하는 기본 예제입니다.</li>        
+    </ul>
+    <div class="btn_lst_box" style="width: 100%; text-align:center;">        
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap; background:lightgray;">
+            <button type="button" value="파일추가" class="input_image" onclick="fn_openFileDialog()" id="file_add_btn">파일추가</button><span id="file_add_nbsp">&nbsp;</span>
+            <button type="button" value="전송하기" class="input_image" onclick="fn_transfer()">전송하기</button>&nbsp;
+            <button type="button" value="전체삭제" class="input_image" onclick="fn_deleteAllFile()">전체삭제</button>&nbsp;
+            <button type="button" value="항목삭제" class="input_image" onclick="fn_deleteSelectedFile()">항목삭제</button>&nbsp;
+            <button type="button" value="파일총개수" class="input_image" style="width:90px;" onclick="fn_getTotalFileCount()">파일총개수</button>&nbsp;
+            <button type="button" value="파일총용량" class="input_image" style="width:90px;" onclick="fn_getTotalFileSize()">파일총용량</button>&nbsp;
+            <button type="button" value="업로드 숨기기" class="input_image" style="width:90px;" onclick="fn_uploadHidden('')">업로드 숨기기</button>&nbsp;
+            <button type="button" value="업로드 보이기" class="input_image" style="width:90px;" onclick="fn_uploadShow('')">업로드 보이기</button>&nbsp;
+        </div>        
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">                        
+            <button type="button" value="SetExceptionPath" class="input_image" style="width:250px;" onclick="fn_SetExceptionPath()">0. SetExceptionPath (설정, 기존하드코딩)</button>&nbsp;
+            -> 특정 폴더예외 처리시 사용
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="CompressionTypeGet" class="input_image" style="width:145px;" onclick="fn_GetCompressionType()">1. CompressionTypeGet</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="GetLocalDirList" class="input_image" style="width:145px;" onclick="fn_GetLocalDirList()">2-1. GetLocalDirList</button>&nbsp;
+            <button type="button" value="MakeDir" class="input_image" style="width:145px;" onclick="fn_MakeDir()">2-2. MakeDir</button>&nbsp;
+            <button type="button" value="RemoveDir" class="input_image" style="width:145px;" onclick="fn_RemoveDir()">2-3. RemoveDir</button>&nbsp;
+            <button type="button" value="RemoveDir" class="input_image" style="width:145px;" onclick="fn_RemoveDir()">2-4. RemDirAll</button>&nbsp;
+            <button type="button" value="RemoveFile" class="input_image" style="width:145px;" onclick="fn_RemoveFile()">2-5. RemoveFile</button>&nbsp;
+            <button type="button" value="Rename" class="input_image" style="width:145px;" onclick="fn_Rename()">2-6. Rename</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="ExcuteFile" class="input_image" style="width:250px;" onclick="fn_SetAllowExecFile()">3-1. SetAllowExecFile (설정, 기존하드코딩)</button>&nbsp;
+            <button type="button" value="ExcuteFile" class="input_image" style="width:145px;" onclick="fn_ExcuteFile()">3-2. FileExe</button>&nbsp;
+            <br><br>
+            <button type="button" value="ExcuteFile" class="input_image" style="width:250px;" onclick="fn_SetAllowViewerFile()">3-3. SetAllowViewerFile (설정, 기존하드코딩)</button>&nbsp;
+            <button type="button" value="ExecViewer" class="input_image" style="width:145px;" onclick="fn_ExecViewer()">3-4. ExecTheViewer</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="OpenLocalFile" class="input_image" style="width:145px;" onclick="fn_OpenLocalFile()">4-1. OpenLocalFile</button>&nbsp;
+            <button type="button" value="CloseLocalFile" class="input_image" style="width:145px;" onclick="fn_CloseLocalFile()">4-2. CloseLocalFile</button>&nbsp;
+            <button type="button" value="WriteString" class="input_image" style="width:145px;" onclick="fn_WriteString()">4-3. WriteString</button>&nbsp;
+            <button type="button" value="WritelnString" class="input_image" style="width:145px;" onclick="fn_WritelnString()">4-4. WritelnString</button>&nbsp;
+            <button type="button" value="ReadString" class="input_image" style="width:145px;" onclick="fn_ReadString()">4-5. ReadString</button>&nbsp;
+            <button type="button" value="SaveUTF8" class="input_image" style="width:145px;" onclick="fn_SaveUTF8()">4-6. SaveUTF8</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="OpenFileToBrowser" class="input_image" style="width:145px;" onclick="fn_OpenFileToBrowser()">5-1. OpenHtml</button>&nbsp;
+            <button type="button" value="OpenFileToBrowser2" class="input_image" style="width:145px;" onclick="fn_OpenFileToBrowser2()">5-2. OpenHref</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="ZipFile" class="input_image" style="width:250px;" onclick="fn_SetUnZipPaperInfo()">6-1. SetUnZipPaperInfo (설정, 기존Setter)</button>&nbsp;
+            <button type="button" value="ZipFile" class="input_image" style="width:145px;" onclick="fn_ZipFile()">6-2. AddIFile</button>&nbsp;
+            <button type="button" value="UnZipFile" class="input_image" style="width:145px;" onclick="fn_UnZipFile()">6-3. ExtractFile</button>&nbsp;
+            <button type="button" value="UnZipPaperInfo" class="input_image" style="width:145px;" onclick="fn_UnZipPaperInfo()">6-4. UnZipPaperInfo</button>&nbsp;
+            <button type="button" value="GetZipFileDir" class="input_image" style="width:145px;" onclick="fn_GetZipFileDir()">6-5. getZipSourceDir</button>&nbsp;
+            <button type="button" value="GetUnZipTargetFolder" class="input_image" style="width:145px;" onclick="fn_GetUnZipTargetFile()">6-6. getUnZipTargetFile</button>&nbsp;
+            <button type="button" value="GetZipSourceFileName" class="input_image" style="width:145px;" onclick="fn_GetZipSourceFile()">6-7. getZipSourceFile</button>&nbsp;
+            <button type="button" value="GetZipSourceFilePath" class="input_image" style="width:145px;" onclick="fn_GetSendDelFileList()">6-8. getSendDelFileList</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">              
+            <button type="button" value="MultiSave" class="input_image" style="width:250px;" onclick="fn_SetDialogInitDir()">7-1. SetDialogInitDir (설정, 기존Setter)</button>&nbsp;
+            <button type="button" value="Show" class="input_image" style="width: 250px;" onclick="fn_SetDialogTitle()">7-2. SetDialogTitle (설정, 기존Setter)</button>&nbsp;
+            <button type="button" value="ShowOpen" class="input_image" style="width: 250px;" onclick="fn_SetDialogFilter()">7-3. SetDialogFilter (설정, 기존Setter)</button>&nbsp;
+            <br><br>
+            <button type="button" value="MultiSave" class="input_image" style="width:145px;" onclick="fn_OpenDialogMultiSelect()">7-4. MultiSave</button>&nbsp;
+            <button type="button" value="Show" class="input_image" style="width:145px;" onclick="fn_OpenFolderDialog()">7-5. Show</button>&nbsp;
+            <button type="button" value="ShowOpen" class="input_image" style="width:145px;" onclick="fn_OpenDialogSingleSelect()">7-6. ShowOpen</button>&nbsp;
+            <button type="button" value="ShowSave" class="input_image" style="width:145px;" onclick="fn_OpenSaveDialog()">7-7. ShowSave</button>&nbsp;
+            <br><br>
+            <button type="button" value="FileName" class="input_image" style="width: 200px; " onclick="fn_GetDialogFilePath()">7-8. fileName (추출, 기존Getter)</button>&nbsp;
+            <button type="button" value="FileLength" class="input_image" style="width: 200px; " onclick="fn_GetDialogFileSize()">7-9. fileLength (추출, 기존Getter)</button>&nbsp;
+            <button type="button" value="fileExt" class="input_image" style="width: 200px; " onclick="fn_GetDialogFileExt()">7-10. fileExt (추출, 기존Getter)</button>&nbsp;
+            <button type="button" value="dirPath" class="input_image" style="width: 200px;" onclick="fn_GetDialogFolderPath()">7-11. dirPath (추출, 기존Getter)</button>&nbsp;
+        </div>
+        <div style="border: 1px dashed gray; padding: 5px; margin-bottom: 5px; white-space: nowrap;">
+            <button type="button" value="getregstring" class="input_image" style="width:145px;" onclick="fn_GetRegValue()">8-1. getregstring</button>&nbsp;
+            <button type="button" value="setregstring" class="input_image" style="width:145px;" onclick="fn_SetRegValue()">8-2. setregstring</button>&nbsp;
+        </div>
+    </div>
+    <div style="width: 800px; margin: 0 auto;">
+        <script type="text/javascript">
+            // 해당 config 이외의 설정도 가능합니다. (www.raonk.com > 개발센터 참조)
+            var uploadConfig = {
+                Id: "kupload"//,
+                //InitXml: "raonkupload.config.xml",
+                //SkinName: "blue",
+                //Width: "200px",
+                //Height: "500px",
+                //MaxTotalFileSize: "20GB",
+                //MaxOneFileSize: "20KB",
+                //MaxTotalFileCount: "9",
+                //MultiFileSelect: false,
+                //ExtensionAllowOrLimit: "0",
+                //ExtensionArr: "png",
+                //FolderNameRule: "/uploadfolder",
+                //Mode: "view", // edit, view
+                //ButtonBarEdit: "add,send,remove,remove_all",
+                //ButtonBarView: "open,download,download_all", // 0 일경우 버튼바 보이지 않음.
+                //Lang: "en-us", // ko-kr, en-us, ja-jp, zh-cn, zh-tw
+                //UploadHolder: "uploadHoder_PlaceHolder",
+                //IgnoreSameUploadName: "1"
+            };
+
+            var upload = new RAONKUpload(uploadConfig);
+        </script>
+    </div>
+
+    <br /><br />
+
+    <!-- 로그영역 -->
+    <div id="logBox" class="logBox" style="overflow: auto;"></div>
+    <!-- //로그영역 -->
+</body>
+</html>

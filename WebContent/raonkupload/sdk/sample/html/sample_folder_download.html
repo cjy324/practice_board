@@ -1,0 +1,113 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+    <title>RAON K Download Sample</title>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+    <link href="../css/sample.common.css" rel="stylesheet" />    
+    <script src="../js/sample.common.js" type="text/javascript"></script>
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+
+    <script src="../../../js/raonkupload.js" type="text/javascript"></script>
+    
+    <script type="text/javascript">
+        var G_UploadID;
+
+        function fn_addFile() {
+            var tempPath = location.href;
+            tempPath = tempPath.substring(0, tempPath.lastIndexOf('/'));
+            tempPath = tempPath.substring(0, tempPath.lastIndexOf('/'));
+
+            // 실제 서버상의 파일을 작성합니다.
+            RAONKUPLOAD.AddUploadedFile('1', '전경\\전경사진.jpg', tempPath + '/images/Panorama/ViewPhotos.jpg', '87325', '', G_UploadID);
+            RAONKUPLOAD.AddUploadedFile('2', '풍경\\이미지\\풍경이미지.bmp', tempPath + '/images/Scenery/image/CreativeImages.bmp', '2359350', '', G_UploadID);
+            RAONKUPLOAD.AddUploadedFile('3', '계절\\봄\\느낌\\봄을느껴봅시다.gif', tempPath + '/images/season/spring/feeling/Lets_feel_the_spring.gif', '192866', '', G_UploadID);
+        }
+
+        // 생성완료 이벤트
+        function RAONKUPLOAD_CreationComplete(uploadID) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML = '업로드 생성 완료 : ' + uploadID + '<br/>';
+
+            fn_addFile();
+        }
+
+        // 오류 이벤트
+        function RAONKUPLOAD_OnError(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += 'Error : ' + paramObj.strCode + ', ' + paramObj.strMessage + '<br/>';
+
+            if (paramObj.arrUploadedFileList != null && paramObj.arrUploadedFileList != '') {
+                logBox.innerHTML += '업로드 된 파일 리스트 - <br/>';
+                var uploadedFileLen = paramObj.arrUploadedFileList.length;
+                for (var i = 0; i < uploadedFileLen; i++) {
+                    logBox.innerHTML += paramObj.arrUploadedFileList[i].uploadName + ', ' + paramObj.arrUploadedFileList[i].uploadPath + '</br>';
+
+                    // originName: paramObj.arrUploadedFileList[i].originName
+                    // fileSize: paramObj.arrUploadedFileList[i].fileSize
+                    // uploadName: paramObj.arrUploadedFileList[i].uploadName
+                    // uploadPath: paramObj.arrUploadedFileList[i].uploadPath
+                    // logicalPath: paramObj.arrUploadedFileList[i].logicalPath
+                    // order: paramObj.arrUploadedFileList[i].order
+                    // status: paramObj.arrUploadedFileList[i].status
+                    // customValue: paramObj.arrUploadedFileList[i].customValue
+                    // responseCustomValue: paramObj.arrUploadedFileList[i].responseCustomValue
+                }
+            }
+        }
+    </script>
+</head>
+<body style="text-align:center;">
+    <ul class="info_lst_box">
+        <li>• 폴더 구조로 다운로드를 하실 수 있습니다. (Windows os 지원)</li>
+    </ul>
+
+    <div class="btn_lst_box">
+        <button type="button" value="다운로드" class="input_image" onclick="fn_downloadFile()">다운로드</button>&nbsp;
+        <button type="button" value="전체 다운로드" class="input_image" style="width:110px;" onclick="fn_downloadAllFile()">전체 다운로드</button>&nbsp;
+        <button type="button" value="파일총개수" class="input_image" style="width:90px;" onclick="fn_getTotalFileCount()">파일총개수</button>&nbsp;
+        <button type="button" value="파일총용량" class="input_image" style="width:90px;" onclick="fn_getTotalFileSize()">파일총용량</button>&nbsp;
+        <button type="button" value="업로드 숨기기" class="input_image" style="width:90px;" onclick="fn_uploadHidden('')">업로드 숨기기</button>&nbsp;
+        <button type="button" value="업로드 보이기" class="input_image" style="width:90px;" onclick="fn_uploadShow('')">업로드 보이기</button>&nbsp;
+    </div>
+    <div style="width: 800px; margin: 0 auto;">
+        <script type="text/javascript">
+            // 해당 config 이외의 설정도 가능합니다. (www.raonk.com > 개발센터 참조)
+            var uploadConfig = {
+                Id: "kupload",
+                FolderTransfer: "1",
+                Mode: "view", // edit, view
+                ButtonBarView: "download,download_all,saveandopen,saveandfolderopen"//, // 0 일경우 버튼바 보이지 않음.
+                //InitXml: "raonkupload.config.xml",
+                //SkinName: "blue",
+                //Width: "200px",
+                //Height: "500px",
+                //MaxTotalFileSize: "20GB",
+                //MaxOneFileSize: "20KB",
+                //MaxTotalFileCount: "9",
+                //MultiFileSelect: false,
+                //ExtensionAllowOrLimit: "0",
+                //ExtensionArr: "png",
+                //FolderNameRule: "/uploadfolder",
+                //ButtonBarEdit: "add,add_folder,send,remove,remove_all",
+                //Lang: "en-us", // ko-kr, en-us, ja-jp, zh-cn, zh-tw
+                //UploadHolder: "uploadHoder_PlaceHolder",
+                //IgnoreSameUploadName: "1"
+            };
+
+            var upload = new RAONKUpload(uploadConfig);
+        </script>
+    </div>
+
+    <br /><br />
+
+    <!-- 로그영역 -->
+    <div id="logBox" class="logBox" style="overflow: auto;"></div>
+    <!-- //로그영역 -->
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>RAONK Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con ">
+            <h3 class="title">K Upload :: GetExifEntityData</h3>
+            <p class="ttl">ExifEntity GetExifEntityData(string pSourceFileFullPath)</p>
+            <p class="txt">
+                업로드되는 파일이 이미지 파일 일 때, 이미지의 EXIF 정보를 추출하려는 경우 사용됩니다. (Exif standard 2.2, JEITA CP-2451)
+                <br />이벤트 AfterUploadEvent 에서 사용이 가능합니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                <span class="firebrick">Com.Raonwiz.Raonk.Util.Exif.ExifEntity</span>&nbsp;&nbsp;이미지의 EXIF 정보를 의미합니다.
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">pSourceFileFullPath</span>&nbsp;&nbsp;이미지 파일의 물리적 경로를 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+string strNewFileLocation = eventVo.GetNewFileLocation();
+try
+{
+    string strSourceFileFullPath = strNewFileLocation;
+        
+    <b>Com.Raonwiz.KUpload.Util.Exif.ExifEntity _exif = ImageApi.GetExifEntityData(strSourceFileFullPath); </b>
+
+}
+catch (Exception ex) { }
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

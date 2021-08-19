@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <h3 class="title">K Upload :: 파일 추가할 때 각 파일에 특정 정보 추가 후 서버에서 받는 방법</h3>
+            <p class="ttl">파일 추가할 때 각 파일에 특정 정보 추가 후 서버에서 받는 방법</p>
+            <p class="txt">
+                파일 추가할 때 각 파일에 특정 정보 추가 후 업로드할 때 서버에서 받아서 처리하는 방법을 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">방법 설명</p>
+            <div class="cord">
+                <pre class="pre">
+<span class="firebrick">1. K Upload에 파일 추가할 때 각 파일에 특정 정보를 추가 후 전송하는 방법</span>
+
+K Upload 파일 추가 후 이벤트 함수인 RAONKUPLOAD_AfterAddFile에서
+해당 파일에 Custom 정보를 추가할 수 있는 API인 SetFileCustomValue로 설정
+
+&#60;script type="text/javascript"&#62;
+function RAONKUPLOAD_AfterAddFile(uploadID, paramObj) {
+    RAONKUPLOAD.SetFileCustomValue("-1", "CustomValue", uploadID);
+}
+&#60;/script&#62;
+
+<b>RAONKUPLOAD_AfterAddFile 이벤트 함수의 파라미터 정보</b>
+uploadID : 이벤트가 발생된 업로드의 ID
+paramObj.strName : 추가되는 파일의 파일명
+paramObj.nSize : 추가되는 파일의 사이즈
+paramObj.nIndex : 0부터 시작되는 파일의 순서 정보
+paramObj.strPath : 추가되는 파일의 로컬 경로 정보
+
+<b>RAONKUPLOAD.SetFileCustomValue API의 파라미터 정보</b>
+1번째 파라미터 : 0부터 시작되는 파일의 순서정보, -1입력시 마지막에 추가된 파일
+2번째 파라미터 : 해당 파일에 설정할 CustomValue 정보
+3번째 파라미터 : CustomValue 정보를 추가할 업로드의 ID
+
+<span class="firebrick">2. 서버에서 그 특정 정보를 받는 방법</span>
+
+<b>.NET</b>
+
+string strCustomValue = eventVo.GetCustomValue();
+
+<b>JAVA</b>
+
+string strCustomValue = eventVo.getCustomValue();
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

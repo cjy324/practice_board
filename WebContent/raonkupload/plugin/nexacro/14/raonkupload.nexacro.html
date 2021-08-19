@@ -1,0 +1,231 @@
+﻿<html>
+<head>
+    <title>RAONK Upload with nexacro 14 Runtime</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script type="text/javascript">
+        document.write('<scr' + 'ipt src="../../../js/raonkupload.js?t=' + (new Date).getTime() + '" type="text/javascript"><\/scr' + 'ipt>');
+    </script>
+    <script type="text/javascript">
+        var G_EventReturnValue;
+
+        var G_GetListInfoForArray_ResultObj = null;
+        var G_GetListInfoForJson_ResultObj = null;
+        //var G_GetListInfoForXml_ResultObj = null;
+        var G_GetListInfoForText_ResultObj = null;
+
+        var G_GetDeleteListForArray_ResultObj = null;
+        var G_GetDeleteListForJson_ResultObj = null;
+        //var G_GetDeleteListForXml_ResultObj = null;
+        var G_GetDeleteListForText_ResultObj = null;
+
+        var G_GetNewUploadListForArray_ResultObj = null;
+        var G_GetNewUploadListForJson_ResultObj = null;
+        //var G_GetNewUploadListForXml_ResultObj = null;
+        var G_GetNewUploadListForText_ResultObj = null;
+
+        var isAndroid = false;
+
+        if (!window.NEXACROHTML) {
+            window.NEXACROHTML = {};
+        }
+
+        window.NEXACROHTML.FireUserNotify = function (userdata) {
+            if (window.NEXACROWEBBROWSER) {
+                // 윈도우 html5, 안드로이드 html5, iOS html5, iOS 런타임
+                window.NEXACROWEBBROWSER.on_fire_onusernotify(window.NEXACROWEBBROWSER, userdata);
+            } else if (typeof nexacro == "undefined") {
+                //윈도우 런타임
+                window.document.title = userdata;
+            } else if (nexacro) {
+                //안드로이드 런타임
+                isAndroid = true;
+                nexacro.fireUserNotify(userdata);
+            }
+        }
+
+        function fn_GetFileInfo(uploadID) {
+            G_GetListInfoForArray_ResultObj = RAONKUPLOAD.GetListInfo("array", uploadID);
+            G_GetListInfoForJson_ResultObj = RAONKUPLOAD.GetListInfo("json", uploadID);
+            //G_GetListInfoForXml_ResultObj = RAONKUPLOAD.GetListInfo("xml", uploadID);
+            G_GetListInfoForText_ResultObj = RAONKUPLOAD.GetListInfo("text", uploadID);
+
+            G_GetDeleteListForArray_ResultObj = RAONKUPLOAD.GetDeleteList("array", uploadID);
+            G_GetDeleteListForJson_ResultObj = RAONKUPLOAD.GetDeleteList("json", uploadID);
+            //G_GetDeleteListForXml_ResultObj = RAONKUPLOAD.GetDeleteList("xml", uploadID);
+            G_GetDeleteListForText_ResultObj = RAONKUPLOAD.GetDeleteList("text", uploadID);
+
+            G_GetNewUploadListForArray_ResultObj = RAONKUPLOAD.GetNewUploadList("array", uploadID);
+            G_GetNewUploadListForJson_ResultObj = RAONKUPLOAD.GetNewUploadList("json", uploadID);
+            //G_GetNewUploadListForXml_ResultObj = RAONKUPLOAD.GetNewUploadList("xml", uploadID);
+            G_GetNewUploadListForText_ResultObj = RAONKUPLOAD.GetNewUploadList("text", uploadID);
+
+            // 안드로이드인경우만
+            if (isAndroid)
+                window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_GetFileInfo#|" + JSON.stringify({
+                    "G_GetListInfoForArray_ResultObj": G_GetListInfoForArray_ResultObj,
+                    "G_GetListInfoForJson_ResultObj": G_GetListInfoForJson_ResultObj,
+                    "G_GetListInfoForText_ResultObj": G_GetListInfoForText_ResultObj,
+                    "G_GetDeleteListForArray_ResultObj": G_GetDeleteListForArray_ResultObj,
+                    "G_GetDeleteListForJson_ResultObj": G_GetDeleteListForJson_ResultObj,
+                    "G_GetDeleteListForText_ResultObj": G_GetDeleteListForText_ResultObj,
+                    "G_GetNewUploadListForArray_ResultObj": G_GetNewUploadListForArray_ResultObj,
+                    "G_GetNewUploadListForJson_ResultObj": G_GetNewUploadListForJson_ResultObj,
+                    "G_GetNewUploadListForText_ResultObj": G_GetNewUploadListForText_ResultObj
+                }));
+        }
+
+        function fn_bodyOnload() {
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_WEBBROWSER_INIT");
+        }
+
+        function fn_InitGlobalVar() {
+            G_GetListInfoForArray_ResultObj = null;
+            G_GetListInfoForJson_ResultObj = null;
+            //G_GetListInfoForXml_ResultObj = null;
+            G_GetListInfoForText_ResultObj = null;
+
+            G_GetDeleteListForArray_ResultObj = null;
+            G_GetDeleteListForJson_ResultObj = null;
+            //G_GetDeleteListForXml_ResultObj = null;
+            G_GetDeleteListForText_ResultObj = null;
+
+            G_GetNewUploadListForArray_ResultObj = null;
+            G_GetNewUploadListForJson_ResultObj = null;
+            //G_GetNewUploadListForXml_ResultObj = null;
+            G_GetNewUploadListForText_ResultObj = null;
+        }
+
+        // create
+        function RAONKUPLOAD_CreationComplete(uploadID, paramObj) {
+            fn_InitGlobalVar();
+
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_CreationComplete#|" + JSON.stringify(paramObj));
+        }
+
+        // add file
+        function RAONKUPLOAD_AfterAddFile(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_AfterAddFile#|" + JSON.stringify(paramObj));
+        }
+        function RAONKUPLOAD_AfterAddAllFile(uploadID) {
+            fn_GetFileInfo(uploadID);
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_AfterAddAllFile");
+        }
+
+        // delete file
+        function RAONKUPLOAD_DeleteAllFile(uploadID, paramObj) {
+            fn_GetFileInfo(uploadID);
+
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_DeleteAllFile#|" + JSON.stringify(paramObj));
+        }
+
+        // upload
+        function RAONKUPLOAD_BeforeUpload(uploadID, paramObj) {
+            fn_InitGlobalVar();
+
+            return true;
+        }
+        function RAONKUPLOAD_UploadComplete(uploadID, paramObj) {
+            fn_GetFileInfo(uploadID);
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_UploadComplete#|" + JSON.stringify(paramObj));
+        }
+
+        // download
+        function RAONKUPLOAD_BeforeDownloadFile(uploadID, paramObj) {
+            fn_InitGlobalVar();
+
+            return true;
+        }
+        function RAONKUPLOAD_BeforeOpenFile(uploadID, paramObj) {
+            fn_InitGlobalVar();
+
+            return true;
+        }
+        function RAONKUPLOAD_DownloadCompleteFile(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_DownloadCompleteFile#|" + JSON.stringify(paramObj));
+        }
+        function RAONKUPLOAD_DownloadCompleteAllFile(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_DownloadCompleteAllFile#|" + JSON.stringify(paramObj));
+        }
+
+
+        // error / cancel
+        function RAONKUPLOAD_OnError(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_OnError#|" + JSON.stringify(paramObj));
+        }
+        function RAONKUPLOAD_UploadingCancel(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_UploadingCancel#|" + JSON.stringify(paramObj));
+        }
+        function RAONKUPLOAD_DownloadCancel(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_DownloadCancel#|" + JSON.stringify(paramObj));
+        }
+
+        // selectItem
+        function RAONKUPLOAD_SelectItem(uploadID, paramObj) {
+            G_EventReturnValue = paramObj;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_SelectItem#|" + JSON.stringify(paramObj));
+        }
+
+        function RAONKUPLOAD_CustomAction(uploadID, command) {
+            G_EventReturnValue = command;
+
+            window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_CustomAction#|" + JSON.stringify(command));
+        }
+
+        function RAONKUPLOAD_Alert(uploadID, msg) {
+            G_EventReturnValue = msg;
+            window.NEXACROHTML.FireUserNotify('RAONKUPLOAD_Alert#|' + JSON.stringify(msg));
+        }
+
+        // util
+        /*
+        function fn_Transfer_complete_done(uploadID) {
+            fn_GetFileInfo(uploadID);
+        }
+        */
+
+        function fn_FireUserNotify(userdata) {
+            window.NEXACROHTML.FireUserNotify(userdata);
+        }
+
+        // android 14
+        function RAONKMethod(args) {
+            args = args.split(",");
+            var apiName = args[0];
+            var returnValue = RAONKUPLOAD[apiName](args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+            if (apiName == "GetTotalFileCount") {
+                window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_GetTotalFileCount#|" + JSON.stringify(returnValue));
+            } else if (apiName == "GetTotalFileSize") {
+                window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_GetTotalFileSize#|" + JSON.stringify(returnValue));
+            } else if (apiName == "GetUploadCompleteState") {
+                window.NEXACROHTML.FireUserNotify("RAONKUPLOAD_GetUploadCompleteState#|" + JSON.stringify(returnValue));
+            }
+        }
+    </script>
+</head>
+<body onload="fn_bodyOnload();" style="padding:0; margin:0; height:100%; text-align: center; overflow: hidden; border: 0;">
+    <div id="raonk_Holder" style="width: 100%; height: 100%; margin: 0 auto; overflow: hidden;"></div>
+</body>
+</html>

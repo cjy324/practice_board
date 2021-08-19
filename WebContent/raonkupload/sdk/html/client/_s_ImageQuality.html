@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <h3 class="title">K Upload :: ImageQuality</h3>
+    <p class="ttl">XML : &#60;image_quality&#62;.....&#60;/image_quality&#62;, Script : Quality<br />XML : &#60;image_quality worker_count="....."&#62;&#60;/image_quality&#62;, Script : WorkerCount<br />XML : &#60;image_quality extension"....."&#62;&#60;/image_quality&#62;, Script : Extension<br />XML : &#60;image_quality changed_extension"....."&#62;&#60;/image_quality&#62;, Script : ChangedExtension<br />XML : &#60;image_quality over_file_size"....."&#62;&#60;/image_quality&#62;, Script : OverFileSize</p>
+    <p class="txt">
+        <b>Script 설정이 우선 적용됩니다.</b><br />
+        이미지 품질을 낮추는 기능을 설정합니다.
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        기본값은 "1"이고 0 ~ 1까지 비율로 품질을 낮춥니다.<br /><br />
+        <span class="txt">
+            <span class="firebrick">XML:worker_count, Script:WorkerCount</span>&nbsp;&nbsp;브라우저의 Worker사용 개수를 설정합니다.<br />
+            <span style="padding-left:201px">&nbsp;&nbsp;&nbsp;&nbsp;기본값은 7 입니다.</span><br />
+            <span style="padding-left:201px;">&nbsp;&nbsp;&nbsp;&nbsp;파일 개수가 Worker 생성 개수보다 작은 경우는 파일 개수만큼만 Worker를 생성합니다.</span>
+        </span><br />
+        <span class="txt">
+            <span class="firebrick">XML:extension, Script:Extension</span>&nbsp;&nbsp;제한할 확장자를 설정합니다.<br />
+            <span style="padding-left:179px">콤마(',')로 구분합니다.</span>
+        </span><br />
+        <span class="txt">
+            <span class="firebrick">XML:changed_extension, Script:ChangedExtension</span>&nbsp;&nbsp;변환할 확장자를 설정합니다.<br />
+            <span style="padding-left:277px">기본값은 'jpg'입니다.</span>
+        </span><br />
+        <span class="txt">
+            <span class="firebrick">XML:over_file_size, Script:OverFileSize</span>&nbsp;&nbsp;특정 사이즈 이상인 경우에만 품질을 낮춥니다.<br />
+        </span><br />
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+<b>이미지 품질을 0.5 비율로 낮추는 설정합니다.</b>
+<b>확장자가 png인 경우 품질을 낮추지 않도록 설정합니다.</b>
+<b>20KB 이상의 파일인 경우 품질을 낮추는 설정합니다.</b>
+
+<b>XML</b>
+
+.....
+&#60;setting&#62;
+    .....
+    &#60;image_quality extension="png" over_file_size="20KB"&#62;0.5&#60;/img_preview&#62;
+    .....
+&#60;/setting&#62;
+.....
+
+<b>Script</b>
+
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;
+	
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            .....
+            ImageQuality: {
+                Quality: "0.5", 
+                Extension: "png",                
+                OverFileSize: "20KB"
+            }
+        }
+
+        new RAONKUpload(raonkParam);
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

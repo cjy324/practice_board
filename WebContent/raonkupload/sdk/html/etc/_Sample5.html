@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <h3 class="title">K Upload :: 서버 이벤트에서 업로드 된 파일 정보 얻는 방법</h3>
+            <p class="ttl">서버 이벤트에서 업로드 된 파일 정보 얻는 방법</p>
+            <p class="txt">
+                서버 이벤트에서 업로드 된 파일 정보를 얻는 방법을 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">방법 설명</p>
+            <div class="cord">
+                <pre class="pre">
+<span class="firebrick">.NET</span>
+
+// 업로드 완료전 이벤트 처리기 등록
+upload.AfterUploadEvent += new AfterUploadEventDelegate(AfterUploadEvent); // 파일을 업로드한 후에 발생하는 이벤트
+
+private void AfterUploadEvent(EventVo eventVo) {
+		
+    // 원본 파일명
+    string strOriginalFileName = eventVo.GetOriginalFileName();
+    
+    // 파일 저장 경로
+    string strResponseFileServerPath = eventVo.GetResponseFileServerPath();
+
+    // 실제 저장된 파일객체
+    System.IO.FileInfo file = new System.IO.FileInfo(eventVo.GetNewFileLocation());
+
+    // 실제 저장된 파일명
+    string strResponseFileName = file.Name;
+    
+    // 실제 저장된 파일의 확장자
+    string strResponseFileExtension = (file.Extension).Substring(1);
+
+    // 실제 저장된 파일의 확장자 제거된 파일명
+    int iGubun = strResponseFileName.LastIndexOf(".");
+    string strResponseOnlyFileName = strResponseFileName.Substring(0, iGubun);
+	
+    // 파일 사이즈
+    string strFileSize = (file.Length).ToString();
+
+}
+
+<span class="firebrick">JAVA</span>
+
+event.addAfterUploadEventListener(new AfterUploadEventListener() {
+    public void afterUploadEvent(EventVo eventVo) {
+		
+        // 원본 파일명
+        String strOriginalFileName = eventVo.getOriginalFileName();
+		
+        // 파일 저장 경로
+        String strResponseFileServerPath = eventVo.getResponseFileServerPath();
+
+        // 실제 저장된 파일객체
+        java.io.File file = new java.io.File(eventVo.getNewFileLocation());
+
+        // 실제 저장된 파일명
+        String strResponseFileName = file.getName();
+
+        int gubun = strResponseFileName.lastIndexOf(".");
+
+        // 실제 저장된 파일의 확장자
+        String strResponseFileExtension = strResponseFileName.substring(gubun + 1);
+		
+        // 실제 저장된 파일의 확장자 제거된 파일명
+        String strResponseOnlyFileName = strResponseFileName.substring(0, gubun);
+		
+        // 파일 사이즈
+        String fileSize = Long.toString(file.length());
+
+    }
+});
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

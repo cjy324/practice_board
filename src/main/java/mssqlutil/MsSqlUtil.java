@@ -10,6 +10,7 @@ import java.util.List;
 
 import dto.Article;
 import dto.GenFile;
+import dto.GenSet;
 
 public class MsSqlUtil {
 	
@@ -151,6 +152,31 @@ public class MsSqlUtil {
     	
     	DBconnectionEnd();
 		
+	}
+
+	public GenSet selectGenSet(String sql) throws SQLException {
+		DBconnectionStart();
+        
+		GenSet genSet = new GenSet();
+
+        /* executeQuery vs executeUpdate*/
+        // 출처: https://aricode.tistory.com/9 [아리의 코딩 모험]
+        // - executeQuery(String sql): 조회문(select, show 등)을 실행할 목적으로 사용
+        // - executeUpdate(String sql): create, drop, insert, delete, update 등등 문을 처리할 때 사용
+		stmt = con.createStatement();
+        rs = stmt.executeQuery(sql);
+ 
+    	while (rs.next()) {
+    			int editorNum = rs.getInt("editorNum");
+    			int uploaderNum = rs.getInt("uploaderNum");
+    			int downloaderNum = rs.getInt("downloaderNum");
+
+    			genSet = new GenSet(editorNum, uploaderNum, downloaderNum);
+    	}
+    	
+    	DBconnectionEnd();
+
+		return genSet;
 	}
 
 }

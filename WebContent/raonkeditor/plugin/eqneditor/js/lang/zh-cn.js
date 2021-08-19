@@ -1,0 +1,2 @@
+(function(){var a={icon:{p_eqneditor:"\u516c\u5f0f\u7f16\u8f91\u5668"},context:{p_eqneditor:"\u516c\u5f0f\u7f16\u8f91\u5668"},title:"\u516c\u5f0f\u7f16\u8f91\u5668",equation:"\u7b49\u5f0f(LaTeX)",preview:"\u9884\u89c8",equation_empty:"\u8bf7\u8f93\u5165\u7b49\u5f0f\u3002",btn_ok:"\u786e\u8ba4",btn_cancel:"\u53d6\u6d88"};try{if(G_KPlugin){G_KPlugin.eqneditor.lang=a;RAONKEditor_lang.plugins.eqneditor=a;var b=document.getElementById("ue_"+KEDITORTOP.G_CURRKEDITOR.ID+"p_eqneditor");b&&b.setAttribute("title",
+a.icon.p_eqneditor)}}catch(c){}})();

@@ -1,0 +1,152 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+    <title>RAON K Custom Download Sample</title>
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+    <link href="../css/sample.common.css" rel="stylesheet" />
+    <script src="../js/sample.common.js" type="text/javascript"></script>
+    <!-- 샘플 페이지 동작을 위한 파일입니다. -->
+
+    <script src="../../../js/raonkupload.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var G_UploadID;
+
+        function fn_addFile() {
+
+            // 파일경로를 제외한 실제 서버상의 파일을 작성합니다.
+            // 5번째 파라미터 값은 핸들러에서 실제파일경로를 구할 Custom Value를 설정합니다.
+            // void AddUploadedFile(FileUniqueKey, FileName, FilePath, FileSize, CustomValue, UploadId)
+            // 서버에서 경로를 추출할수 있는 값을 CustomValue로 전달합니다.
+            RAONKUPLOAD.AddUploadedFile('1', '전경사진.jpg', '', '87325', 'CustomValue1', G_UploadID);
+            RAONKUPLOAD.AddUploadedFile('2', '풍경이미지.bmp', '', '2359350', 'CustomValue2', G_UploadID);
+
+        }
+
+        // 생성완료 이벤트
+        function RAONKUPLOAD_CreationComplete(uploadID) {
+            G_UploadID = uploadID;
+
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML = '업로드 생성 완료 : ' + uploadID + '<br/>';
+
+            fn_addFile(); // 웹파일 추가
+        }
+
+        // 오류 이벤트
+        function RAONKUPLOAD_OnError(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += 'Error : ' + paramObj.strCode + ', ' + paramObj.strMessage + '<br/>';
+
+            if (paramObj.arrUploadedFileList != null && paramObj.arrUploadedFileList != '') {
+                logBox.innerHTML += '업로드 된 파일 리스트 - <br/>';
+                var uploadedFileLen = paramObj.arrUploadedFileList.length;
+                for (var i = 0; i < uploadedFileLen; i++) {
+                    logBox.innerHTML += paramObj.arrUploadedFileList[i].uploadName + ', ' + paramObj.arrUploadedFileList[i].uploadPath + '</br>';
+
+                    // originName: paramObj.arrUploadedFileList[i].originName
+                    // fileSize: paramObj.arrUploadedFileList[i].fileSize
+                    // uploadName: paramObj.arrUploadedFileList[i].uploadName
+                    // uploadPath: paramObj.arrUploadedFileList[i].uploadPath
+                    // logicalPath: paramObj.arrUploadedFileList[i].logicalPath
+                    // order: paramObj.arrUploadedFileList[i].order
+                    // status: paramObj.arrUploadedFileList[i].status
+                    // customValue: paramObj.arrUploadedFileList[i].customValue
+                    // responseCustomValue: paramObj.arrUploadedFileList[i].responseCustomValue
+                }
+            }
+        }
+
+        // 다운로드 완료 이벤트(파일당 발생)
+        function RAONKUPLOAD_DownloadCompleteFile(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += '다운로드 완료 : ' + (paramObj.downloadedPath != '' ? paramObj.downloadedPath : paramObj.originalName) + '<br/>';
+
+            // type: 'download' 또는 'open'
+            // downloadedPath: 다운로드 된 경로(agent 모드에서만 값이 있습니다)
+            // customValue: customValue
+            // logicalPath: 폴더구조 값
+            // size: 파일 사이즈
+            // webPath: 웹 경로
+            // originalName: 원본 파일명
+            // uniqKey: AddUploadedFile API로 넣어준 첫번째 키 값
+        }
+
+        // 모든 파일 다운로드 완료 이벤트
+        function RAONKUPLOAD_DownloadCompleteAllFile(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += '모든 다운로드 완료 : ' + paramObj.nCount + '개 파일<br/>';
+        }
+
+        // 다운로드 취소 이벤트(agent 모드만 해당)
+        function RAONKUPLOAD_DownloadCancel(uploadID, paramObj) {
+            var logBox = document.getElementById("logBox");
+            logBox.innerHTML += '다운로드 취소<br/>';
+        }
+    </script>
+
+</head>
+<body style="text-align:center;">
+    <ul class="info_lst_box">
+        <li>• 서버파일 추가시 CustomValue를 이용하여 파일을 다운로드 하는 예제입니다.</li>
+        <li>• 이 페이지는 sample/handler/raonkhandler_custom_download.jsp 로 다운로드 시 호출하게 되어 있습니다.<br />
+            &nbsp;&nbsp;개발 언어가 .NET인 경우 116줄은 주석처리하시고 118줄의 주석을 푸시면 됩니다.<br />
+            &nbsp;&nbsp;각 핸들러 페이지 내용을 보면 추가한 formdata를 받는 방법에 대한 소스를 확인 할 수 있습니다.
+        </li>
+    </ul>
+
+    <div class="btn_lst_box">
+        <button type="button" value="다운로드" class="input_image" onclick="fn_downloadFile()">다운로드</button>&nbsp;
+        <button type="button" value="전체 다운로드" class="input_image" style="width:110px;" onclick="fn_downloadAllFile()">전체 다운로드</button>&nbsp;
+    </div>
+    <div style="width: 800px; margin: 0 auto;">
+        <script type="text/javascript">
+            var tempPath = location.href;
+            tempPath = tempPath.substring(0, tempPath.lastIndexOf('/'));
+            tempPath = tempPath.substring(0, tempPath.lastIndexOf('/'));
+
+            // Sample을 위하여 연결된 Costom Download Sample Handler 입니다.
+            // 실제 소스 적용은 handler/raonkhandler.ashx 또는 raonkhandler.jsp 에 해당 소스를 적용하시기 바랍니다.
+
+            // 개발 언어가 JAVA인 경우
+            tempPath = tempPath + "/handler/raonkhandler_custom_download.jsp";
+            // 개발 언어가 .NET인 경우
+            //tempPath = tempPath + "/handler/raonkhandler_custom_download.ashx";
+
+            // 해당 config 이외의 설정도 가능합니다. (www.raonk.com > 개발센터 참조)
+            var uploadConfig = {
+                Id: "kupload",
+                Mode: "view", // edit, view
+                HandlerUrl: tempPath
+                //InitXml: "raonkupload.config.xml",
+                //SkinName: "blue",
+                //Width: "200px",
+                //Height: "500px",
+                //MaxTotalFileSize: "20GB",
+                //MaxOneFileSize: "20KB",
+                //MaxTotalFileCount: "9",
+                //MultiFileSelect: false,
+                //ExtensionAllowOrLimit: "0",
+                //ExtensionArr: "png",
+                //FolderNameRule: "/uploadfolder",
+                //ButtonBarEdit: "add,send,remove,remove_all",
+                //ButtonBarView: "open,download,download_all", // 0 일경우 버튼바 보이지 않음.
+                //Lang: "en-us", // ko-kr, en-us, ja-jp, zh-cn, zh-tw
+                //UploadHolder: "uploadHoder_PlaceHolder",
+                //IgnoreSameUploadName: "1"
+            };
+
+            var upload = new RAONKUpload(uploadConfig);
+        </script>
+    </div>
+    <br /><br />
+
+    <!-- 로그영역 -->
+    <div id="logBox" class="logBox" style="overflow: auto;"></div>
+    <!-- //로그영역 -->
+</body>
+</html>

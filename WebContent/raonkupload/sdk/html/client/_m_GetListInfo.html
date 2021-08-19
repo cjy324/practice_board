@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <h3 class="title">K Upload :: GetListInfo</h3>
+    <p class="ttl">object GetListInfo(type, uploadID)</p>
+    <p class="txt">
+        전송 완료 후 새롭게 업로드 된 파일, 웹 파일, 삭제된 파일 리스트 정보를 리턴해 주는 함수 입니다.
+    </p>
+    <p class="mttl01">return value</p>
+    <p class="txt">
+        <span class="firebrick">Object</span>&nbsp;&nbsp;파일 리스트 정보를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- Object.newFile</span>&nbsp;&nbsp;새로 업로드된 파일 정보를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- Object.deleteFile</span>&nbsp;&nbsp;삭제된 파일 정보를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- Object.webFile</span>&nbsp;&nbsp;웹 파일 정보를 의미합니다.<br />
+    </p>            
+    <p class="mttl01">parameters</p>     
+    <p class="txt">
+        <span class="firebrick">type</span>&nbsp;&nbsp;리턴받을 형식입니다. ('array', 'json', 'xml', 'text')<br />
+        <span class="firebrick">uploadID</span>&nbsp;&nbsp;파일 리스트를 가져올 업로드의 id를 의미합니다.
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        없음.
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;	
+&#60;script type="text/javascript"&#62;
+        function RAONKUPLOAD_UploadComplete(uploadID) {
+            // 업로드 완료 후 새롭게 업로드된 파일 리스트에 대한 정보를 추출함.
+            // 리턴받은 데이터에서 원하는 정보를 추출하는 방법은 kupload/sample/js/sample.common.js 에서 상세히 확인하실 수 있습니다.
+            var allListArray = RAONKUPLOAD.GetListInfo("array", "upload1");
+            var newListArray = allListArray.newFile;
+            var deleteListArray = allListArray.deleteFile;
+            var webListArray = allListArray.webFile;
+        }
+&#60;/script&#62;	
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+        &#60;script type="text/javascript"&#62;
+            new RAONKUpload({Id: 'upload1'});
+        &#60;/script&#62;
+&#60;/div&#62;
+
+&#60;!-- ..... 생략 ..... --&#62;
+
+&#60;/body&#62;
+&#60;/html&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

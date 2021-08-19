@@ -1,0 +1,2 @@
+(function(){var a={icon:{p_eqneditor:"\uc218\uc2dd \ud3b8\uc9d1\uae30"},context:{p_eqneditor:"\uc218\uc2dd \ud3b8\uc9d1\uae30"},title:"\uc218\uc2dd \ud3b8\uc9d1\uae30",equation:"\uc218\uc2dd(LaTeX)",preview:"\ubbf8\ub9ac\ubcf4\uae30",equation_empty:"\uc218\uc2dd\uc744 \uc785\ub825\ud574\uc8fc\uc138\uc694.",btn_ok:"\ud655\uc778",btn_cancel:"\ucde8\uc18c"};try{if(G_KPlugin){G_KPlugin.eqneditor.lang=a;RAONKEditor_lang.plugins.eqneditor=a;var b=document.getElementById("ue_"+KEDITORTOP.G_CURRKEDITOR.ID+
+"p_eqneditor");b&&b.setAttribute("title",a.icon.p_eqneditor)}}catch(c){}})();

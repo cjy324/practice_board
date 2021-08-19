@@ -74,6 +74,8 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 			ConfigController configController = Container.configController;
 			if(requestName.equals("setting")) {
 				jspPath = configController.setting(request, response);
+			}else if(requestName.equals("setOptions")) {
+				jspPath = configController.setOptions(request, response);
 			}
 		}
 		

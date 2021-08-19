@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con ">
+            <h3 class="title">K Upload :: setViewerBrokenImagePath</h3>
+            <p class="ttl">void setViewerBrokenImagePath(String pViewerBrokenImagePath)</p>
+            <p class="txt">
+                웹 표준 모드의 뷰어 사용시 뷰어에 사용되는 kupload/images/broken.png 파일의 경로를 설정합니다.
+                <br />일반적으로 kupload/handler/raonkviewer.jsp를 다른 경로에 사용될 경우 설정합니다.
+                <br />이 경우 raonkviewer.jsp 페이지에서 broken.png의 경로가 접근 가능하도록 설정해야 합니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">pViewerBrokenImagePath</span>&nbsp;&nbsp;웹 표준 모드의 뷰어 사용시 뷰어에 사용되는 kupload/images/broken.png 파일의 경로를 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                기본값 : ../images/broken.png ( kupload/images/broken.png )
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+<b>//raonkviewer.jsp에서 설정</b>
+
+RAONKHandler upload = new RAONKHandler();
+
+<b>upload.settingVo.setViewerBrokenImagePath("../images/broken.png");</b>
+
+String result = upload.Process(request, response, application, event);
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

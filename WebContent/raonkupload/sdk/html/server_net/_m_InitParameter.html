@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con ">
+            <h3 class="title">K Upload :: InitParameter</h3>
+            <p class="ttl">void InitParameter(HttpContext pContext)</p>
+            <p class="txt">
+                파라미터를 셋팅할 때 사용됩니다.<br />
+                Process 전에 파라미터 정보를 얻을 때 사용됩니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">pContext</span>&nbsp;&nbsp;요청된 context 정보를 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+RAONKHandler upload = new RAONKHandler();
+
+<b>upload.InitParameter(context);</b>
+
+upload.Process(context);
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

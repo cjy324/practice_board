@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">               
+    <h3 class="title">K Upload :: UploadComplete</h3>
+    <p class="ttl">void RAONKUPLOAD_UploadComplete(uploadID)</p>
+    <p class="txt">
+        파일 전송이 완료되었을 때 발생합니다.
+    </p>
+    <p class="mttl01">return value</p>
+    <p class="txt">
+        없음.
+    </p> 
+    <p class="mttl01">parameters</p>
+    <p class="txt">
+        <span class="firebrick">uploadID</span>&nbsp;&nbsp;전송이 완료된 업로드의 id를 의미합니다. 
+    </p>
+    <p class="mttl01">remarks</p>
+    <p class="txt">
+        없음.
+    </p>   
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;	
+
+&#60;script type="text/javascript"&#62;
+    function RAONKUPLOAD_UploadComplete(uploadID) {
+        // 업로드 완료 후 처리할 내용
+        // 이 이벤트 함수 안에서 아래 API로 업로드된 정보를 추출합니다.
+        // json, xml, array, text delimit 방식으로 결과값을 제공합니다.
+
+        var newListData = RAONKUPLOAD.GetNewUploadList('json', G_UploadID);
+
+        &#60;!-- ..... 생략 ..... --&#62;
+    }
+&#60;/script&#62;
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        new RAONKUpload({Id: 'upload1'});
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

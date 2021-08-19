@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <h3 class="title">K Upload :: 파일을 원하는 파일명으로 변환하는 방법</h3>
+            <p class="ttl">파일을 원하는 파일명으로 변환하는 방법</p>
+            <p class="txt">
+                K Upload는 파일을 업로드할 때 서버에 저장되는 파일명에 대하여 GUID와 원본파일명(REALFILENAME)을 제공합니다.
+                <br />각 고객사에 맞게 파일명을 변경하기 원할경우 이 방법을 이용하여 처리하시면 됩니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">방법 설명</p>
+            <div class="cord">
+                <pre class="pre">
+<span class="firebrick">.NET</span>
+
+<b>1. upload.Process(context); 전에 아래 이벤트 처리기를 등록을 합니다.</b>
+
+upload.BeforeUploadEvent += new BeforeUploadEventDelegate(BeforeUploadEvent); // 파일을 업로드하기 전에 발생하는 이벤트
+
+<b>2. BeforeUploadEvent에서 아래와 같이 처리합니다.</b>
+
+private void BeforeUploadEvent(EventVo eventVo) {
+    string strNewFileLocation = eventVo.GetNewFileLocation(); // 저장될 파일의 실제 물리적 경로
+    string strFilePathLower = strNewFileLocation.ToLower();
+    string strFileExt = strFilePathLower.Substring(strFilePathLower.LastIndexOf('.') + 1); // 저장될 파일의 확장자
+    
+    /* 변경할 파일명 구하는 Business Logic */
+    string strFileName = "test";
+    /* 변경할 파일명 구하는 Business Logic */
+
+    string strFilePath = strNewFileLocation.Substring(0, strNewFileLocation.LastIndexOf(System.IO.Path.DirectorySeparatorChar))
+                                + System.IO.Path.DirectorySeparatorChar + strFileName + "." + strFileExt;
+    eventVo.SetNewFileLocation(strFilePath);
+}
+
+<span class="firebrick">JAVA</span>
+
+<b>1. upload 객체 생성 후 아래와 같이 이벤트 객체를 생성합니다.</b>
+
+EventClass event = new EventClass();
+
+<b>2. 이벤트 객체 생성 후 아래와 같이 이벤트 셋팅을 합니다.</b>
+
+// 파일을 업로드하기 전에 발생하는 이벤트
+event.addBeforeUploadEventListener(new BeforeUploadEventListener() {
+    public void beforeUploadEvent(EventVo eventVo) {
+			
+        String strNewFileLocation = eventVo.getNewFileLocation(); // 저장될 파일의 실제 물리적 경로
+        String strFilePathLower = strNewFileLocation.toLowerCase();
+        String strFileExt = strFilePathLower.substring(strFilePathLower.lastIndexOf('.') + 1); // 저장될 파일의 확장자
+	
+        /* 변경할 파일명 구하는 Business Logic */
+        String strFileName = "test";
+        /* 변경할 파일명 구하는 Business Logic */
+
+        String strFilePath = strNewFileLocation.substring(0, strNewFileLocation.lastIndexOf(java.io.File.separator))
+                                    + java.io.File.separator + strFileName + "." + strFileExt;
+        eventVo.setNewFileLocation(strFilePath);
+        
+    }
+});
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

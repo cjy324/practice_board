@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <h3 class="title">K Upload :: AddBase64Data</h3>
+    <p class="ttl">void AddBase64Data(strBase64Data, fileName, uploadID)</p>
+    <p class="txt">
+        Base64 이미지 데이터를 전송(업로드)하기 위하여 전송대상 목록에 추가합니다.
+    </p>
+    <p class="mttl01">return value</p>
+    <p class="txt">
+        없음.
+    </p>            
+    <p class="mttl01">parameters</p>     
+    <p class="txt">
+        <span class="firebrick">strBase64Data</span>&nbsp;&nbsp;Base64 이미지 문자열을 의미합니다.<br />
+        <span class="firebrick">fileName</span>&nbsp;&nbsp;이미지 파일명을 의미합니다.<br />
+        <span class="firebrick">uploadID</span>&nbsp;&nbsp;실행할 업로드의 id를 의미합니다.<br />
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        없음.
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;	
+&#60;script type="text/javascript"&#62;
+        function addBase64Image(strBase64Data, fileName){
+            RAONKUPLOAD.AddBase64Data(strBase64Data, fileName, 'upload1');
+        }
+&#60;/script&#62;	
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+        &#60;script type="text/javascript"&#62;
+            new RAONKUpload({Id: 'upload1'});
+        &#60;/script&#62;
+&#60;/div&#62;
+
+&#60;!-- ..... 생략 ..... --&#62;
+
+&#60;/body&#62;
+&#60;/html&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

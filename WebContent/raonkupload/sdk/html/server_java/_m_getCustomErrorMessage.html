@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con ">
+            <h3 class="title">K Upload :: getCustomErrorMessage</h3>
+            <p class="ttl">String getCustomErrorMessage(String pCustomErrorCode, String pCustomErrorMessage)</p>
+            <p class="txt">
+                Process를 실행하기 전에 특정 상황에 대하여 에러 처리를 할 경우 사용합니다.<br />
+                Session Check 등의 경우에 사용이 가능합니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                설정된 Error 코드와 Message를 kupload에서 사용되는 암호화된 문자열로 처리 후 return
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">pCustomErrorCode</span>&nbsp;&nbsp;설정하려는 Error의 코드(900이상의 3자리로 설정)를 의미합니다.<br />
+                <span class="firebrick">pCustomErrorMessage</span>&nbsp;&nbsp;설정하려는 Error의 Message를 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+RAONKHandler upload = new RAONKHandler();
+
+String result = "";
+if(인증이 맞지 않을 경우) {
+    <b>result = upload.getCustomErrorMessage("999", "사용자오류");</b>
+} else {
+    result = upload.Process(request, response, application, event);
+}
+
+if(!result.equals("")) {
+	out.print(result);
+} else {
+	out.clear();
+}
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

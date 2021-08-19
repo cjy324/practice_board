@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">               
+    <h3 class="title">K Upload :: UseSizeColumn</h3>
+    <p class="ttl">XML : &#60;use_size_column&#62;.....&#60;/use_size_column&#62;, Script : SizeColumnWidth</p>
+    <p class="txt">
+        <b>Script 설정이 우선 적용됩니다.</b><br />
+        업로드 영역 항목 중 파일크기 항목 노출 여부를 설정합니다.     
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        <span class="firebrick">XML:use_size_column</span>&nbsp;&nbsp;설정값 "0" 파일크기 항목 노출안함이고, "1"로 설정시 파일크기 항목을 노출합니다.<br />
+        <span class="firebrick">Script:SizeColumnWidth</span>&nbsp;&nbsp;설정값 "0" 파일크기 항목 노출안함이고, 다른 값으로 설정시 파일크기 항목을 노출 후 해당 넓이를 설정합니다.
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+<b>파일크기 항목 노출안함으로 설정합니다.</b>
+
+<b>XML</b>
+
+.....
+&#60;setting&#62;
+    .....
+    &#60;use_size_column&#62;0&#60;/use_size_column&#62;
+    .....
+&#60;/setting&#62;
+.....
+
+<b>Script</b>
+
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;
+	
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            .....
+            SizeColumnWidth: '0'
+        }
+
+        new RAONKUpload(raonkParam);
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

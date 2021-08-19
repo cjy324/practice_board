@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>K Upload Developer Manual</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="raonkhelp_content_right">
+        <div class="right_con">
+            <h3 class="title">K Upload :: SetTempPath</h3>
+            <p class="ttl">void SetTempPath(string pTempPath)</p>
+            <p class="txt">
+                업로드 또는 다운로드시 임시 파일에 대한 폴더를 설정하기 위하여 사용합니다.
+            </p>
+            <p class="mttl01">return value</p>
+            <p class="txt">
+                없음.
+            </p>
+            <p class="mttl01">parameters</p>
+            <p class="txt">
+                <span class="firebrick">pTempPath</span>&nbsp;&nbsp;임시 파일에 대한 폴더경로를 의미합니다.
+            </p>
+            <p class="mttl01">remarks</p>
+            <p class="txt">
+                기본값 : kupload/handler/temp<br />
+                <b>SetVirtualPath 또는 SetPhysicalPath의 경로가 공유 드라이브 일 경우<br />SetTempPath도 해당 공유 드라이브의 위치로 설정되어야 합니다.</b>
+            </p>
+            <p class="mttl01">sample code</p>
+            <div class="cord">
+                <pre class="pre">
+RAONKHandler upload = new RAONKHandler();
+
+<b>upload.settingVo.SetTempPath(@"D:\temp");</b>
+
+upload.Process(context);
+                </pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

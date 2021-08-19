@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">               
+    <h3 class="title">K Upload :: SelectItem</h3>
+    <p class="ttl">void RAONKUPLOAD_SelectItem(uploadID, paramObj)</p>
+    <p class="txt">
+        파일 선택 후 발생합니다. 
+    </p>
+    <p class="mttl01">return value</p>
+    <p class="txt">
+        없음.
+    </p> 
+    <p class="mttl01">parameters</p>
+    <p class="txt">
+        <span class="firebrick">uploadID</span>&nbsp;&nbsp;파일을 선택한 업로드의 id를 의미합니다.<br />
+        <span class="firebrick">paramObj</span>&nbsp;&nbsp;선택한 파일에 대한 정보가 있는 object 입니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.colunmIndex</span>&nbsp;&nbsp;파일 선택이 발생한 colunmIndex를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.isWebFile</span>&nbsp;&nbsp;파일이 웹파일이면 "y" 아니면 "n"을 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.nFileSize</span>&nbsp;&nbsp;파일의 사이즈를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.nIndex</span>&nbsp;&nbsp;파일 리스트에서의 순서를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strCustomValue</span>&nbsp;&nbsp;파일의 CustomValue를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strExtension</span>&nbsp;&nbsp;파일의 확장자를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strLocalPath</span>&nbsp;&nbsp;파일의 로컬 경로를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strOriginalName</span>&nbsp;&nbsp;파일의 원본 파일명을 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strUniqkey</span>&nbsp;&nbsp;파일의 Uniqkey를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.strWebPath</span>&nbsp;&nbsp;파일의 웹 경로를 의미합니다.<br />
+        <span class="firebrick" style="margin-left:20px;">- paramObj.objFile</span>&nbsp;&nbsp;파일의 객체 정보를 의미합니다.
+    </p>
+    <p class="mttl01">remarks</p>
+    <p class="txt">
+        없음.
+    </p>   
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;	
+
+&#60;script type="text/javascript"&#62;
+    function RAONKUPLOAD_SelectItem(uploadID, paramObj) {
+        // 파일 선택 후 처리할 내용
+
+    }
+&#60;/script&#62;
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        new RAONKUpload({Id: 'upload1'});
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+

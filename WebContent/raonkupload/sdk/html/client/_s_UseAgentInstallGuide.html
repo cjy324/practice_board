@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>K Upload Developer Manual</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<link href="../../css/sdkContents.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="raonkhelp_content_right">
+<div class="right_con">           
+    <span class="pl_type">[Agent 전용]</span>  
+    <h3 class="title">K Upload :: UseAgentInstallGuide</h3>
+    <p class="ttl">XML : &#60;use_agent_install_guide&#62;.....&#60;/use_agent_install_guide&#62;, Script : UseAgentInstallGuide<br />XML : &#60;use_agent_install_guide zindex="....."&#62;&#60;/use_agent_install_guide&#62;, Script : AgentInstallGuideZIndex</p>
+    <p class="txt">
+        <b>Script 설정이 우선 적용됩니다.</b><br />
+        Agent 설치시 설치 안내창 노출여부를 설정합니다.
+    </p>
+    <p class="mttl01">remarks</p>               
+    <p class="txt">
+        <span class="firebrick">XML:use_agent_install_guide, Script:UseAgentInstallGuide</span>&nbsp;&nbsp;기본값이 "1" Agent 설치시 설치 안내창 노출이고, "0"은 노출하지 않습니다.<br />
+        <span class="firebrick">XML:zindex, Script:AgentInstallGuideZIndex</span>&nbsp;&nbsp;Agent 설치 안내창에 대한 ZIndex를 설정합니다. (기본값: 1000)
+    </p>    
+    <p class="mttl01">sample code</p>             
+    <div class="cord">
+        <pre class="pre">
+<b>Agent 설치시 설치 안내창 노출여부를 노출로 설정합니다.</b>
+<b>Agent 설치 안내창의 ZIndex는 1500으로 설정합니다.</b>
+
+<b>XML</b>
+
+.....
+&#60;setting&#62;
+    .....
+    &#60;use_agent_install_guide zindex="1500"&#62;1&#60;/use_agent_install_guide&#62;
+    .....
+&#60;/setting&#62;
+.....
+
+<b>Script</b>
+
+&#60;script type="text/javascript" src="raonkupload/js/raonkupload.js"&#62;&#60;/script&#62;	
+
+&#60;!-- ..... 생략 ..... --&#62;
+ 
+&#60;div style="width:800px;height:200px"&#62;  
+    &#60;script type="text/javascript"&#62;
+        var raonkParam = {
+            .....
+            UseAgentInstallGuide: '1',
+            AgentInstallGuideZIndex: '1500'
+        }
+
+        new RAONKUpload(raonkParam);
+    &#60;/script&#62;
+&#60;/div&#62;
+        </pre>  
+    </div>                   
+    </div>
+</div>
+</body>
+</html>
+
