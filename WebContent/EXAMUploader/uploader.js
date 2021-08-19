@@ -324,7 +324,7 @@
 
         // 기존 업로드된 파일 삭제
         this.deleteFiles = function(forDeleteFileIndex){
-            console.log("forDeleteFileIndex: " + forDeleteFileIndex)
+            console.log("forDeleteFileIndex: " + forDeleteFileIndex);
             var params = "path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
 
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);

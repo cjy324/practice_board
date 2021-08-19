@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import container.Container;
 import controller.ArticleController;
+import controller.ConfigController;
 import controller.DownloadController;
 import controller.UploadController;
 
@@ -68,7 +69,12 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 			}else if(requestName.equals("dlelateAttFiles")) {
 				jspPath = articleController.dlelateAttFiles(request, response);
 			}
-			
+		}
+		if (controllerName.equals("config")) {
+			ConfigController configController = Container.configController;
+			if(requestName.equals("setting")) {
+				jspPath = configController.setting(request, response);
+			}
 		}
 		
 
