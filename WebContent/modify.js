@@ -140,7 +140,7 @@ function saveTextContentByAjax(textContent) {
 
 
 // 첨부파일 매핑 및 DB에 저장
-function articleAndAttchedFilesMappingByAjax(resultFileList) {
+function articleAndAttchedFilesMappingByAjax(resultFileList, deleteFileList) {
     // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
     const xhttp = new XMLHttpRequest(); 
     // http 요청 타입 / 주소 / 동기식 여부 설정
@@ -149,6 +149,40 @@ function articleAndAttchedFilesMappingByAjax(resultFileList) {
     xhttp.setRequestHeader("Content-type", "application/json");
     // http 요청
     xhttp.send(JSON.stringify(resultFileList));   // 요청 전송(JSON 전송)
+
+    xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+        const req = e.target;
+
+        if(req.readyState === 4) {
+            if(req.status === 200) {
+                console.log("------통신 성공------");
+                if(xhttp.responseText == "DONE"){
+                    if(deleteFileList.length > 0){
+                        delelteAttFilelistByAjax(deleteFileList)
+                    }else{
+                        alert(id + "번 게시물 수정 완료!!")
+                        goToDetailPage();
+                    }
+                }
+            }else{
+                console.error("------통신 실패------");
+                console.error("req.status: " + req.status);
+                console.error(xhttp.responseText);
+            }
+        }
+    }
+}
+
+// DB상에서 관련 파일정보 삭제
+function delelteAttFilelistByAjax(deleteFileList){
+    // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
+    const xhttp = new XMLHttpRequest(); 
+    // http 요청 타입 / 주소 / 동기식 여부 설정
+    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/dlelateAttFiles?relId=" + id, true); // 메서드와 주소 설정    
+    // Header를 JSON으로 셋팅
+    xhttp.setRequestHeader("Content-type", "application/json");
+    // http 요청
+    xhttp.send(JSON.stringify(deleteFileList));   // 요청 전송(JSON 전송)
 
     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
         const req = e.target;
@@ -172,15 +206,22 @@ function articleAndAttchedFilesMappingByAjax(resultFileList) {
 // (가이드)업로드가 완료되면 이 함수가 호출됨
 // 서버로 업로드가 완료된 파일리스트를 인수로 받을 수 있음
 function EXAMUploader_UploadComplete(resultFileList) {
-    if(resultFileList.length > 0){
+    // 사용자커스텀
+    // 1. 업로드될 신규 파일이 있고 기존 삭제할 파일 있는 경우 
+    if(resultFileList.length > 0 && EXAMUploader.forDeleteFileList.length > 0){
         for(let i = 0; i < resultFileList.length; i++){
             console.log(resultFileList[i]);
         }
-        // 사용자커스텀
-        articleAndAttchedFilesMappingByAjax(resultFileList);
-        alert("forDeleteFileList.length: " + EXAMUploader.forDeleteFileList.length)
-    }else{
-        alert("forDeleteFileList.length: " + EXAMUploader.forDeleteFileList.length)
+        articleAndAttchedFilesMappingByAjax(resultFileList, EXAMUploader.forDeleteFileList);
+    }// 2. 업로드될 신규 파일은 없고 기존 삭제할 파일 있는 경우 
+    else if(resultFileList.length <= 0 && EXAMUploader.forDeleteFileList.length > 0){
+        delelteAttFilelistByAjax(EXAMUploader.forDeleteFileList)
+    }// 3. 업로드될 신규 파일은 있고 기존 삭제할 파일은 없는 경우
+    else if(resultFileList.length > 0 && EXAMUploader.forDeleteFileList.length <= 0){
+        var emptyList = [];
+        articleAndAttchedFilesMappingByAjax(resultFileList, emptyList);
+    }// 4. 둘 다 없는 경우 
+    else if(resultFileList.length <= 0 && EXAMUploader.forDeleteFileList.length <= 0){
         alert(id + "번 게시물 수정 완료!!")
         goToDetailPage();
     }

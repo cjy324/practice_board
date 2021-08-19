@@ -65,7 +65,10 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.getBody(request, response);
 			}else if(requestName.equals("modifyContent")) {
 				jspPath = articleController.modifyContent(request, response);
+			}else if(requestName.equals("dlelateAttFiles")) {
+				jspPath = articleController.dlelateAttFiles(request, response);
 			}
+			
 		}
 		
 

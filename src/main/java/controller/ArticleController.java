@@ -212,5 +212,49 @@ public class ArticleController {
 
 			return "notJspPath";
 		}
+
+		// 관련 첨부파일 정보 DB상에서 삭제
+		public String dlelateAttFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			int relId = Integer.parseInt(request.getParameter("relId"));
+			
+
+			//JSON Parsing
+			StringBuffer data = new StringBuffer();
+			String line = null;
+			
+			try {
+				// BufferedReader로 request읽기
+				BufferedReader reader = request.getReader();
+				
+				while ((line = reader.readLine()) != null) {
+					data.append(line);
+				};
+				
+				// JSONParser객체 생성
+				JSONParser parser = new JSONParser();
+				// JSONParser로 파싱 후
+				// JSONObject에 JSON형태로 담기
+				JSONArray files = (JSONArray) parser.parse(data.toString());
+				JSONObject json = new JSONObject();
+
+				for(int i = 0; i < files.size(); i++) {
+					json = (JSONObject) files.get(i);
+					
+					int id = Integer.parseInt(json.get("id").toString());
+					
+					// DB에서 관련 정보 삭제
+					genFileService.deleteFileInfo(relId, id);
+				}
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// 클라이언트로 완료 메시지 전달
+			response.getWriter().append("DONE");
+
+			return "notJspPath";
+		}
 		
 }
