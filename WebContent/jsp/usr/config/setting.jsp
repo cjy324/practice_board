@@ -9,6 +9,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/raonkeditor/js/raonkeditor.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/raonkupload/js/raonkupload.js"></script>
 <script defer="defer" src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
+<script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
 <script defer="defer" type="text/javascript" src="${pageContext.request.contextPath}/setting.js"></script>
 <title>SETTING</title>
 </head>
@@ -19,6 +20,12 @@
 		var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
 		
 		EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+		
+		// 업로더 적용
+		var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+        
+        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
 	}
 </script>
 <body onload="draw()">
@@ -71,11 +78,24 @@
 			<div class="config_setting_body__btn">
 				<button onclick="setOptions()">설정값 저장</button>
 			</div>
+			<div>
+				<h2>미리보기</h2>
+			</div>
 			<div style="text-align: center; width: 100%;">
+				<h4>EXAMEditor</h4>
+				<div style="width: 80%; display:inline-block;">
+					<!-- Editor -->
+					<div id="EDITOR_AREA" class="EDITOR_AREA">
+						<iframe id='editor_holder' class='editor_holder' src="" width="100%" height="100%"></iframe>
+					</div>
+				</div>
+			</div>
+			<div style="text-align: center; width: 100%;">
+				<h4>K_Editor</h4>
 				<div style="width: 80%; display:inline-block;">
 					<script type="text/javascript">
 						var raonkParam = {
-								Id: "K_Editor1",
+								Id: "K_Editor",
 					            Width: '100%',
 					            DefaultMessage: "<span>이곳에 내용을 입력하세요.</span>"
 					        }
@@ -84,16 +104,22 @@
 				</div>
 			</div>
 			<div style="text-align: center; width: 100%;">
-				<div style="display:inline-block;">
-					<script type="text/javascript">
-						var upload = new RAONKUpload({Id: "K_Uploader1"});
-					</script>
+				<h4>EXAMUploader</h4>
+				<div style="width: 80%; display:inline-block;">
+					<!-- Uploader -->
+        			<iframe id='uploader_holder' class='uploader_holder' src="" frameborder='0'></iframe>
 				</div>
 			</div>
 			<div style="text-align: center; width: 100%;">
+				<h4>K_Uploader</h4>
 				<div style="width: 80%; display:inline-block;">
-					<!-- Editor -->
-        			<iframe id='editor_holder' class='editor_holder' src="" frameborder='0'></iframe>
+					<script type="text/javascript">
+						var raonkParam = {
+								Id: "K_Uploader",
+					            Width: '100%'
+					        }
+						var upload = new RAONKUpload(raonkParam);
+					</script>
 				</div>
 			</div>
 		</div>

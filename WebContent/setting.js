@@ -6,6 +6,7 @@ function goToListPage(){
     location.replace("http://localhost:8086/practiceBoard/usr/article/list");
 }
 
+// 체크박스 값 가져오기
 function getCheckedOptions(){
     var editors = document.getElementsByName("editors");
     var uploaders = document.getElementsByName("uploaders");
@@ -32,6 +33,7 @@ function getCheckedOptions(){
     return checkedOpteions;
 }
 
+// DB에 설정값 저장하기
 function saveOptions(array){
     
     // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
@@ -63,6 +65,7 @@ function saveOptions(array){
     
 }
 
+// 설정값 저장(버튼 클릭시)
 function setOptions(){
     // 체크된 옵션 가져오기
     let checkedOpteionArray = getCheckedOptions();
@@ -70,7 +73,7 @@ function setOptions(){
     saveOptions(checkedOpteionArray);
 }
 
-// 한개의 체크박스만 선택
+/* 한개의 체크박스만 선택 시작 */
 function checkOnlyOneEditors(element) {
     var checkboxes = document.getElementsByName("editors");
     
@@ -98,3 +101,4 @@ function checkOnlyOneDownloaders(element) {
     
     element.checked = true;
 }
+/* 한개의 체크박스만 선택 끝 */

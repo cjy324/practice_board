@@ -112,22 +112,60 @@ function doWrite() {
         return;
     }
 
-    // 내용 값 가져오기
-    const body = EXAMEditor.getBodyContent();
 
-    if(body.trim() === "<p><br></p>"){
-        alert("내용을 입력해주세요.");
-        return;
-    }
+    console.log(typeof(EXAMEditor))
+    console.log(typeof(RAONKEditor))
 
-    // JSON 형태로 담기
-    let textContent = {
-        title: title,
-        body: body
-    }
-    textContent = JSON.stringify(textContent);
+    // 콜백함수
+    // body값을 요청하는 함수 응답 이후에 진행되는 함수
+    var afterGetBodyContents = function (body) {
+        if(body.trim() === "<p><br></p>"){
+            alert("내용을 입력해주세요.");
+            return;
+        }
+    
+        // JSON 형태로 담기
+        let textContent = {
+            title: title,
+            body: body
+        }
+        textContent = JSON.stringify(textContent);
+    
+        // ajax통신 시작
+        saveTextContentByAjax(textContent);
+    };
 
-    // ajax통신 시작
-    saveTextContentByAjax(textContent);
+    // 라온K에디터의 경우
+    // GetHtmlContents api가 비동기 방식이므로 동기방식 로직에 적용시 오류가 생긴다
+    // 따라서 아래와 같이 콜백 개념으로 다음 로직을 짜야 비동기 방식으로 처리가 가능하다.
+    var fn_callback = function (paramObj){
+        afterGetBodyContents(paramObj.strData);
+    };
+
+    // GetHtmlContents api로 요청을 보내고 콜백함수로 content값을 리턴 받는 방식(비동기)
+    // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
+    RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
+
+    // const body = EXAMEditor.getBodyContent();
+    // afterGetBodyContents(EXAMEditor.getBodyContent());
+
+    // return;
+    // // 내용 값 가져오기
+    // const body = EXAMEditor.getBodyContent();
+
+    // if(body.trim() === "<p><br></p>"){
+    //     alert("내용을 입력해주세요.");
+    //     return;
+    // }
+
+    // // JSON 형태로 담기
+    // let textContent = {
+    //     title: title,
+    //     body: body
+    // }
+    // textContent = JSON.stringify(textContent);
+
+    // // ajax통신 시작
+    // saveTextContentByAjax(textContent);
     
 }

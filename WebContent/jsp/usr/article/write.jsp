@@ -5,32 +5,111 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css">
-<script defer src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
-<script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
-<script defer src="${pageContext.request.contextPath}/write.js"></script>
+<script src="${pageContext.request.contextPath}/write.js"></script>
 <script type="text/javascript">
 
+	// contextpath
+	var contextpath = "http://localhost:8086/practiceBoard";
+	
+	// 에디터 설정값
+	var G_EditorConfig = {
+		editor1: {
+			url: '/EXAMEditor/editor.js',
+			beforeCreate: function () {
+				var editorAreaNode = document.getElementById('EDITOR_AREA');
+				var editorFrame = document.createElement('iframe');
+		    	editorFrame.id = 'editor_holder';
+		    	editorFrame.className = 'editor_holder';
+		    	editorFrame.width = '100%';
+		    	editorFrame.height = '100%';
+		    	
+		    	editorAreaNode.appendChild(editorFrame);
+			},
+			create: function () {
+				var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
+		        var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+		        
+		        EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+			}
+		},
+		editor2: {
+			url: '/raonkeditor/js/raonkeditor.js',
+	        beforeCreate: function () {},
+			create: function () {
+				var raonkParam = {
+					Id: "K_Editor",
+		            Width: '100%',
+		            EditorHolder: "EDITOR_AREA",  // EditorHolder를 지정해 주면 해당 id 태그에 에디터를 그린다.
+		            DefaultMessage: "<span>이곳에 내용을 입력하세요.</span>"
+		        }
+				new RAONKEditor(raonkParam);
+			}
+		}
+	};
+	
+	// 업로더 설정값
+	var G_UploaderConfig = {
+		uploader1: {
+			url: '/EXAMUploader/uploader.js',
+			beforeCreate: function () {
+				var uploaderAreaNode = document.getElementById('UPLOADER_AREA');
+				var uploaderFrame = document.createElement('iframe');
+				uploaderFrame.id = 'uploader_holder';
+				uploaderFrame.className = 'uploader_holder';
+				uploaderFrame.width = '100%';
+				uploaderFrame.height = '100%';
+		    	
+				uploaderAreaNode.appendChild(uploaderFrame);
+			},
+			create: function () {
+				var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+		        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+		        
+		        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+			}
+		},
+		uploader2: {
+			url: '/raonkupload/js/raonkupload.js',
+	        beforeCreate: function () {},
+			create: function () {
+				var raonkParam = {
+					Id: "K_Uploader",
+		            Width: '100%',
+		            UploadHolder: "UPLOADER_AREA"  // UploadHolder를 지정해 주면 해당 id 태그에 업로더를 그린다.
+		        }
+				new RAONKUpload(raonkParam);
+			}
+		}
+	};
+	
 	function drawProduct(genSet){
-		console.log(typeof(genSet))
 	    // 에디터 적용
-	    if(genSet.editorNum === 1){
-	        var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
-	        var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
-	        
-	        EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
-	    }else if(genSet.editorNum === 2){
-	        alert("k에디터 적용")
-	    }
-	     
+	    var editorConfig = G_EditorConfig['editor' + genSet.editorNum];
+	
+	    editorConfig.beforeCreate();
+	
+	    var editorScript = document.createElement('script');
+	    editorScript.src = contextpath + editorConfig.url;
+	    editorScript.defer = "defer";
+	    document.head.appendChild(editorScript);
+	
+	    editorScript.onload = function () {
+	    	editorConfig.create();
+	    };
+
 	     // 업로더 적용
-	    if(genSet.uploaderNum === 1){
-	        var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
-	        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
-	        
-	        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
-	    }else if(genSet.uploaderNum === 2){
-	        alert("k업로더 적용")
-	    }
+	    var uploaderConfig = G_UploaderConfig['uploader' + genSet.uploaderNum];
+		
+	    uploaderConfig.beforeCreate();
+	
+	    var uploaderScript = document.createElement('script');
+	    uploaderScript.src = contextpath + uploaderConfig.url;
+	    uploaderScript.defer = "defer";
+	    document.head.appendChild(uploaderScript);
+	
+	    uploaderScript.onload = function () {
+	    	uploaderConfig.create();
+	    };
 	}
 	
 	function getOptionsByAjax(){
@@ -85,10 +164,13 @@
 			        <input id="titleInput" type="text" placeholder="제목 입력란">
 			    </div>
 			</div>
+			
 			<!-- Editor -->
-        	<iframe id='editor_holder' class='editor_holder' src="" frameborder='0'></iframe>
-        	<!-- Uploader -->
-        	<iframe id='uploader_holder' class='uploader_holder' src="" frameborder='0'></iframe>
+			<div id="EDITOR_AREA" class="EDITOR_AREA"></div>
+			
+			<!-- Uploader -->
+			<div id="UPLOADER_AREA" class="UPLOADER_AREA"></div>
+        	
         </div>
     	<div class="article_write_foot">
 			<button type="button" onclick="doWrite()" style="cursor: pointer;">
