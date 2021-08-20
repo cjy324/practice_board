@@ -9,18 +9,64 @@
 <script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
 <script defer src="${pageContext.request.contextPath}/write.js"></script>
 <script type="text/javascript">
+
+	function drawProduct(genSet){
+		console.log(typeof(genSet))
+	    // 에디터 적용
+	    if(genSet.editorNum === 1){
+	        var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
+	        var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+	        
+	        EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+	    }else if(genSet.editorNum === 2){
+	        alert("k에디터 적용")
+	    }
+	     
+	     // 업로더 적용
+	    if(genSet.uploaderNum === 1){
+	        var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+	        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+	        
+	        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+	    }else if(genSet.uploaderNum === 2){
+	        alert("k업로더 적용")
+	    }
+	}
+	
+	function getOptionsByAjax(){
+		// 환경설정값
+		let genSet = {
+			    editorNum: 0,
+			    uploaderNum: 0,
+			    downloaderNum: 0
+			}
+	    
+		// ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
+	    const xhttp = new XMLHttpRequest(); 
+	    // http 요청 타입 / 주소 / 동기식 여부 설정
+	    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/config/getOptions", true); // 메서드와 주소 설정    
+	    // http 요청
+	    xhttp.send();   // 요청 전송
+
+	    xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
+	        const req = e.target;
+
+	        if(req.readyState === 4) {
+	            if(req.status === 200) {
+	                console.log("------통신 성공------");
+	                genSet = JSON.parse(xhttp.responseText);
+	                drawProduct(genSet)
+	            }else{
+	                console.error("------통신 실패------");
+	                console.error("req.status: " + req.status);
+	                console.error(xhttp.responseText);
+	            }
+	        }
+	    }
+	}
+
 	function start(){
-		// 에디터 적용
-		var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
-		var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
-		
-		EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
-		
-		// 업로더 적용
-		var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
-		var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
-		
-		EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+		getOptionsByAjax();
 	}
 </script>
 <title>WRITE</title>

@@ -2,15 +2,18 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import container.Container;
+import dto.GenFile;
 import dto.GenSet;
 import service.ConfigService;
 
@@ -27,9 +30,18 @@ public class ConfigController {
 			return "usr/config/setting";
 		}
 		
-		public String getOptions(HttpServletRequest request, HttpServletResponse response){
+		@SuppressWarnings("unchecked")
+		public String getOptions(HttpServletRequest request, HttpServletResponse response) throws IOException{
 			GenSet genSet = configService.getOptions();
 			
+			// JSON 형태로 담기
+			JSONObject obj = new JSONObject(); 
+			obj.put("editorNum", genSet.getEditorNum());
+			obj.put("uploaderNum", genSet.getUploaderNum());
+			obj.put("downloaderNum", genSet.getDownloaderNum());
+
+			// JSON 형태로 클라이언트에 전달
+			response.getWriter().print(obj.toJSONString());
 			
 			return "notJspPath";
 		}

@@ -18,9 +18,6 @@ window.MSInputMethodContext && document.documentMode && document.write('<script 
 		<div class="article_list_header">
 			<h3>게시물 리스트</h3>
 		</div>
-		<button type="button" onclick="location.href='../config/setting'">
-			환경설정
-		</button>
 		<div class="article_list_body">
 			<div class="article_list_body__head">
 				<div class="list_body__cell_id">번호</div>
@@ -44,6 +41,9 @@ window.MSInputMethodContext && document.documentMode && document.write('<script 
 			</div>
 		</div>
 		<div class="article_list_foot">
+			<button type="button" onclick="location.href='../config/setting'">
+				환경설정
+			</button>
 			<button type="button" onclick="location.href='../article/write'" style="cursor: pointer;">
 				글 작성
 			</button>
