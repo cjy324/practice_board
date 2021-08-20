@@ -102,6 +102,13 @@ function EXAMUploader_UploadComplete(resultFileList) {
 
 // 글 작성
 function doWrite() {
+
+    console.log(typeof(EXAMEditor))
+    console.log(typeof(RAONKEditor))
+    console.log(GENSET.editorNum)
+    console.log(GENSET.uploaderNum)
+    console.log(GENSET.downloaderNum)
+
     // 제목 값 가져오기
     const titleInput = document.getElementById("titleInput");
     // 제목 값 가져오기
@@ -111,10 +118,6 @@ function doWrite() {
         alert("제목을 입력해주세요.");
         return;
     }
-
-
-    console.log(typeof(EXAMEditor))
-    console.log(typeof(RAONKEditor))
 
     // 콜백함수
     // body값을 요청하는 함수 응답 이후에 진행되는 함수
@@ -135,16 +138,24 @@ function doWrite() {
         saveTextContentByAjax(textContent);
     };
 
-    // 라온K에디터의 경우
-    // GetHtmlContents api가 비동기 방식이므로 동기방식 로직에 적용시 오류가 생긴다
-    // 따라서 아래와 같이 콜백 개념으로 다음 로직을 짜야 비동기 방식으로 처리가 가능하다.
-    var fn_callback = function (paramObj){
-        afterGetBodyContents(paramObj.strData);
-    };
+    // EXAM
+    if(GENSET.editorNum === 1){
+        afterGetBodyContents(EXAMEditor.getBodyContent());
+    }
+    // RAONK
+    else if(GENSET.editorNum === 2){
+        // 라온K에디터의 경우
+        // GetHtmlContents api가 비동기 방식이므로 동기방식 로직에 적용시 오류가 생긴다
+        // 따라서 아래와 같이 콜백 개념으로 다음 로직을 짜야 비동기 방식으로 처리가 가능하다.
+        var fn_callback = function (paramObj){
+            afterGetBodyContents(paramObj.strData);
+        };
 
-    // GetHtmlContents api로 요청을 보내고 콜백함수로 content값을 리턴 받는 방식(비동기)
-    // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
-    RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
+        // GetHtmlContents api로 요청을 보내고 콜백함수로 content값을 리턴 받는 방식(비동기)
+        // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
+        RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
+    }
+    
 
     // const body = EXAMEditor.getBodyContent();
     // afterGetBodyContents(EXAMEditor.getBodyContent());

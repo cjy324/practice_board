@@ -83,6 +83,13 @@
 	};
 	
 	function drawProduct(genSet){
+		// window 전역변수로 저장
+		window.GENSET = {
+				editorNum: genSet.editorNum, 
+				uploaderNum: genSet.uploaderNum, 
+				downloaderNum: genSet.downloaderNum
+				};
+		
 	    // 에디터 적용
 	    var editorConfig = G_EditorConfig['editor' + genSet.editorNum];
 	
