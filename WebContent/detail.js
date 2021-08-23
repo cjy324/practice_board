@@ -58,18 +58,26 @@ function fileLoad() {
                 attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
                 
                 if(attFileList.length !== 0){
-                    // 다운로더 제품(가이드)
-                    // 다운로드 대상 리스트를 인수로 넘겨주어야 함
-                    // 리스트 내 객체의 속성으로 (name, size, type, path, uploaded)가 필수로 들어가야 함
-                    // 예시) 
-                    // files[0] = {
-                    //     name: "테스트파일.jpg",
-                    //     size: 50000,
-                    //     type: "image/png",
-                    //     path: "경로",
-                    //     uploaded: "true"
-                    // }
-                    EXAMDownloader.setAndDrawDownloadFileList(attFileList);
+                    if(GENSET.downloaderNum === 1){  // 다운로더
+                        // 다운로더 제품(가이드)
+                        // 다운로드 대상 리스트를 인수로 넘겨주어야 함
+                        // 리스트 내 객체의 속성으로 (name, size, type, path, uploaded)가 필수로 들어가야 함
+                        // 예시) 
+                        // files[0] = {
+                        //     name: "테스트파일.jpg",
+                        //     size: 50000,
+                        //     type: "image/png",
+                        //     path: "경로",
+                        //     uploaded: "true"
+                        // }
+                        document.getElementById("downloader_holder").onload = function () {
+                            EXAMDownloader.setAndDrawDownloadFileList(attFileList);
+                        }
+                        
+                    }else if(GENSET.downloaderNum === 2){
+                        console.log("GENSET.downloaderNum: " + GENSET.downloaderNum)
+                    }
+                    
                 }
                 console.log("------첨부파일 로드 완료------");
             }else{
@@ -86,4 +94,11 @@ function fileLoad() {
 function setBody(body){
     document.getElementById("detail_body__content").innerHTML = body;
     fileLoad();
+}
+
+// K다운로더
+function RAONKUPLOAD_CreationComplete(K_Downloader) {
+    for(let i = 0; i < attFileList.length; i++){
+        RAONKUPLOAD.AddUploadedFile('1', attFileList[i].name, attFileList[i].path, attFileList[i].size, 'CustomValue', K_Downloader);
+    }
 }
