@@ -1,26 +1,16 @@
-package controller;
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.io.BufferedInputStream"%>
+<%@page import="java.io.BufferedOutputStream"%>
+<%@page import="java.io.File"%>
+<%@page import="java.io.FileInputStream"%>
+<%@page import="java.io.FileOutputStream"%>
+<%@page import="java.io.IOException"%>
+<%@page import="java.io.RandomAccessFile"%>
+<%@page import="java.net.URLEncoder"%>
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.net.URLEncoder;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-
-public class DownloadController {
-	
-		public DownloadController() {
-		}
-	
-		// 다운로드 서버
-		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			// 파일에 대한 정보를 parameter로 받기
+<%
+//파일에 대한 정보를 parameter로 받기
 			int index = Integer.parseInt(request.getParameter("index"));
 			String guid = request.getParameter("guid");
 			String originName = request.getParameter("originName");
@@ -110,64 +100,17 @@ public class DownloadController {
 
 
 			/* 파일 다운로드(브라우저로 전송) 끝 */
-			
-			return "notJspPath";
-		}
-		
-		// 다운로드 진행률
-		public String progress(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			// 파일에 대한 정보를 parameter로 받기
-			String guid = request.getParameter("guid");
-			
-			// (테스트용)
-			// System.out.println("guid : " + guid);
-			
-			// 다운로드 상태를 임시 저장해 놓을 txt파일 읽기
-			String tempPath = request.getServletContext().getRealPath("temp");
-			String tempTxtPath = tempPath + "\\" + guid + ".txt";
-			File tempTxtFile = new File(tempTxtPath);			
 
 
-			/* 파일 다운로드 진행률 읽기 시작 */
-			// 1. RandomAcessFile
-			String doneByte; // 마지막 라인을 담을 String
-			RandomAccessFile raf = new RandomAccessFile(tempTxtFile, "r");
-			StringBuffer lastLineText = new StringBuffer();
-			
-			// 2. 전체 파일 길이
-			long fileLength = raf.length();
-			
-			// 3. 포인터를 이용하여 뒤에서부터 앞으로 데이터를 읽는다.
-			for (long pointer = fileLength - 2; pointer >= 0; pointer--) {
-				// 3.1. pointer를 읽을 글자 앞으로 옮긴다.
-				raf.seek(pointer);
-				// 3.2. pointer 위치의 글자를 읽는다.
-				char c = (char) raf.read();
-				// 3.3. 줄바꿈이 나타나면 더 이상 글자를 읽지 않는다.
-				if (c == '\n') {
-					break;
-				}
-				// 3.4. 결과 문자열의 앞에 읽어온 글자(c)를 붙여준다.
-				lastLineText.insert(0, c);
-			}
 
-			String[] doneBytes = lastLineText.toString().split("/");
-			doneByte = doneBytes[0];
-			System.out.println("doneByte : " + doneByte);
-			System.out.println("---------------------------------------------------");
-			
-			raf.close();
-			/* 파일 다운로드 진행률 읽기 끝 */
-			
-			// 파일 다운로드 진행률 값 클라이언트로 응답
-			response.getWriter().append(doneByte);
-			
-			if(doneByte.equals("100") && tempTxtFile.exists()) {
-				tempTxtFile.delete();
-				System.out.println("----------------다운로드 완료----------------");
-			}
-			
-			return "notJspPath";
-		}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
 
-}
+</body>
+</html>

@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import container.Container;
 import dto.Article;
+import dto.GenFile;
 import dto.GenSet;
 import service.ArticleService;
 import service.ConfigService;
@@ -193,6 +194,43 @@ public class ArticleController {
 			
 			// 클라이언트에 전달
 			response.getWriter().print(article.getBody());
+			
+			return "notJspPath";
+		}
+		
+		@SuppressWarnings("unchecked")
+		// 형 변환 시 안전성을 위반할 경우 무점검 경고가 뜨게 된다.
+		// 만약, 형 변환이 정확하다면 이 경고를 무시하기 위해 @SuppressWarnings 어노테이션을 사용한다.
+		public String loadAttFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
+			
+			// 파일에 대한 정보를 parameter로 받기
+			int relId = Integer.parseInt(request.getParameter("relId"));
+			
+			// genFile 리스트 가져오기
+			List<GenFile> genFiles = genFileService.getGenFilesByRelId(relId);
+			
+			// JSON 형태로 담기
+			JSONObject jsonObj = new JSONObject();
+
+			int index = 1;
+			for (GenFile genFile : genFiles){
+				JSONObject obj = new JSONObject(); //배열 내에 들어갈 json 객체 = genFile 객체
+				obj.put("id", genFile.getId());
+				obj.put("regDate", genFile.getRegDate());
+				obj.put("updateDate", genFile.getUpdateDate());
+				obj.put("uploaded", genFile.getUploaded());
+				obj.put("relId", genFile.getRelId());
+				obj.put("name", genFile.getName());
+				obj.put("size", genFile.getSize());
+				obj.put("path", genFile.getPath());
+				obj.put("type", genFile.getType());
+				
+				jsonObj.put("genFile" + "_" + index, obj);
+				index++;
+			}
+			
+			// JSON 형태로 클라이언트에 전달
+			response.getWriter().print(jsonObj.toJSONString());
 			
 			return "notJspPath";
 		}

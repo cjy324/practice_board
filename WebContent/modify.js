@@ -51,7 +51,7 @@ function getBody(id){
 function fileLoad() {
     // 서버로 DB정보 요청
     // http 요청 타입 / 주소 / 동기식 여부 설정
-    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + id, true); // 메서드와 주소 설정    
+    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/loadAttFiles?relId=" + id, true); // 메서드와 주소 설정    
     // http 요청
     xhttp.send();   // 요청 전송
     // XmlHttpRequest의 요청 // 통신 상태 모니터링
