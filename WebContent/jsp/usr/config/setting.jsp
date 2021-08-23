@@ -123,12 +123,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="config_setting_foot">
-			<button type="button" onclick="location.href='../article/list'" style="cursor: pointer;">
-				설정 완료
-			</button>
-		</div>
-		
 	</section>
 </body>
 </html>

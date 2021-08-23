@@ -1,20 +1,21 @@
-/* 사용자 커스텀 */
-/* Detail */
+/** 사용자 커스텀 **/
+/** Detail **/
 
-// 게시물 id
+/* 게시물 id */
 let id = 0;
-// 첨부파일리스트
+/* 첨부파일리스트 */
 let attFileList = [];
+/* xhttp */
+const xhttp = new XMLHttpRequest(); 
 
-// URL로 부터 게시물 ID값 가져오기
+/* URL로 부터 게시물 ID값 가져오기 */
 function getIdByUrl(){
     const url = window.location.href;
     return Number(url.split("?id=")[1]);
 }
 
-// 게시물 body 받아오기
+/* DB로부터 게시물 body 받아오기 */
 function getBody(id){
-    const xhttp = new XMLHttpRequest(); 
     // http 요청 타입 / 주소 / 동기식 여부 설정
     xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/getBody?id=" + id, true); // 메서드와 주소 설정    
     // http 요청
@@ -38,11 +39,9 @@ function getBody(id){
     }
 }
 
-// 파일 로드
+/* 첨부 파일 로드 */
 function fileLoad() {
     // 서버로 DB정보 요청
-    /* ajax통신 시작 */
-    var xhttp = new XMLHttpRequest();
     // http 요청 타입 / 주소 / 동기식 여부 설정
     xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/download/loadFiles?relId=" + id, true); // 메서드와 주소 설정    
     // http 요청
@@ -50,7 +49,7 @@ function fileLoad() {
 
     // XmlHttpRequest의 요청 // 통신 상태 모니터링
     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-        var req = e.target;
+        const req = e.target;
 
         if(req.readyState === 4) {
             if(req.status === 200) {
@@ -58,7 +57,9 @@ function fileLoad() {
                 attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
                 
                 if(attFileList.length !== 0){
-                    if(GENSET.downloaderNum === 1){  // 다운로더
+                    /* EXAM다운로더 */
+                    /* 첨부파일 리스트 그리기 */
+                    if(GENSET.downloaderNum === 1){  
                         // 다운로더 제품(가이드)
                         // 다운로드 대상 리스트를 인수로 넘겨주어야 함
                         // 리스트 내 객체의 속성으로 (name, size, type, path, uploaded)가 필수로 들어가야 함
@@ -72,12 +73,8 @@ function fileLoad() {
                         // }
                         document.getElementById("downloader_holder").onload = function () {
                             EXAMDownloader.setAndDrawDownloadFileList(attFileList);
-                        }
-                        
-                    }else if(GENSET.downloaderNum === 2){
-                        console.log("GENSET.downloaderNum: " + GENSET.downloaderNum)
+                        }   
                     }
-                    
                 }
                 console.log("------첨부파일 로드 완료------");
             }else{
@@ -90,13 +87,14 @@ function fileLoad() {
     /* ajax통신 끝 */
 }
 
-// 게시물 body 그리기
+/* 게시물 body 그리기 */
 function setBody(body){
     document.getElementById("detail_body__content").innerHTML = body;
     fileLoad();
 }
 
-// K다운로더
+/* K다운로더 */
+/* 첨부파일 리스트 그리기 */
 function RAONKUPLOAD_CreationComplete(K_Downloader) {
     for(let i = 0; i < attFileList.length; i++){
         RAONKUPLOAD.AddUploadedFile('1', attFileList[i].name, attFileList[i].path, attFileList[i].size, 'CustomValue', K_Downloader);
