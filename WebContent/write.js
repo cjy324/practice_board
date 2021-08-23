@@ -108,6 +108,11 @@ function RAONKUPLOAD_UploadComplete(K_Uploader) {
     // json, xml, array, text delimit 방식으로 결과값을 제공합니다.
 
     var resultFileList = RAONKUPLOAD.GetNewUploadList('array', K_Uploader);
+    
+    if(resultFileList == null){
+        resultFileList = [];
+    }
+
     if(resultFileList.length > 0){
         for(let i = 0; i < resultFileList.length; i++){
             console.log(resultFileList[i]);
