@@ -3,9 +3,7 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,17 +15,20 @@ import org.json.simple.parser.ParseException;
 
 import container.Container;
 import dto.Article;
-import dto.GenFile;
+import dto.GenSet;
 import service.ArticleService;
+import service.ConfigService;
 import service.GenFileService;
 
 
 public class ArticleController {
 	
+		private ConfigService configService;
 		private ArticleService articleService;
 		private GenFileService genFileService;
 	
 		public ArticleController() {
+			configService = Container.configService;
 			articleService = Container.articleService;
 			genFileService = Container.genFileService;
 		}
@@ -105,7 +106,7 @@ public class ArticleController {
 		}
 		
 		public String mappingFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			
+	
 			int relId = Integer.parseInt(request.getParameter("relId"));
 			
 			//JSON Parsing
@@ -126,18 +127,37 @@ public class ArticleController {
 				// JSONObject에 JSON형태로 담기
 				JSONArray files = (JSONArray) parser.parse(data.toString());
 				JSONObject json = new JSONObject();
-
-				for(int i = 0; i < files.size(); i++) {
-					json = (JSONObject) files.get(i);
-					
-					String originName = json.get("name").toString();
-					long originSize = Long.parseLong(json.get("size").toString());
-					String path = json.get("path").toString();
-					String originType = json.get("type").toString();
-					
-					// DB에 파일 정보 저장
-					genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+				
+				// 업로더 제품 확인
+				GenSet genSet = configService.getOptions();
+				
+				if(genSet.getUploaderNum() == 1) {  // EXAM 에디터
+					for(int i = 0; i < files.size(); i++) {
+						json = (JSONObject) files.get(i);
+						
+						String originName = json.get("name").toString();
+						long originSize = Long.parseLong(json.get("size").toString());
+						String path = json.get("path").toString();
+						String originType = json.get("type").toString();
+						
+						// DB에 파일 정보 저장
+						genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+					}
+				}else if(genSet.getUploaderNum() == 2) {  // K 에디터
+					for(int i = 0; i < files.size(); i++) {
+						json = (JSONObject) files.get(i);
+						
+						String originName = json.get("originalName").toString();
+						long originSize = Long.parseLong(json.get("size").toString());
+						String path = "D:\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Practice_board" + json.get("uploadPath").toString();
+						String originType = json.get("mimeType").toString();
+						
+						// DB에 파일 정보 저장
+						genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
+					}
 				}
+
+				
 				
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block

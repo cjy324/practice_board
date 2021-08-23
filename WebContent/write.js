@@ -31,7 +31,17 @@ function saveTextContentByAjax(textContent) {
                 // 생성된 신규 게시물 ID값 받기
                 id = Number(xhttp.responseText);
                 console.log("id : " + id);
-                EXAMUploader.setUploadFileList();  // 파일 업로드 시작
+
+                if(GENSET.uploaderNum === 1){  // EXAM 업로드
+                    console.log("GENSET.uploaderNum: " + GENSET.uploaderNum);
+                    EXAMUploader.setUploadFileList();  // 파일 업로드 시작
+                }
+                if(GENSET.uploaderNum === 2){  // K 업로드
+                    console.log("GENSET.uploaderNum: " + GENSET.uploaderNum);
+                    setUploadByKeditor()
+                }
+                return;
+                
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -155,28 +165,28 @@ function doWrite() {
         // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
         RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
     }
-    
+}
 
-    // const body = EXAMEditor.getBodyContent();
-    // afterGetBodyContents(EXAMEditor.getBodyContent());
+function RAONKUPLOAD_UploadComplete(K_Uploader) {
+    // 업로드 완료 후 처리할 내용
+    // 이 이벤트 함수 안에서 아래 API로 업로드된 정보를 추출합니다.
+    // json, xml, array, text delimit 방식으로 결과값을 제공합니다.
 
-    // return;
-    // // 내용 값 가져오기
-    // const body = EXAMEditor.getBodyContent();
+    var resultFileList = RAONKUPLOAD.GetNewUploadList('array', K_Uploader);
+    if(resultFileList.length > 0){
+        for(let i = 0; i < resultFileList.length; i++){
+            console.log(resultFileList[i]);
+        }
+        // 사용자커스텀
+        articleAndAttchedFilesMappingByAjax(resultFileList);
+    }else{
+        alert(id + "번 게시물 작성 완료!!")
+        goToDetailPage();
+    }
 
-    // if(body.trim() === "<p><br></p>"){
-    //     alert("내용을 입력해주세요.");
-    //     return;
-    // }
+}
 
-    // // JSON 형태로 담기
-    // let textContent = {
-    //     title: title,
-    //     body: body
-    // }
-    // textContent = JSON.stringify(textContent);
-
-    // // ajax통신 시작
-    // saveTextContentByAjax(textContent);
-    
+// 케이에디터로 업로드
+function setUploadByKeditor(){
+    document.getElementById('raonkuploader_frame_K_Uploader').contentWindow.document.getElementById('button_send').click()
 }

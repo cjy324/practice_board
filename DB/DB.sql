@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS article;
 DROP TABLE IF EXISTS genFile;
+DROP TABLE IF EXISTS genSet;
 
 CREATE TABLE article (
 	id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
@@ -33,5 +34,16 @@ CREATE TABLE genFile (
 );
 
 
+CREATE TABLE genSet (
+	editorNum INT NOT NULL,
+	uploaderNum INT NOT NULL,
+	downloaderNum INT NOT NULL
+);
+
+INSERT INTO genSet(editorNum, uploaderNum, downloaderNum) 
+VALUES(1,1,1);
+
+
 SELECT * FROM article;
 SELECT * FROM genFile;
+SELECT * FROM genSet;
