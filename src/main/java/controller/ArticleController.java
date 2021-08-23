@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -257,14 +258,33 @@ public class ArticleController {
 				JSONArray files = (JSONArray) parser.parse(data.toString());
 				JSONObject json = new JSONObject();
 
-				for(int i = 0; i < files.size(); i++) {
-					json = (JSONObject) files.get(i);
-					
-					int id = Integer.parseInt(json.get("id").toString());
-					
-					// DB에서 관련 정보 삭제
-					genFileService.deleteFileInfo(relId, id);
+				// 업로더 제품 확인
+				GenSet genSet = configService.getOptions();
+				if(genSet.getUploaderNum() == 1) {  // EXAM 에디터
+					for(int i = 0; i < files.size(); i++) {
+						json = (JSONObject) files.get(i);
+						
+						String path = json.get("path").toString();
+						
+						// DB에서 관련 정보 삭제
+						genFileService.deleteFileInfo(relId, path);
+					}
+				}else if(genSet.getUploaderNum() == 2) {  // K 에디터
+					for(int i = 0; i < files.size(); i++) {
+						json = (JSONObject) files.get(i);
+						
+						String path = json.get("uploadPath").toString();
+						// 실제 파일 삭제
+						File delFile = new File(path);
+						if(delFile.exists()) {
+							delFile.delete();
+						}
+						
+						// DB에서 관련 정보 삭제
+						genFileService.deleteFileInfo(relId, path);
+					}
 				}
+
 				
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block

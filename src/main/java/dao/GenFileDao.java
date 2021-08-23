@@ -74,10 +74,10 @@ public class GenFileDao {
 	}
 	
 	// 게시물 ID관련 첨부파일 삭제
-	public void deleteFileInfo(int relId, int id) {
+	public void deleteFileInfo(int relId, String path) {
 		sql = "DELETE genFile "
 			+ "WHERE relId = " + relId
-			+ " AND id = " + id;
+			+ " AND path = '" + path + "'";
 		
 		try {
 			msSqlUtil.delete(sql);

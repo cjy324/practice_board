@@ -19,9 +19,9 @@
         // 편집영역에 컨텐츠 그리기
         this.drawBodyContent = function(bodyContent){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
-            var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
             // 편집영역 로드 상태 모니터링
             var startInterval = setInterval(function(){  
+                var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
                 if(editWindow.document.getElementById("edit_area")){
                     editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
                     console.log("------Draw Body Content Complete!!------");
