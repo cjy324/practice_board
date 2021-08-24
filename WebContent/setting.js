@@ -74,32 +74,32 @@ function setOptions(){
 }
 
 
-// /* 한개의 체크박스만 선택 시작 */
-// function checkOnlyOneEditors(element) {
-//     var checkboxes = document.getElementsByName("editors");
+/* 한개의 체크박스만 선택 시작 */
+function checkOnlyOneEditors(element) {
+    var checkboxes = document.getElementsByName("editors");
     
-//     checkboxes.forEach((cb) => {
-//         cb.checked = false;
-//     })
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
     
-//     element.checked = true;
-// }
-// function checkOnlyOneUploaders(element) {
-//     var checkboxes = document.getElementsByName("uploaders");
+    element.checked = true;
+}
+function checkOnlyOneUploaders(element) {
+    var checkboxes = document.getElementsByName("uploaders");
     
-//     checkboxes.forEach((cb) => {
-//         cb.checked = false;
-//     })
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
     
-//     element.checked = true;
-// }
-// function checkOnlyOneDownloaders(element) {
-//     var checkboxes = document.getElementsByName("downloaders");
+    element.checked = true;
+}
+function checkOnlyOneDownloaders(element) {
+    var checkboxes = document.getElementsByName("downloaders");
     
-//     checkboxes.forEach((cb) => {
-//         cb.checked = false;
-//     })
+    checkboxes.forEach((cb) => {
+        cb.checked = false;
+    })
     
-//     element.checked = true;
-// }
-// /* 한개의 체크박스만 선택 끝 */
+    element.checked = true;
+}
+/* 한개의 체크박스만 선택 끝 */

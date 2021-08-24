@@ -143,3 +143,10 @@ function doWrite() {
         RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
     }
 }
+
+
+// function EXAMUploader_OnError(errorCode, message, uploadCompleteList){
+//     console.log("errorCode: " + errorCode)
+//     alert("message: " + message)
+//     console.log("uploadCompleteList: " + uploadCompleteList)
+// };

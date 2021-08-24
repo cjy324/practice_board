@@ -12,6 +12,7 @@
         this.drawUploaderHtml = function(usrUploaderPath, usrServerPath){
             var src = usrUploaderPath;
             var uploaderHolderFrame = document.getElementById("uploader_holder");
+
             uploaderHolderFrame.src = src;
             EXAMUploader.usrServerPath = usrServerPath;
         }
@@ -284,8 +285,6 @@
         // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
         this.setUploadFileList = function() {
 
-            //EXAMUploader.relId = id;
-
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < EXAMUploader.globalFileList.length; i++){
                 if(EXAMUploader.globalFileList[i].uploaded === undefined){
@@ -324,7 +323,7 @@
 
         // 기존 업로드된 파일 삭제
         this.deleteFiles = function(forDeleteFileIndex){
-            console.log("forDeleteFileIndex: " + forDeleteFileIndex);
+            console.log("forDeleteFileIndex: " + forDeleteFileIndex)
             var params = "path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
 
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
@@ -341,6 +340,7 @@
             // XmlHttpRequest의 요청 // 통신 상태 모니터링
             xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
                 var req = e.target;
+                
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
@@ -704,52 +704,6 @@
         this.resetGlobalFileList = function(){
             EXAMUploader.globalFileList = [];
         }
-        
-        // // 파일 로드(게시판용)
-        // this.fileLoad = function(id, usrLoadServerPath) {
-        //     usrLoadServerPath = "http://localhost:8086/practiceBoard/usr/download/loadFiles"; // (임시)
-        //     EXAMUploader.relId = id;
-
-        //     // 서버로 DB정보 요청
-        //     /* ajax통신 시작 */
-        //     var xhttp = new XMLHttpRequest();
-        //     // http 요청 타입 / 주소 / 동기식 여부 설정
-        //     xhttp.open("POST", usrLoadServerPath + "?relId=" + EXAMUploader.relId, true); // 메서드와 주소 설정    
-        //     // http 요청
-        //     xhttp.send();   // 요청 전송
-
-        //     // XmlHttpRequest의 요청 // 통신 상태 모니터링
-        //     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-        //         var req = e.target;
-
-        //         if(req.readyState === 4) {
-        //             if(req.status === 200) {
-        //                 console.log("------통신 성공------");
-        //                 // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
-        //                 // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-        //                 // EXAMUploader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
-
-        //                 // 21.08.17 IE 호환을 위한 로직 수정
-        //                 // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
-        //                 // 그 값을 구하는 함수는 오류가 발생한다.
-        //                 // var keys = Object.keys(parameters); // 오류 발생 안함
-        //                 // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
-        //                 // 출처: https://sehoonkim.tistory.com/246 [Think Different]
-        //                 EXAMUploader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
-
-        //                 if(EXAMUploader.globalFileList.length !== 0){
-        //                     EXAMUploader.showFiles(EXAMUploader.globalFileList);
-        //                 }
-        //                 console.log("------첨부파일 로드 완료------");
-        //             }else{
-        //                 console.error("------통신 실패------");
-        //                 console.error("req.status: " + req.status);
-        //                 console.error(xhttp.responseText);
-        //             }
-        //         }
-        //     }
-        //     /* ajax통신 끝 */
-        // }
     }
 
     // Uploader를 새 Object 객체 생성

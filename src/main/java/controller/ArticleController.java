@@ -92,10 +92,6 @@ public class ArticleController {
 				JSONArray files = (JSONArray) jsonData.get("resultFileList");
 				JSONObject json = new JSONObject();
 				
-				System.out.println("jsonData: " + jsonData.toJSONString());
-				System.out.println("textContent: " + textContent.toJSONString());
-				System.out.println("files: " + files.toJSONString());
-				
 				/* 게시물 저장 START */
 				// String 형태로 옮겨 담기
 				String title = textContent.get("title").toString();

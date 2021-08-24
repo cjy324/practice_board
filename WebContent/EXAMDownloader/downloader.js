@@ -16,7 +16,7 @@
         /* *************************************************************************** */
         
         // 전역변수
-        this.usrLoadServerPath = "";  // 사용자 다운로더 파일로드 서버 경로
+        this.usrDownloaderServerPath = "";  // 사용자 다운로더 서버 경로
         this.usrDownloadProgressPath ="";  // 사용자 다운로더 진행률 모니터링 요청 경로
         this.globalFileList = []; // 다운로드 파일 정보를 담아놓을 fileList
         // let forDownloadFilelistIndex = 0; 
@@ -40,50 +40,6 @@
         
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
-        
-        // // 파일 로드
-        // this.fileLoad = function(id) {
-        //     EXAMDownloader.relId = id;
-        //     // 서버로 DB정보 요청
-        //     /* ajax통신 시작 */
-        //     var xhttp = new XMLHttpRequest();
-        //     // http 요청 타입 / 주소 / 동기식 여부 설정
-        //     xhttp.open("POST", EXAMDownloader.usrLoadServerPath + "?relId=" + EXAMDownloader.relId, true); // 메서드와 주소 설정    
-        //     // http 요청
-        //     xhttp.send();   // 요청 전송
-    
-        //     // XmlHttpRequest의 요청 // 통신 상태 모니터링
-        //     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-        //         var req = e.target;
-    
-        //         if(req.readyState === 4) {
-        //             if(req.status === 200) {
-        //                 console.log("------통신 성공------");
-        //                 // console.log("globalFileList : " + Object.values(JSON.parse(xhttp1.responseText)));
-        //                 // JSON 형태로 온 값을 Object형태로 변경 후 globalFileList로 옮겨 담기
-        //                 // EXAMDownloader.globalFileList = Object.values(JSON.parse(xhttp.responseText));  
-                        
-        //                 // 21.08.17 IE 호환을 위한 로직 수정
-        //                 // Internet Explorer(이하 IE) 11 이하버전에서 스크립트 객체에 키를 구하는 함수는 사용이 되나
-        //                 // 그 값을 구하는 함수는 오류가 발생한다.
-        //                 // var keys = Object.keys(parameters); // 오류 발생 안함
-        //                 // var values = Object.values(parameters); // 오류 발생. "개체가 'values' 속성이나 메서드를 지원하지 않습니다."
-        //                 // 출처: https://sehoonkim.tistory.com/246 [Think Different]
-        //                 EXAMDownloader.globalFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
-                        
-        //                 if(EXAMDownloader.globalFileList.length !== 0){
-        //                     EXAMDownloader.drawDownloadFileList(EXAMDownloader.globalFileList);
-        //                 }
-        //                 console.log("------첨부파일 로드 완료------");
-        //             }else{
-        //                 console.error("------통신 실패------");
-        //                 console.error("req.status: " + req.status);
-        //                 console.error(xhttp.responseText);
-        //             }
-        //         }
-        //     }
-        //     /* ajax통신 끝 */
-        // }
 
         // 전체 선택/해제
         this.setAllCheckbox = function() {
