@@ -10,7 +10,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/raonkupload/js/raonkupload.js"></script>
 <script defer="defer" src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
 <script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
-<script defer="defer" type="text/javascript" src="${pageContext.request.contextPath}/setting.js"></script>
+<script defer src="${pageContext.request.contextPath}/setting.js"></script>
 <title>SETTING</title>
 </head>
 <script defer="defer" type="text/javascript">
@@ -39,11 +39,11 @@
 					<span>에디터 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="editor_1" type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false' checked>
+							<input id="editor_1" type='checkbox' name='editors'  value='false' checked>
 							<span>EXAMEditor</span>
 						</li>
 						<li>
-							<input id="editor_2"  type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false'>
+							<input id="editor_2"  type='checkbox' name='editors'  value='false'>
 							<span>K-Editor</span>
 						</li>
 					</ul>
@@ -52,11 +52,11 @@
 					<span>업로더 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="uploader_1" type='checkbox' name='uploaders' onclick="checkOnlyOneUploaders(this)" value='false' checked>
+							<input id="uploader_1" type='checkbox' name='uploaders'  value='false' checked>
 							<span>EXAMUploader</span>
 						</li>
 						<li>
-							<input id="uploader_2"  type='checkbox' name='uploaders' onclick="checkOnlyOneUploaders(this)" value='false'>
+							<input id="uploader_2"  type='checkbox' name='uploaders'  value='false'>
 							<span>K-Uploader</span>
 						</li>
 					</ul>
@@ -65,11 +65,11 @@
 					<span>다운로더 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="downloader_1" type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false' checked>
+							<input id="downloader_1" type='checkbox' name='downloaders'  value='false' checked>
 							<span>EXAMDownloader</span>
 						</li>
 						<li>
-							<input id="downloader_2"  type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false'>
+							<input id="downloader_2"  type='checkbox' name='downloaders'  value='false'>
 							<span>K-Downloader</span>
 						</li>
 					</ul>

@@ -56,8 +56,6 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.write(request, response);
 			}else if(requestName.equals("saveContent")) {
 				jspPath = articleController.saveContent(request, response);
-			}else if(requestName.equals("mappingFiles")) {
-				jspPath = articleController.mappingFiles(request, response);
 			}else if(requestName.equals("modify")) {
 				jspPath = articleController.modify(request, response);
 			}else if(requestName.equals("loadAttFiles")) {
@@ -66,8 +64,6 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.getBody(request, response);
 			}else if(requestName.equals("modifyContent")) {
 				jspPath = articleController.modifyContent(request, response);
-			}else if(requestName.equals("dlelateAttFiles")) {
-				jspPath = articleController.dlelateAttFiles(request, response);
 			}
 		}
 		if (controllerName.equals("config")) {

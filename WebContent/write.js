@@ -1,7 +1,14 @@
 /** 사용자 커스텀 **/
 /** Write **/
 
+/* 게시물 id */
 let id = 0;
+/* text content */
+let textContent = {
+    title: "",
+    body: ""
+}
+
 
 /* 게시물 리스트페이지로 이동 */
 function goToDetailPage(){
@@ -11,16 +18,21 @@ function goToDetailPage(){
     location.replace("http://localhost:8086/practiceBoard/usr/article/detail?id=" + id);
 }
 
-/* textContent ajax 전송 */
-function saveTextContentByAjax(textContent) {
+/* 게시물 저장 및 첨부파일 맵핑 */
+function articleSaveAndAttchedFilesMappingByAjax(resultFileList) {
     // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
     const xhttp = new XMLHttpRequest(); 
     // http 요청 타입 / 주소 / 동기식 여부 설정
     xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/saveContent", true); // 메서드와 주소 설정    
     // Header를 JSON으로 셋팅
     xhttp.setRequestHeader("Content-type", "application/json");
+    // 텍스트정보와 파일정보를 data에 담기
+    let data = {
+        textContent: textContent,
+        resultFileList: resultFileList
+    }
     // http 요청
-    xhttp.send(textContent);   // 요청 전송(JSON 전송)
+    xhttp.send(JSON.stringify(data));   // 요청 전송(JSON 전송)
 
     xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
         const req = e.target;
@@ -30,14 +42,8 @@ function saveTextContentByAjax(textContent) {
                 console.log("------통신 성공------");
                 // 생성된 신규 게시물 ID값 받기
                 id = Number(xhttp.responseText);
-                console.log("id : " + id);
-
-                if(GENSET.uploaderNum === 1){  // EXAM업로더
-                    EXAMUploader.setUploadFileList();  // 파일 업로드 시작
-                }
-                if(GENSET.uploaderNum === 2){  // K업로더
-                    uploadByKUploader();  // 파일 업로드 시작
-                } 
+                alert(id + "번 게시물 작성 완료!!")
+                goToDetailPage();
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -46,53 +52,16 @@ function saveTextContentByAjax(textContent) {
         }
     }
 }
-
-/* 첨부파일 매핑 및 DB에 저장 */
-function articleAndAttchedFilesMappingByAjax(resultFileList) {
-    // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
-    const xhttp = new XMLHttpRequest(); 
-    // http 요청 타입 / 주소 / 동기식 여부 설정
-    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/article/mappingFiles?relId=" + id, true); // 메서드와 주소 설정    
-    // Header를 JSON으로 셋팅
-    xhttp.setRequestHeader("Content-type", "application/json");
-    // http 요청
-    xhttp.send(JSON.stringify(resultFileList));   // 요청 전송(JSON 전송)
-
-    xhttp.onreadystatechange = function(e){   // 요청에 대한 콜백
-        const req = e.target;
-
-        if(req.readyState === 4) {
-            if(req.status === 200) {
-                console.log("------통신 성공------");
-                if(xhttp.responseText == "DONE"){
-                    alert(id + "번 게시물 작성 완료!!")
-                    goToDetailPage();
-                }
-            }else{
-                console.error("------통신 실패------");
-                console.error("req.status: " + req.status);
-                console.error(xhttp.responseText);
-            }
-        }
-    }
-}
-
 
 /* EXAM업로더 */
 /* 완료된 업로드리스트 받기 */
 function EXAMUploader_UploadComplete(resultFileList) {
-// (가이드)업로드가 완료되면 이 함수가 호출됨
-// 서버로 업로드가 완료된 파일리스트를 인수로 받을 수 있음
-    if(resultFileList.length > 0){
-        for(let i = 0; i < resultFileList.length; i++){
-            console.log(resultFileList[i]);
-        }
-        // 사용자커스텀
-        articleAndAttchedFilesMappingByAjax(resultFileList);
-    }else{
-        alert(id + "번 게시물 작성 완료!!")
-        goToDetailPage();
-    }
+    // (가이드)업로드가 완료되면 이 함수가 호출됨
+    // 서버로 업로드가 완료된 파일리스트를 인수로 받을 수 있음
+
+    // (사용자커스텀) 게시물저장 및 첨부파일 맵핑
+    articleSaveAndAttchedFilesMappingByAjax(resultFileList);
+
 }
 
 /* K업로더 */
@@ -113,16 +82,19 @@ function RAONKUPLOAD_UploadComplete(K_Uploader) {
         resultFileList = [];
     }
 
-    if(resultFileList.length > 0){
-        for(let i = 0; i < resultFileList.length; i++){
-            console.log(resultFileList[i]);
-        }
-        // (사용자커스텀)
-        articleAndAttchedFilesMappingByAjax(resultFileList);
-    }else{
-        alert(id + "번 게시물 작성 완료!!")
-        goToDetailPage();
+    // (사용자커스텀) 게시물저장 및 첨부파일 맵핑
+    articleSaveAndAttchedFilesMappingByAjax(resultFileList);
+
+}
+
+/* 첨부파일 업로드 시작 */
+function startAttFilesUpload(){
+    if(GENSET.uploaderNum === 1){  // EXAM업로더
+        EXAMUploader.setUploadFileList();  // 파일 업로드 시작
     }
+    if(GENSET.uploaderNum === 2){  // K업로더
+        uploadByKUploader();  // 파일 업로드 시작
+    } 
 }
 
 /* 글 작성(버튼 클릭 시) */
@@ -145,16 +117,12 @@ function doWrite() {
             alert("내용을 입력해주세요.");
             return;
         }
+        // textContent 전역객체에 정보 담기
+        textContent.title = title;
+        textContent.body = body;
     
-        // JSON 형태로 담기
-        let textContent = {
-            title: title,
-            body: body
-        }
-        textContent = JSON.stringify(textContent);
-    
-        // ajax통신 시작
-        saveTextContentByAjax(textContent);
+        // 업로드 시작
+        startAttFilesUpload();
     };
 
     // EXAM에디터
