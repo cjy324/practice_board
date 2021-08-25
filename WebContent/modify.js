@@ -1,8 +1,19 @@
 /** 사용자 커스텀 **/
 /** Modify **/
 
-/* 게시물 id */
-let id = 0;
+/* 제품 그리기 */
+function drawProduct(genSet){
+    /* 에디터 config 적용 */
+    applyProductConfig(G_EditorConfig['editor' + genSet.editorNum]);
+    /* 업로더 config 적용 */
+    applyProductConfig(G_UploaderConfig['uploader' + genSet.uploaderNum]);
+    
+    // 상세페이지 그리기
+    id = getIdByUrl();
+    // 게시물 body 요청하기
+    getBody(id);
+}
+
 /* DB에서 삭제할 첨부파일리스트 */
 let forDeleteFileList = [];
 /* 게시물 원본 body */
@@ -11,22 +22,6 @@ let originBody = "";
 let textContent = {
     title: "",
     body: ""
-}
-/* xhttp */
-const xhttp = new XMLHttpRequest(); 
-
-/* URL로 부터 게시물 ID값 가져오기 */
-function getIdByUrl(){
-    const url = window.location.href;
-    return Number(url.split("?id=")[1]);
-}
-
-/* 게시물 리스트페이지로 이동 */
-function goToDetailPage(){
-    // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
-    // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
-    // href: 그대로 페이지 이동을 의미
-    location.replace("http://localhost:8086/practiceBoard/usr/article/detail?id=" + id);
 }
 
 /* DB로부터 게시물 body 받아오기 */
@@ -142,7 +137,7 @@ function articleSaveAndAttchedFilesMappingByAjax(resultFileList, deleteFileList)
             if(req.status === 200) {
                 console.log("------통신 성공------");
                 alert(id + "번 게시물 수정 완료!!");
-                goToDetailPage();
+                goToDetailPage(id);
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -257,16 +252,16 @@ function doModify() {
 }
 
 
-/* EXAM업로더 */
-/* 에러 정보 콜백함수 */
-function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message)
-    console.log("uploadCompleteList: " + uploadCompleteList)
-};
+// /* EXAM업로더 */
+// /* 에러 정보 콜백함수 */
+// function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
+//     alert("에러 코드: " + errorCode + "\n에러 메세지: " + message)
+//     console.log("uploadCompleteList: " + uploadCompleteList)
+// };
 
-/* K업로더 */
-/* 에러 정보 콜백함수 */
-function RAONKUPLOAD_OnError(uploadID, paramObj){
-    //에러 발생 후 오류메시지 띄어주는 예제
-    alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
-}
+// /* K업로더 */
+// /* 에러 정보 콜백함수 */
+// function RAONKUPLOAD_OnError(uploadID, paramObj){
+//     //에러 발생 후 오류메시지 띄어주는 예제
+//     alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
+// }

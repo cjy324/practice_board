@@ -1,18 +1,19 @@
 /** 사용자 커스텀 **/
 /** Detail **/
 
-/* 게시물 id */
-let id = 0;
+/* 제품 그리기 */
+function drawProduct(genSet){
+    /* 다운로더 config 적용 */
+    applyProductConfig(G_DownloaderConfig['downloader' + genSet.downloaderNum]);
+
+    // 상세페이지 그리기
+    id = getIdByUrl();
+    // 게시물 body 요청하기
+    getBody(id);
+}
+
 /* 첨부파일리스트 */
 let attFileList = [];
-/* xhttp */
-const xhttp = new XMLHttpRequest(); 
-
-/* URL로 부터 게시물 ID값 가져오기 */
-function getIdByUrl(){
-    const url = window.location.href;
-    return Number(url.split("?id=")[1]);
-}
 
 /* DB로부터 게시물 body 받아오기 */
 function getBody(id){

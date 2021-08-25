@@ -13,22 +13,7 @@
 <script defer src="${pageContext.request.contextPath}/setting.js"></script>
 <title>SETTING</title>
 </head>
-<script defer="defer" type="text/javascript">
-	function draw(){
-		// 에디터 적용
-		var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
-		var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
-		
-		EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
-		
-		// 업로더 적용
-		var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
-        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
-        
-        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
-	}
-</script>
-<body onload="draw()">
+<body onload="drawProduct()">
 	<section class="main_section">
 		<div class="config_setting_header">
 			<h3>환경설정 페이지</h3>
@@ -37,7 +22,7 @@
 			<div class="config_setting_body__content">
 				<div class="config_setting_body__content_cell">
 					<span>에디터 선택</span>
-					<ul class="selectZone" id="uploadZone">
+					<ul class="selectZone" id="selectZone">
 						<li>
 							<!-- <input id="editor_1" type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false' checked>
 							<span>EXAMEditor</span> -->
@@ -54,7 +39,7 @@
 				</div>
 				<div class="config_setting_body__content_cell">
 					<span>업로더 선택</span>
-					<ul class="selectZone" id="uploadZone">
+					<ul class="selectZone" id="selectZone">
 						<li>
 <!-- 							<input id="uploader_1" type='checkbox' name='uploaders' value='false' checked>
 							<span>EXAMUploader</span> -->
@@ -71,7 +56,7 @@
 				</div>
 				<div class="config_setting_body__content_cell">
 					<span>다운로더 선택</span>
-					<ul class="selectZone" id="uploadZone">
+					<ul class="selectZone" id="selectZone">
 						<li>
 <!-- 							<input id="downloader_1" type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false' checked>
 							<span>EXAMDownloader</span> -->

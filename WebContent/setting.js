@@ -1,12 +1,20 @@
-// 게시물 리스트페이지로 이동
-function goToListPage(){
-    // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
-    // replace: 현재 페이지에 덮어씌우기 때문에 replace를 사용한 다음에는 이전 페이지로 돌아갈 수 없다.
-    // href: 그대로 페이지 이동을 의미
-    location.replace("http://localhost:8086/practiceBoard/usr/article/list");
+
+/* 제품 미리보기 그리기 */
+function drawProduct(){
+    // 에디터 적용
+    var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
+    var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+    
+    EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+    
+    // 업로더 적용
+    var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
+    var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+    
+    EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
 }
 
-// 라디오 값 가져오기
+/* 라디오 값 가져오기 */
 function getCheckedOptions(){
     var editors = document.getElementsByName("editors");
     var uploaders = document.getElementsByName("uploaders");
@@ -36,7 +44,7 @@ function getCheckedOptions(){
     return checkedOpteions;
 }
 
-// DB에 설정값 저장하기
+/* DB에 설정값 저장하기 */
 function saveOptions(array){
     
     // ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
@@ -55,27 +63,27 @@ function saveOptions(array){
             if(req.status === 200) {
                 console.log("------통신 성공------");
                 if(xhttp.responseText == "DONE"){
-                    alert("설정값 저장 완료")
-                    goToListPage();
+                    location.replace("http://localhost:8086/practiceBoard/usr/article/list");
                 }
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
                 console.error(xhttp.responseText);
+                alert("저장 실패");
             }
         }
     }
     
 }
 
-// 설정값 저장(버튼 클릭시)
+/* 설정값 저장(버튼 클릭시) */
 function setOptions(){
-    // 체크된 옵션 가져오기
-    let checkedOpteionArray = getCheckedOptions();
-    console.log("checkedOpteionArray: " + checkedOpteionArray);
-
-    // DB에 설정값 저장
-    saveOptions(checkedOpteionArray);
+    if(confirm("저장하시겠습니까?")){
+        // 체크된 옵션 가져오기
+        let checkedOpteionArray = getCheckedOptions();
+        // DB에 설정값 저장
+        saveOptions(checkedOpteionArray);
+    }
 }
 
 

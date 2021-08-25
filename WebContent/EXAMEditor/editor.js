@@ -5,18 +5,49 @@
     // 에디터 클래스
     var Editor = function() {
 
-        // 이미지 업로드 경로
-        this.usrImgUploadPath = "";
 
-        // 에디터 그리기
+        /* *************************************************************************** */
+
+
+        /**** 전역변수 ****/        
+        this.usrImgUploadPath = ""; // 이미지 업로드 경로
+        var imageFileList = [];  // 이미지 업로드 파일리스트
+        var imageFileListIndex = 0;  // 이미지 업로드 파일리스트 인덱스
+
+        /**** 에러 관련 ****/
+        var errorCode = "";
+        var message = "";
+
+
+        /* *************************************************************************** */
+
+
+        /* 에디터 그리기 */
         this.drawEditorHtml = function(usrEditorPath, usrImgUploadPath){
             var src = usrEditorPath;
             var editorHolderFrame = document.getElementById("editor_holder");
             editorHolderFrame.src = src;
             EXAMEditor.usrImgUploadPath = usrImgUploadPath;
+
+            // 에러 함수 호출
+            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+            if( typeof(window.EXAMEditor_OnError) == 'function' ) {
+                if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){
+                    // JS에서 string 포함 여부 확인하는 방법
+                    // 참고: https://han.gl/3jiPg
+                    errorCode = "EEC_001"
+                    message = "editorHolder.html의 경로를 확인해주세요."
+                    window.EXAMEditor_OnError(errorCode, message, null);
+                }
+                if(usrImgUploadPath == null || usrImgUploadPath == ""){
+                    errorCode = "EEC_002"
+                    message = "이미지 업로드 서버 경로를 확인해주세요."
+                    window.EXAMEditor_OnError(errorCode, message, null);
+                }
+            }
         }
 
-        // 편집영역에 컨텐츠 그리기
+        /* 편집영역에 컨텐츠 그리기 */
         this.drawBodyContent = function(bodyContent){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             // 편집영역 로드 상태 모니터링
@@ -24,21 +55,21 @@
                 var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
                 if(editWindow.document.getElementById("edit_area")){
                     editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
-                    console.log("------Draw Body Content Complete!!------");
+                    // console.log("------Draw Body Content Complete!!------");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
         }
 
-        // autoFocus 기능
+        /* autoFocus 기능 */
         this.autoFocus = function() {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
             editWindow.document.getElementById("edit_area").focus();
         }
 
-        // caret 저장
-        let selection; //selection, range 도입
+        /* caret 저장 */
+        let selection;  //selection, range 도입
         let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
         document.getElementById("editor_holder").addEventListener("load", function(e) {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
@@ -49,7 +80,7 @@
             })
         })
 
-        // p태그 자동 생성
+        /* p태그 자동 생성 */
         document.getElementById("editor_holder").addEventListener("load", function(e) {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -64,7 +95,7 @@
             })
         })
 
-        // 새 문서 기능
+        /* 새 문서 기능 */
         this.newPage = function() {
             var answer = confirm("작성중인 문서가 삭제됩니다. 계속하시겠습니까?");
             if(answer){
@@ -75,7 +106,7 @@
             }
         }
 
-        // select 버튼
+        /* select 버튼 */
         document.getElementById("editor_holder").addEventListener("load", function(e) {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
 
@@ -95,7 +126,7 @@
             })
         })           
                 
-        // 버튼별 서식 적용
+        /* 버튼별 서식 적용 */
         this.setStyle = function(style, value) {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -108,7 +139,7 @@
             EXAMEditor.autoFocus()  // 서식 적용 후에도 커서 위치 유지하도록 적용
         }
 
-        // 미리보기 창
+        /* 미리보기 창 */
         this.showPreview = function(){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -124,11 +155,7 @@
             preview.document.close();
         }
 
-        // 이미지 업로드용 전역 변수
-        var imageFileList = [];
-        var imageFileListIndex = 0;
-
-        // 이미지 업로드("이미지"버튼 클릭시)
+        /* 이미지 업로드("이미지"버튼 클릭시) */
         this.doUpload = function(e){
              // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
             for(let i = 0; i < e.target.files.length; i++){
@@ -137,7 +164,7 @@
             EXAMEditor.doUploadImgAjax(imageFileList, imageFileListIndex)
         };
 
-        // 이미지 업로드 ajax
+        /* 이미지 업로드 ajax */
         this.doUploadImgAjax = function(imageFileList, imageFileListIndex){
             var formData = new FormData()
             formData.append("imgFiles", imageFileList[imageFileListIndex]);
@@ -179,12 +206,18 @@
                         } 
                     }else{
                         console.error(xhttp.responseText)
+                        // 에러 함수 호출
+                        if( typeof(window.EXAMEditor_OnError) == 'function' ) {
+                            errorCode = "EEC_003"
+                            message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status
+                            window.EXAMEditor_OnError(errorCode, message, imageFileList);
+                        }
                     }
                 }
             } 
         }
 
-        // 이미지 그리기
+        /* 편집영역에 이미지 그리기 */
         this.drawImg = function(imagePath){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -198,7 +231,7 @@
             range.insertNode(newImg);
         }
 
-        // IE상에서 커서 위치 포커싱
+        /* 커서 위치 포커싱(IE 호환용) */
         this.setFocusForIE = function(){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -208,7 +241,7 @@
             selection.addRange(range);
         }
 
-        // 글 body값 가져오기
+        /* 글 body값 가져오기 */
         this.getBodyContent = function(){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
@@ -217,9 +250,9 @@
 
     }
 
-    // Editor를 새 Object 객체 생성
+    /* Editor를 새 Object 객체 생성 */
     var EXAMEditor = new Editor();
-    // 최상위 windows에 이 객체 지정하기
+    /* 최상위 windows에 이 객체 지정하기 */
     top.EXAMEditor = EXAMEditor;
     
 })()
