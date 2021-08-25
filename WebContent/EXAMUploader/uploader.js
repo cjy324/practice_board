@@ -2,26 +2,18 @@
 // self close 함수
 // 함수 사용 후 self close를 해서 불필요한 메모리 할당을 줄이는 목적으로 사용
 (function () {
-    // 업로더 클래스
-    // 참고: https://mygumi.tistory.com/312
-    // 자바스크립트에서 프로토타입은 자신을 만들어낸 객체의 원형을 뜻한다.
-    // Prototype Link - 자신을 만들어낸 객체의 원형
-    // Prototype Object - 자신을 통해 만들어질 객체의 원형
+    /*** 업로더 클래스 ***/
+        // 참고: https://mygumi.tistory.com/312
+        // 자바스크립트에서 프로토타입은 자신을 만들어낸 객체의 원형을 뜻한다.
+        // Prototype Link - 자신을 만들어낸 객체의 원형
+        // Prototype Object - 자신을 통해 만들어질 객체의 원형
     var Uploader = function (){
-        // 업로더 그리기
-        this.drawUploaderHtml = function(usrUploaderPath, usrServerPath){
-            var src = usrUploaderPath;
-            var uploaderHolderFrame = document.getElementById("uploader_holder");
-
-            uploaderHolderFrame.src = src;
-            EXAMUploader.usrServerPath = usrServerPath;
-        }
-
+        
 
         /* *************************************************************************** */
 
 
-        // 전역변수
+        /**** 전역변수 ****/
         this.usrServerPath = "";  // 사용자 업로더 서버 경로
         this.forDeleteFilePath = "";  // 서버상 업로더된 파일들을 삭제하기 위한 경로
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
@@ -37,12 +29,44 @@
         this.indicator = "DEFUALT";  // 업로더 상태를 알려주는 indicator
         // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
+        /**** 에러 관련 ****/
+        var errorCode = "";
+        var message = "";
+
 
         /* *************************************************************************** */
 
 
+        /* 업로더 그리기 */
+        this.drawUploaderHtml = function(usrUploaderPath, usrServerPath){
+            var src = usrUploaderPath;
+            var uploaderHolderFrame = document.getElementById("uploader_holder");
 
-        // 단위변환 유틸 함수
+            uploaderHolderFrame.src = src;
+            EXAMUploader.usrServerPath = usrServerPath;
+
+            // 에러 함수 호출
+            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+            if( typeof(window.EXAMUploader_OnError) == 'function' ) {
+                
+                if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){
+                    // JS에서 string 포함 여부 확인하는 방법
+                    // 참고: https://han.gl/3jiPg
+                    errorCode = "UEC_001"
+                    message = "uploaderHolder.html의 경로를 확인해주세요."
+                    window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
+                }
+                if(usrServerPath == null || usrServerPath == ""){
+                    errorCode = "UEC_002"
+                    message = "EXAMUploader 서버 경로를 확인해주세요."
+                    window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
+                }
+                
+            }
+        }
+
+
+        /* 단위변환 유틸 함수 */
         this.formatBytes = function(bytes, decimals) {
             if (bytes === 0) return '0 Bytes';
         
@@ -55,14 +79,14 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
 
-        // 버튼으로 파일추가input 불러오기
+        /* 버튼으로 파일추가input 불러오기 */
         this.selectFiles = function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var fileInput = componentWindow.document.getElementById("fileInput");
             fileInput.click();
         }
 
-        // Drag & Drop
+        /* Drag & Drop */
         document.getElementById('uploader_holder').addEventListener("load", function(e) {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadZone = componentWindow.document.getElementById("uploadZone");
@@ -120,7 +144,7 @@
             })
         })
 
-        // 업로드 될 파일리스트 그리기
+        /* 업로드 될 파일리스트 그리기 */
         this.showFiles = function(files) {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadZone = componentWindow.document.getElementById("uploadZone");
@@ -169,7 +193,7 @@
             EXAMUploader.globalFileList = files;
         }
 
-        // 파일 업로드를 위한 데이터 셋팅(from Input)
+        /* 파일 업로드를 위한 데이터 셋팅(from Input) */
         this.setUploadFiles = function(e) {
 
             if((EXAMUploader.totalNum + e.target.files.length) > 20){
@@ -195,7 +219,7 @@
             EXAMUploader.showFiles(EXAMUploader.globalFileList);
         }
 
-        // 전체 선택/해제
+        /* 전체 선택/해제 */
         this.setAllCheckbox = function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
@@ -213,7 +237,7 @@
             }  
         }
 
-        // 선택된 파일 삭제
+        /* 선택된 파일 삭제 */
         this.removeSelectedFiles = function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
@@ -272,7 +296,7 @@
             EXAMUploader.showFiles(EXAMUploader.globalFileList);
         }
 
-        // 전체 파일 선택 및 삭제
+        /* 전체 파일 선택 및 삭제 */
         this.selectAllFilesAndRemove = function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadFiles = componentWindow.document.getElementsByName("uploadFiles");
@@ -282,8 +306,12 @@
             EXAMUploader.removeSelectedFiles();
         }
 
-        // 선택된 업로드 파일 담기("전송하기" 버튼 클릭) 
+        /* 선택된 업로드 파일 담기("전송하기" 버튼 클릭) */
         this.setUploadFileList = function() {
+
+            // 업로드 중단, 에러 등으로 업로드중이던 파일 중복 업로드되지 않도록 초기화
+            EXAMUploader.forUploadFileList = [];
+            EXAMUploader.uploadCompleteList = [];
 
             // 새로 업로드될 파일리스트만 forUploadFileList에 담기
             for(let i = 0; i < EXAMUploader.globalFileList.length; i++){
@@ -292,13 +320,17 @@
                 }
             }
 
+            console.log("EXAMUploader.globalFileList.length: " + EXAMUploader.globalFileList.length)
+            console.log("EXAMUploader.forUploadFileList.length: " + EXAMUploader.forUploadFileList.length)
+
             // 업로드 시나리오별 필터링
             if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
                 if(EXAMUploader.forDeleteFileList.length > 0){ // 신규 업로드될 파일이 없지만 기존 업로드된 파일 중 삭제할 파일이 있는 경우
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
-                // 완료 함수 호출
+                // 업로드 완료 함수 호출
+                // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
                 if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
                     window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
                 }
@@ -309,7 +341,7 @@
                     EXAMUploader.deleteFiles(EXAMUploader.forDeleteFileIndex);
                     return;
                 }
-                // 완료 함수 호출
+                // 업로드 완료 함수 호출
                 if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
                     window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
                 }
@@ -325,15 +357,15 @@
             }
         }
 
-        // 기존 업로드된 파일 삭제
+        /* 기존 업로드된 파일 삭제 */
         this.deleteFiles = function(forDeleteFileIndex){
-            console.log("forDeleteFileIndex: " + forDeleteFileIndex)
+            // console.log("forDeleteFileIndex: " + forDeleteFileIndex)
             var params = "path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
 
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
         }
 
-        // 기존 업로드된 파일 삭제를 위한 ajax통신
+        /* 기존 업로드된 파일 삭제를 위한 ajax통신 */
         this.startDeleteAjax = function(params, forDeleteFileIndex){
             /* ajax통신 시작 */
             var xhttp = new XMLHttpRequest();
@@ -356,7 +388,7 @@
                             EXAMUploader.startUpload(EXAMUploader.forUploadFileListIndex);
                         }else{
                             EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-                            // 완료 함수 호출
+                            // 업로드 완료 함수 호출
                             if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
                                 window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
                             }   
@@ -365,13 +397,20 @@
                         console.error("------통신 실패------");
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
+
+                        // 에러 함수 호출
+                        if( typeof(window.EXAMUploader_OnError) == 'function' ) {
+                            errorCode = "UEC_004"
+                            message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status;
+                            window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
+                        }
                     }
                 }
             }
             /* ajax통신 끝 */
         }
 
-        // 업로드 프로그래스바 창 생성
+        /* 업로드 프로그래스바 창 생성 */
         this.createProgressBarWindow = function() {
             // 팝업 창
             // 팝업옵션 설정
@@ -396,7 +435,7 @@
             EXAMUploader.popupWindow.document.close();
         }
 
-        // GUID 생성 함수
+        /* GUID 생성 함수 */
         this.createGuid = function() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -404,12 +443,11 @@
             });
         }
 
-        // 파일 업로드
+        /* 파일 업로드 시작 */
         this.startUpload = function(forUploadFileListIndex) {
 
             EXAMUploader.indicator = "START";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-            // console.log("indicator1111: " + indicator);
-            console.log("startUpload--------------- forUploadFileListIndex: " + forUploadFileListIndex + " ---------------");  
+            // console.log("startUpload--------------- forUploadFileListIndex: " + forUploadFileListIndex + " ---------------");  
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
@@ -425,7 +463,7 @@
             if(EXAMUploader.forUploadFileList[forUploadFileListIndex].size >= limitSize){ 
                 // 용량에 따른 분할 수 계산
                 var slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
-                console.log("slicedFilesNum: " + slicedFilesNum);
+                // console.log("slicedFilesNum: " + slicedFilesNum);
                 // 파일 분할
                 for(let f = 0; f < slicedFilesNum; f++){
                     // 각 분할 횟수별 분할 시작 포인트 설정
@@ -435,8 +473,8 @@
                     // 분할된 파일 slicedFiles 배열 객체에 담기
                     slicedFiles.push(slicedFile);
                 }
-                console.log("slicedFiles : " + slicedFiles);
-                console.log("slicedFiles.length : " + slicedFiles.length);
+                // console.log("slicedFiles : " + slicedFiles);
+                // console.log("slicedFiles.length : " + slicedFiles.length);
                 
             }
             /* 분할 끝 */
@@ -449,7 +487,7 @@
 
             /* 단일 파일일 경우 단일 전송 시작 */
             if(slicedFiles.length == 0){
-                console.log("------단일 파일 전송 시작------");
+                // console.log("------단일 파일 전송 시작------");
 
                 // params 추가 정보 담기
                 params += "&sliced=false";
@@ -464,7 +502,7 @@
             
             /* 분할 파일일 경우 분할 전송 시작 */
             if(slicedFiles.length > 0){
-                console.log("------분할 파일 전송 시작------");
+                // console.log("------분할 파일 전송 시작------");
 
                 let guid = EXAMUploader.createGuid();
             
@@ -511,7 +549,7 @@
             }
         }
 
-        // ajax통신
+        /* 파일 전송을 위한 ajax통신 */
         this.startAjax = function(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex) {
 
             var xhttp = new XMLHttpRequest();
@@ -522,8 +560,7 @@
             var allFilesMessage = EXAMUploader.popupWindow.document.getElementById("allFilesMessage");
             var allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
             var message = EXAMUploader.popupWindow.document.getElementById("message");
-            // console.log("indicator22222: " + indicator);
-            console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
+            // console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
             /* progressBar 시작 */
             xhttp.upload.onloadstart = function (e) {
@@ -612,7 +649,6 @@
                     // 3=interactive 요청 처리 중 상태
                     // 4=complete 요청 완료되고 응답 준비된 상태
                     if(req.status === 200 && EXAMUploader.indicator === "START") {
-                        // console.log("indicator33333333: " + indicator);
                         var uploadedFile = null;
                         
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
@@ -647,13 +683,12 @@
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
-                            // 완료 함수 호출
+                            // 업로드 완료 함수 호출
                             if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
                                 window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
                             }
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
-                        // console.log("indicator444444: " + indicator);
                         console.log("---업로드 중단---");
                         console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
                         // 업로드시 여러 파일이 중단될 수도 있으니 
@@ -663,6 +698,11 @@
                         localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+
+                        // 업로드 중단 함수 호출
+                        if( typeof(window.EXAMUploader_UploadInterruption) == 'function' ) {
+                            window.EXAMUploader_UploadInterruption("업로드가 중단되었습니다.", forUploadFileList[forUploadFileListIndex]);
+                        } 
                     }else if(req.status === 200 && EXAMUploader.indicator === "DONE" && slicedFileIndex == slicedFiles.length-1){
                         alert("이미 \"" + forUploadFileList[forUploadFileListIndex].name + "\" file의 업로드가 완료되었습니다.");  
                     }else{
@@ -670,13 +710,33 @@
                         EXAMUploader.indicator = "ERROR";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
+
+                        // console.log("---에러로 인한 업로드 중단---");
+                        // console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
+                        // // 업로드시 여러 파일이 중단될 수도 있으니 
+                        // // 여러 파일이 중단될 경우를 고려해서
+                        // // loacalStorage에 담을때 구분자, 배열 등을 활용해 잘 저장해 놓는 것이 중요
+                        // // 나중에 이어올리기시 localStorage에 있는 해당 키들을 for문으로 돌리면서 일치하는 값 찾을 수 있도록 하기 위함..
+                        // if(){
+
+                        // }
+                        // localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                        // console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                        // console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+
+                        // 에러 함수 호출
+                        if( typeof(window.EXAMUploader_OnError) == 'function' ) {
+                            errorCode = "UEC_003"
+                            message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status;
+                            window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
+                        }
                     }
                 }
             }
             /* 파일 전송을 위한 ajax통신 끝 */
         }
 
-        // 업로드 후 대기 파일리스트 리셋
+        /* 업로드 후 대기 파일리스트 리셋 */
         this.afterUploaded = function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadZone = componentWindow.document.getElementById("uploadZone");
@@ -704,20 +764,14 @@
             // 따라서,
             // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-            this.resetGlobalFileList();
             console.log("-------------upload canceled-------------");
-        }
-
-        // 업로드 중단 시 현재 globalFileList 리셋
-        this.resetGlobalFileList = function(){
-            EXAMUploader.globalFileList = [];
         }
     }
 
-    // Uploader를 새 Object 객체 생성
+    /* Uploader를 새 Object 객체 생성 */
     var EXAMUploader = new Uploader();
 
-    // 최상위 windows에 이 객체 지정하기
+    /* 최상위 windows에 이 객체 지정하기 */
     top.EXAMUploader = EXAMUploader;
     
 })()

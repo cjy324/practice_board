@@ -26,8 +26,8 @@
 		    	editorAreaNode.appendChild(editorFrame);
 			},
 			create: function () {
-				var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
-		        var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+				var editorPath = contextpath + "/EXAMEditor/editorHolder.html";
+		        var editorImgUploadPath = contextpath + "/usr/upload/imageUpload";
 		        
 		        EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
 			}
@@ -62,8 +62,8 @@
 				uploaderAreaNode.appendChild(uploaderFrame);
 			},
 			create: function () {
-				var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";
-		        var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
+				var uploaderPath = contextpath + "/EXAMUploader/uploaderHolder.html";
+		        var uploaderServerPath = contextpath + "/usr/upload/server";
 		        
 		        EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
 			}
@@ -130,7 +130,7 @@
 		// ajax 통신을 하기 위한 XmlHttpRequest 객체 생성
 	    const xhttp = new XMLHttpRequest(); 
 	    // http 요청 타입 / 주소 / 동기식 여부 설정
-	    xhttp.open("POST", "http://localhost:8086/practiceBoard/usr/config/getOptions", true); // 메서드와 주소 설정    
+	    xhttp.open("POST", contextpath + "/usr/config/getOptions", true); // 메서드와 주소 설정    
 	    // http 요청
 	    xhttp.send();   // 요청 전송
 

@@ -141,7 +141,7 @@ function articleSaveAndAttchedFilesMappingByAjax(resultFileList, deleteFileList)
         if(req.readyState === 4) {
             if(req.status === 200) {
                 console.log("------통신 성공------");
-                alert(id + "번 게시물 수정 완료!!")
+                alert(id + "번 게시물 수정 완료!!");
                 goToDetailPage();
             }else{
                 console.error("------통신 실패------");
@@ -164,6 +164,12 @@ function EXAMUploader_UploadComplete(resultFileList) {
 
     // (사용자커스텀) 게시물 수정 및 첨부파일 맵핑 + 삭제파일 정보 삭제
     articleSaveAndAttchedFilesMappingByAjax(resultFileList, forDeleteFileList);
+}
+/* EXAM업로더 */
+/* 업로드 중단 event시 msg와 파일정보 받기 */
+function EXAMUploader_UploadInterruption(msg, interruptedFile) {
+    alert(msg);
+    console.log(interruptedFile);
 }
 
 /* K업로더 */
@@ -248,4 +254,19 @@ function doModify() {
         // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
         RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
     }
+}
+
+
+/* EXAM업로더 */
+/* 에러 정보 콜백함수 */
+function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message)
+    console.log("uploadCompleteList: " + uploadCompleteList)
+};
+
+/* K업로더 */
+/* 에러 정보 콜백함수 */
+function RAONKUPLOAD_OnError(uploadID, paramObj){
+    //에러 발생 후 오류메시지 띄어주는 예제
+    alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
 }
