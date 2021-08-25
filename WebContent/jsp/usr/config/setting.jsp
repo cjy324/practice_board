@@ -39,12 +39,16 @@
 					<span>에디터 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="editor_1" type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false' checked>
-							<span>EXAMEditor</span>
+							<!-- <input id="editor_1" type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false' checked>
+							<span>EXAMEditor</span> -->
+							<input id="editor_1" style="cursor: pointer;" type='radio' name='editors' value='1' checked>
+							<label for="editor_1" style="cursor: pointer;">EXAMEditor</label>
 						</li>
 						<li>
-							<input id="editor_2"  type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false'>
-							<span>K-Editor</span>
+							<!-- <input id="editor_2"  type='checkbox' name='editors' onclick="checkOnlyOneEditors(this)" value='false'>
+							<span>K-Editor</span> -->
+							<input id="editor_2" style="cursor: pointer;" type='radio' name='editors' value='2'>
+							<label for="editor_2" style="cursor: pointer;">K-Editor</label>
 						</li>
 					</ul>
 				</div>
@@ -52,12 +56,16 @@
 					<span>업로더 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="uploader_1" type='checkbox' name='uploaders' onclick="checkOnlyOneUploaders(this)" value='false' checked>
-							<span>EXAMUploader</span>
+<!-- 							<input id="uploader_1" type='checkbox' name='uploaders' value='false' checked>
+							<span>EXAMUploader</span> -->
+							<input id="uploader_1" style="cursor: pointer;" type='radio' name='uploaders' value='1' checked>
+							<label for="uploader_1" style="cursor: pointer;">EXAMUploader</label>
 						</li>
 						<li>
-							<input id="uploader_2"  type='checkbox' name='uploaders' onclick="checkOnlyOneUploaders(this)" value='false'>
-							<span>K-Uploader</span>
+<!-- 							<input id="uploader_2"  type='checkbox' name='uploaders' onclick="checkOnlyOneUploaders(this)" value='false'>
+							<span>K-Uploader</span> -->
+							<input id="uploader_2" style="cursor: pointer;"  type='radio' name='uploaders' value='2'>
+							<label for="uploader_2" style="cursor: pointer;">K-Uploader</label>
 						</li>
 					</ul>
 				</div>
@@ -65,12 +73,16 @@
 					<span>다운로더 선택</span>
 					<ul class="selectZone" id="uploadZone">
 						<li>
-							<input id="downloader_1" type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false' checked>
-							<span>EXAMDownloader</span>
+<!-- 							<input id="downloader_1" type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false' checked>
+							<span>EXAMDownloader</span> -->
+							<input id="downloader_1" style="cursor: pointer;"  type='radio' name='downloaders' value='1' checked>
+							<label for="downloader_1" style="cursor: pointer;">EXAMDownloader</label>
 						</li>
 						<li>
-							<input id="downloader_2"  type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false'>
-							<span>K-Downloader</span>
+<!-- 							<input id="downloader_2"  type='checkbox' name='downloaders' onclick="checkOnlyOneDownloaders(this)" value='false'>
+							<span>K-Downloader</span> -->
+							<input id="downloader_2" style="cursor: pointer;"  type='radio' name='downloaders' value='2'>
+							<label for="downloader_2" style="cursor: pointer;">K-Downloader</label>
 						</li>
 					</ul>
 				</div>

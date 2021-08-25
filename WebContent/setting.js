@@ -6,7 +6,7 @@ function goToListPage(){
     location.replace("http://localhost:8086/practiceBoard/usr/article/list");
 }
 
-// 체크박스 값 가져오기
+// 라디오 값 가져오기
 function getCheckedOptions(){
     var editors = document.getElementsByName("editors");
     var uploaders = document.getElementsByName("uploaders");
@@ -16,17 +16,20 @@ function getCheckedOptions(){
 
     for(let i = 0; i < editors.length; i++){
         if(editors[i].checked){ 
-            checkedOpteions[0] = Number(editors[i].id.split("_")[1]);
+            // checkedOpteions[0] = Number(editors[i].id.split("_")[1]);
+            checkedOpteions[0] = Number(editors[i].value);
         }
     }
     for(let i = 0; i < uploaders.length; i++){
         if(uploaders[i].checked){ 
-            checkedOpteions[1] = Number(uploaders[i].id.split("_")[1]);
+            // checkedOpteions[1] = Number(uploaders[i].id.split("_")[1]);
+            checkedOpteions[1] = Number(uploaders[i].value);
         }
     }
     for(let i = 0; i < downloaders.length; i++){
         if(downloaders[i].checked){ 
-            checkedOpteions[2] = Number(downloaders[i].id.split("_")[1]);
+            // checkedOpteions[2] = Number(downloaders[i].id.split("_")[1]);
+            checkedOpteions[2] = Number(downloaders[i].value);
         }
     }
 
@@ -69,37 +72,39 @@ function saveOptions(array){
 function setOptions(){
     // 체크된 옵션 가져오기
     let checkedOpteionArray = getCheckedOptions();
+    console.log("checkedOpteionArray: " + checkedOpteionArray);
+
     // DB에 설정값 저장
     saveOptions(checkedOpteionArray);
 }
 
 
-/* 한개의 체크박스만 선택 시작 */
-function checkOnlyOneEditors(element) {
-    var checkboxes = document.getElementsByName("editors");
+// /* 한개의 체크박스만 선택 시작 */
+// function checkOnlyOneEditors(element) {
+//     var checkboxes = document.getElementsByName("editors");
     
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
+//     checkboxes.forEach((cb) => {
+//         cb.checked = false;
+//     })
     
-    element.checked = true;
-}
-function checkOnlyOneUploaders(element) {
-    var checkboxes = document.getElementsByName("uploaders");
+//     element.checked = true;
+// }
+// function checkOnlyOneUploaders(element) {
+//     var checkboxes = document.getElementsByName("uploaders");
     
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
+//     checkboxes.forEach((cb) => {
+//         cb.checked = false;
+//     })
     
-    element.checked = true;
-}
-function checkOnlyOneDownloaders(element) {
-    var checkboxes = document.getElementsByName("downloaders");
+//     element.checked = true;
+// }
+// function checkOnlyOneDownloaders(element) {
+//     var checkboxes = document.getElementsByName("downloaders");
     
-    checkboxes.forEach((cb) => {
-        cb.checked = false;
-    })
+//     checkboxes.forEach((cb) => {
+//         cb.checked = false;
+//     })
     
-    element.checked = true;
-}
-/* 한개의 체크박스만 선택 끝 */
+//     element.checked = true;
+// }
+// /* 한개의 체크박스만 선택 끝 */
