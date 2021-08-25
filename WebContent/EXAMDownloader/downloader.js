@@ -4,19 +4,11 @@
 (function () {
     // 다운로더 클래스
     var Downloader = function (){
-        // 다운로더 그리기
-        this.drawDownloaderHtml = function(usrDownloaderPath, usrDownloaderServerPath, usrDownloadProgressPath){
-            var src = usrDownloaderPath;
-            var downloaderHolderFrame = document.getElementById("downloader_holder");
-            downloaderHolderFrame.src = src;
-            EXAMDownloader.usrDownloaderServerPath = usrDownloaderServerPath;
-            EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
-        }
 
 
         /* *************************************************************************** */
         
-        // 전역변수
+        /**** 전역변수 ****/
         this.usrDownloaderServerPath = "";  // 사용자 다운로더 서버 경로
         this.usrDownloadProgressPath ="";  // 사용자 다운로더 진행률 모니터링 요청 경로
         this.globalFileList = []; // 다운로드 파일 정보를 담아놓을 fileList
@@ -24,12 +16,46 @@
         this.relId = 0; // 게시물 relId
         this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         let progressPercentage = 0; // 다운로드 진행률
+
+        /**** 에러 관련 ****/
+        var errorCode = "";
+        var message = "";
         
         /* *************************************************************************** */
         
 
+        /* 다운로더 그리기 */
+        this.drawDownloaderHtml = function(usrDownloaderPath, usrDownloaderServerPath, usrDownloadProgressPath){
+            var src = usrDownloaderPath;
+            var downloaderHolderFrame = document.getElementById("downloader_holder");
+            downloaderHolderFrame.src = src;
+            EXAMDownloader.usrDownloaderServerPath = usrDownloaderServerPath;
+            EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
 
-        // 단위변환 유틸 함수
+            // 에러 함수 호출
+            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
+                if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){
+                    // JS에서 string 포함 여부 확인하는 방법
+                    // 참고: https://han.gl/3jiPg
+                    errorCode = "DEC_001"
+                    message = "downloaderHolder.html의 경로를 확인해주세요."
+                    window.EXAMDownloader_OnError(errorCode, message);
+                }
+                if(usrDownloaderServerPath == null || usrDownloaderServerPath == ""){
+                    errorCode = "DEC_002"
+                    message = "EXAMDownloader 서버 경로를 확인해주세요."
+                    window.EXAMDownloader_OnError(errorCode, message);
+                }
+                if(usrDownloadProgressPath == null || usrDownloadProgressPath == ""){
+                    errorCode = "DEC_003"
+                    message = "EXAMDownloader 진행률 서버 경로를 확인해주세요."
+                    window.EXAMDownloader_OnError(errorCode, message);
+                }
+            }
+        }
+
+        /* 단위변환 유틸 함수 */
         this.formatBytes = function(bytes, decimals) {
             if (bytes === 0) return '0 Bytes';
         
@@ -42,7 +68,7 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
 
-        // 전체 선택/해제
+        /* 전체 선택/해제 */
         this.setAllCheckbox = function() {
             var componentWindow = document.getElementById("downloader_holder").contentWindow;
             var downFiles = componentWindow.document.getElementsByName("downFiles");
@@ -60,7 +86,7 @@
             }  
         }
 
-        // globalFileList값 셋팅 및 downloadZone에 그리기
+        /* globalFileList값 셋팅 및 downloadZone에 그리기 */
         this.setAndDrawDownloadFileList = function(fileList) {
             var componentWindow = document.getElementById("downloader_holder").contentWindow;
             var downloadZone = componentWindow.document.getElementById("downloadZone");
@@ -96,7 +122,7 @@
             EXAMDownloader.globalFileList = fileList;
         }
 
-        // 다운로드 시작("다운로드" 버튼 클릭시)
+        /* 다운로드 시작("다운로드" 버튼 클릭시) */
         this.startDownload = function(forDownloadFilelistIndex) {
             var componentWindow = document.getElementById("downloader_holder").contentWindow;
             var downFiles = componentWindow.document.getElementsByName("downFiles");
@@ -130,7 +156,7 @@
             }
         }
 
-        // GUID 생성 함수
+        /* GUID 생성 함수 */
         this.createGuid = function() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -138,7 +164,7 @@
             });
         }
 
-        // iframe으로 다운로드 요청 보내기
+        /* iframe으로 다운로드 요청 보내기 */
         this.startIframRequestForDownload = function(forDownloadFilelist, forDownloadFilelistIndex) {
             var componentWindow = document.getElementById("downloader_holder").contentWindow;
             var downlaodFrame = componentWindow.document.getElementById("download_frame");
@@ -176,7 +202,7 @@
 
         }
 
-        // 현재 다운로드 진행률 모니터링
+        /* 현재 다운로드 진행률 모니터링 */
         this.checkDownProgress = function(downFileGuid, forDownloadFilelist, forDownloadFilelistIndex) {
 
             /* ajax통신 시작 */
@@ -200,6 +226,13 @@
                         console.error("------통신 실패------");
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
+
+                        // 에러 함수 호출
+                        if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
+                            errorCode = "DEC_004"
+                            message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status;
+                            window.EXAMUplEXAMDownloader_OnErroroader_OnError(errorCode, message);
+                        }
                     }
                 }
             }
@@ -207,7 +240,7 @@
             
         }
 
-        // 다운로드 프로그래스바 창 생성
+        /* 다운로드 프로그래스바 팝업창 생성 */
         this.createProgressBarWindow = function() {
 
             // 팝업 창
@@ -231,7 +264,7 @@
             
         }
 
-        // 다운로드 프로그래스바 그리기
+        /* 다운로드 프로그래스바 그리기 */
         this.drawDownloadProgressBar = function(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex) {
 
             var allFilesProgressBar_down = EXAMDownloader.popupWindow.document.getElementById("allFilesProgressBar_down");
@@ -253,10 +286,10 @@
         }
     }
 
-    // Downloader를 새 Object 객체 생성
+    /* Downloader를 새 Object 객체 생성 */
     var EXAMDownloader = new Downloader();
 
-    // 최상위 window에 이 객체 지정하기
+    /* 최상위 window에 이 객체 지정하기 */
     top.EXAMDownloader = EXAMDownloader;
 
 })()

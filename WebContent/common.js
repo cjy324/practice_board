@@ -188,21 +188,34 @@ function goToDetailPage(id){
 /** 에러 정보 콜백함수 모음 **/
 /* EXAM에디터 */
 function EXAMEditor_OnError(errorCode, message, imageFileList){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message)
-    console.log("imageFileList: " + imageFileList)
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+    console.log("imageFileList: " + imageFileList);
+};
+
+/* K에디터 */
+function RAONKEDITOR_OnError(editorId, codemessage) {
+    // codemessage.type; // 에러가 발생한 기능
+    // codemessage.message; // 에러 메세지
+    alert("에러 발생 기능: " + codemessage.type + "\n에러 메세지: " + codemessage.message);
+
 };
 
 /* EXAM업로더 */
 function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message)
-    console.log("uploadCompleteList: " + uploadCompleteList)
-    console.log("uploadCompleteList: " + forDeleteFileList)
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+    console.log("uploadCompleteList: " + uploadCompleteList);
+    console.log("uploadCompleteList: " + forDeleteFileList);
 };
 
-/* K업로더 */
+/* K업로더&다운로더 */
 function RAONKUPLOAD_OnError(uploadID, paramObj){
     //에러 발생 후 오류메시지 띄어주는 예제
     alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
-}
+};
+
+/* EXAM다운로더 */
+function EXAMDownloader_OnError(errorCode, message){
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+};
 
 

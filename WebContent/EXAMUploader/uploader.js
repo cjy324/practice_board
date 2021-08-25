@@ -12,7 +12,6 @@
 
         /* *************************************************************************** */
 
-
         /**** 전역변수 ****/
         this.usrServerPath = "";  // 사용자 업로더 서버 경로
         this.forDeleteFilePath = "";  // 서버상 업로더된 파일들을 삭제하기 위한 경로
@@ -33,7 +32,6 @@
         var errorCode = "";
         var message = "";
 
-
         /* *************************************************************************** */
 
 
@@ -48,7 +46,6 @@
             // 에러 함수 호출
             // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
             if( typeof(window.EXAMUploader_OnError) == 'function' ) {
-                
                 if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){
                     // JS에서 string 포함 여부 확인하는 방법
                     // 참고: https://han.gl/3jiPg
@@ -61,7 +58,6 @@
                     message = "EXAMUploader 서버 경로를 확인해주세요."
                     window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
                 }
-                
             }
         }
 
