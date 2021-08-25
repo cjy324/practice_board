@@ -299,7 +299,9 @@
                     return;
                 }
                 // 완료 함수 호출
-                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
+                    window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                }
                 // EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else if(EXAMUploader.forUploadFileList.length == 0){  // 2. 선택된 파일이 없는 경우
@@ -308,7 +310,9 @@
                     return;
                 }
                 // 완료 함수 호출
-                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
+                    window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                }
                 // EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else{                                // 3. 신규 업로드할 파일이 있는 경우
@@ -353,7 +357,9 @@
                         }else{
                             EXAMUploader.indicator = "DONE";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // 완료 함수 호출
-                            window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);    
+                            if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
+                                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                            }   
                         } 
                     }else{
                         console.error("------통신 실패------");
@@ -642,7 +648,9 @@
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
                             // 완료 함수 호출
-                            window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                            if( typeof(window.EXAMUploader_UploadComplete) == 'function' ) {
+                                window.EXAMUploader_UploadComplete(EXAMUploader.uploadCompleteList);
+                            }
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
                         // console.log("indicator444444: " + indicator);

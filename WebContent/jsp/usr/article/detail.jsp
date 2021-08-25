@@ -70,6 +70,10 @@
 	    downloaderScript.onload = function () {
 	    	downloaderConfig.create();
 	    };
+	 	// 상세페이지 그리기
+		id = getIdByUrl();
+	    // 게시물 body 요청하기
+	    getBody(id);
 	}
 	
 	function getOptionsByAjax(){
@@ -105,10 +109,7 @@
 	}
 
 	function start(){
-	 	// 상세페이지 그리기
-		id = getIdByUrl();
-	    // 게시물 body 요청하기
-	    getBody(id);
+
 		getOptionsByAjax();
 	}
 </script>

@@ -10,8 +10,9 @@
             var downloaderHolderFrame = document.getElementById("downloader_holder");
             downloaderHolderFrame.src = src;
             EXAMDownloader.usrDownloaderServerPath = usrDownloaderServerPath;
-            EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;
+            EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
         }
+
 
         /* *************************************************************************** */
         
