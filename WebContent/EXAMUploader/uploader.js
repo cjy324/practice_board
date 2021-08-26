@@ -397,7 +397,7 @@
                         // 에러 함수 호출
                         if( typeof(window.EXAMUploader_OnError) == 'function' ) {
                             errorCode = "UEC_004"
-                            message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status;
+                            message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                             window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
                         }
                     }
@@ -723,7 +723,7 @@
                         // 에러 함수 호출
                         if( typeof(window.EXAMUploader_OnError) == 'function' ) {
                             errorCode = "UEC_003"
-                            message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status;
+                            message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                             window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
                         }
                     }

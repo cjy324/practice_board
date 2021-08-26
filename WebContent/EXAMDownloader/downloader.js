@@ -16,6 +16,8 @@
         this.relId = 0; // 게시물 relId
         this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         let progressPercentage = 0; // 다운로드 진행률
+        this.indicator = "DEFUALT";  // 다운로더 상태를 알려주는 indicator
+        // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
         /**** 에러 관련 ****/
         var errorCode = "";
@@ -124,11 +126,15 @@
 
         /* 다운로드 시작("다운로드" 버튼 클릭시) */
         this.startDownload = function(forDownloadFilelistIndex) {
+
+            EXAMDownloader.indicator = "START"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+
             var componentWindow = document.getElementById("downloader_holder").contentWindow;
             var downFiles = componentWindow.document.getElementsByName("downFiles");
 
             if(EXAMDownloader.globalFileList.length == 0){
                 alert("첨부된 파일이 없습니다.")
+                EXAMDownloader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }
 
@@ -149,6 +155,7 @@
 
             if(forDownloadFilelist.length == 0){
                 alert("선택된 파일이 없습니다.")
+                EXAMDownloader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                 return;
             }else{
                 EXAMDownloader.createProgressBarWindow();
@@ -171,29 +178,28 @@
 
             // 선택된 파일들에 대한 정보 URL로 담기
             // iframe에 URL 세팅
-            let forDownloadUrl = EXAMDownloader.usrDownloaderServerPath + "?";
+            let forDownloadServerUrl = EXAMDownloader.usrDownloaderServerPath + "?";
             let downFileGuid = EXAMDownloader.createGuid();
 
-            forDownloadUrl += "index=" + forDownloadFilelistIndex;
-            forDownloadUrl += "&guid=" + downFileGuid;
-            forDownloadUrl += "&originName=" + forDownloadFilelist[forDownloadFilelistIndex].name;
-            forDownloadUrl += "&originSize=" + forDownloadFilelist[forDownloadFilelistIndex].size;
-            forDownloadUrl += "&originPath=" + forDownloadFilelist[forDownloadFilelistIndex].path;
-            forDownloadUrl += "&originType=" + forDownloadFilelist[forDownloadFilelistIndex].type;
+            forDownloadServerUrl += "guid=" + downFileGuid;
+            forDownloadServerUrl += "&originName=" + forDownloadFilelist[forDownloadFilelistIndex].name;
+            forDownloadServerUrl += "&originSize=" + forDownloadFilelist[forDownloadFilelistIndex].size;
+            forDownloadServerUrl += "&originPath=" + forDownloadFilelist[forDownloadFilelistIndex].path;
 
-            downlaodFrame.src = encodeURI(forDownloadUrl); // encodeURI 참고 : https://jamesdreaming.tistory.com/2
+            // iframe으로 서버에 요청 전송
+            downlaodFrame.src = encodeURI(forDownloadServerUrl); // encodeURI 참고 : https://jamesdreaming.tistory.com/2
 
             // setInterval(타겟함수,설정시간) 함수는 주기적으로 인자를 실행하는 함수
             // 일정한 시간 간격으로 작업을 수행하기 위해서 사용
             // clearInterval 함수를 사용하여 중지
             // 지정된 작업은 모두 실행되고 다음 작업 스케쥴이 중지
             var startInterval = setInterval(function(){
-                if(progressPercentage < 100){  // 다운로드 진행률 값이 100보다 작으면..
+                if(progressPercentage < 100 && EXAMDownloader.indicator != "ERROR"){  // 다운로드 진행률 값이 100보다 작으면..
                     EXAMDownloader.checkDownProgress(downFileGuid, forDownloadFilelist, forDownloadFilelistIndex);
-                }else if(progressPercentage == 100){  // 다운로드 진행률 값이 100이면...종료
+                }else if(progressPercentage == 100 || EXAMDownloader.indicator == "ERROR"){  // 다운로드 진행률 값이 100이면...종료
                     clearInterval(startInterval);
-                    if(forDownloadFilelistIndex < forDownloadFilelist.length-1){ // 아직 다운로드해야 할 파일이 남았는지 체크
-                        progressPercentage = 0;
+                    progressPercentage = 0;
+                    if(forDownloadFilelistIndex < forDownloadFilelist.length-1 && EXAMDownloader.indicator != "ERROR"){ // 아직 다운로드해야 할 파일이 남았는지 체크
                         forDownloadFilelistIndex++;
                         EXAMDownloader.startIframRequestForDownload(forDownloadFilelist, forDownloadFilelistIndex); // 다음 파일 다운로드 시작
                     }
@@ -219,19 +225,39 @@
                 if(req.readyState === 4) {
                     if(req.status === 200) {
                         console.log("------통신 성공------");
-                        console.log("doneByte : " + xhttp.responseText);
-                        progressPercentage = Number(xhttp.responseText);
-                        EXAMDownloader.drawDownloadProgressBar(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex);
-                    }else{
+                        if(xhttp.responseText.length > 10){  // 서버 로직수행 중 오류
+                            EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+                            // 에러 함수 호출
+                            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
+                                errorCode = "DEC_004"
+                                message = "다운로드 서버 요청 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                                window.EXAMDownloader_OnError(errorCode, message);
+                            }
+                        }else if(xhttp.responseText == "NULL"){ // 실제 파일이 존재하지 않는 경우
+                            EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+                            // 에러 함수 호출
+                            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
+                                errorCode = "DEC_005"
+                                message = "\"" + forDownloadFilelist[forDownloadFilelistIndex].name + "\" 파일이 존재하지 않습니다.\nhttp status=" + req.status;
+                                window.EXAMDownloader_OnError(errorCode, message);
+                            }
+                        }else{
+                            console.log("doneByte : " + xhttp.responseText);
+                            progressPercentage = Number(xhttp.responseText);
+                            EXAMDownloader.drawDownloadProgressBar(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex);
+                        }
+                    }else{  // 통신 오류
                         console.error("------통신 실패------");
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
 
+                        EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
+
                         // 에러 함수 호출
                         if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
-                            errorCode = "DEC_004"
-                            message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status;
-                            window.EXAMUplEXAMDownloader_OnErroroader_OnError(errorCode, message);
+                            errorCode = "DEC_006"
+                            message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                            window.EXAMDownloader_OnError(errorCode, message);
                         }
                     }
                 }

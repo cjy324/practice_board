@@ -216,7 +216,7 @@
                         // 에러 함수 호출
                         if( typeof(window.EXAMEditor_OnError) == 'function' ) {
                             errorCode = "EEC_004"
-                            message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status
+                            message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                             window.EXAMEditor_OnError(errorCode, message, imageFileList);
                         }
                     }

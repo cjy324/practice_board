@@ -21,20 +21,16 @@ public class DownloadController {
 		// 다운로드 서버
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			// 파일에 대한 정보를 parameter로 받기
-			int index = Integer.parseInt(request.getParameter("index"));
 			String guid = request.getParameter("guid");
 			String originName = request.getParameter("originName");
 			long originSize = Long.parseLong(request.getParameter("originSize"));
 			String originPath = request.getParameter("originPath");
-			String originType = request.getParameter("originType");
 			
 			// (테스트용)
-//			System.out.println("index : " + index);
 //			System.out.println("guid : " + guid);
 //			System.out.println("originName : " + originName);
 //			System.out.println("originSize : " + originSize);
 //			System.out.println("originPath : " + originPath);
-//			System.out.println("originType : " + originType);
 			
 			/* HTTP 헤더 셋팅 시작 */
 			response.reset();
@@ -50,7 +46,10 @@ public class DownloadController {
 	                "attachment; filename=\"" + URLEncoder.encode(originName, "UTF-8") + "\"");
 			/* HTTP 헤더 셋팅 끝 */
 			
-			// 파일 임시 업로드 경로 설정
+			
+			/* 파일 다운로드(브라우저로 전송) 시작 */
+			File file = new File(originPath);
+			// 다운로드 상태 임시저장 경로 설정
 			String tempPath = request.getServletContext().getRealPath("temp");
 			// System.out.println("tempPath : " + tempPath); //(테스트용)
 
@@ -65,8 +64,6 @@ public class DownloadController {
 			tempTxtFile.createNewFile();
 			FileOutputStream fos = new FileOutputStream(tempTxtFile);
 			
-			/* 파일 다운로드(브라우저로 전송) 시작 */
-			File file = new File(originPath);
 			int read = 0;
 			long count = 0;
 			
@@ -107,7 +104,6 @@ public class DownloadController {
 			// 파일은 파일시스템이나 기타 다른 곳에 있으므로 이 내용을 스트림으로 읽어 들이는데 메모리를 소모합니다. 
 			// 작업이 끝나면 close()를 호출하여 스트림을 닫아 종료된 작업에 대해 메모리를 확보해야 합니다.
 
-
 			/* 파일 다운로드(브라우저로 전송) 끝 */
 			
 			return "notJspPath";
@@ -115,55 +111,64 @@ public class DownloadController {
 		
 		// 다운로드 진행률 모니터링
 		public String progress(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			// 파일에 대한 정보를 parameter로 받기
-			String guid = request.getParameter("guid");
-			
-			// (테스트용)
-			// System.out.println("guid : " + guid);
-			
-			// 다운로드 상태를 임시 저장해 놓을 txt파일 읽기
-			String tempPath = request.getServletContext().getRealPath("temp");
-			String tempTxtPath = tempPath + "\\" + guid + ".txt";
-			File tempTxtFile = new File(tempTxtPath);			
+			try {
+				// 파일에 대한 정보를 parameter로 받기
+				String guid = request.getParameter("guid");
+				
+				// (테스트용)
+				// System.out.println("guid : " + guid);
+				
+				// 다운로드 상태를 임시 저장해 놓을 txt파일 읽기
+				String tempPath = request.getServletContext().getRealPath("temp");
+				String tempTxtPath = tempPath + "\\" + guid + ".txt";
+				File tempTxtFile = new File(tempTxtPath);			
 
 
-			/* 파일 다운로드 진행률 읽기 시작 */
-			// 1. RandomAcessFile
-			String doneByte; // 마지막 라인을 담을 String
-			RandomAccessFile raf = new RandomAccessFile(tempTxtFile, "r");
-			StringBuffer lastLineText = new StringBuffer();
-			
-			// 2. 전체 파일 길이
-			long fileLength = raf.length();
-			
-			// 3. 포인터를 이용하여 뒤에서부터 앞으로 데이터를 읽는다.
-			for (long pointer = fileLength - 2; pointer >= 0; pointer--) {
-				// 3.1. pointer를 읽을 글자 앞으로 옮긴다.
-				raf.seek(pointer);
-				// 3.2. pointer 위치의 글자를 읽는다.
-				char c = (char) raf.read();
-				// 3.3. 줄바꿈이 나타나면 더 이상 글자를 읽지 않는다.
-				if (c == '\n') {
-					break;
+				/* 파일 다운로드 진행률 읽기 시작 */
+				// 1. RandomAcessFile
+				String doneByte; // 마지막 라인을 담을 String
+				RandomAccessFile raf = new RandomAccessFile(tempTxtFile, "r");
+				StringBuffer lastLineText = new StringBuffer();
+				
+				// 2. 전체 파일 길이
+				long fileLength = raf.length();
+				
+				// 3. 포인터를 이용하여 뒤에서부터 앞으로 데이터를 읽는다.
+				for (long pointer = fileLength - 2; pointer >= 0; pointer--) {
+					// 3.1. pointer를 읽을 글자 앞으로 옮긴다.
+					raf.seek(pointer);
+					// 3.2. pointer 위치의 글자를 읽는다.
+					char c = (char) raf.read();
+					// 3.3. 줄바꿈이 나타나면 더 이상 글자를 읽지 않는다.
+					if (c == '\n') {
+						break;
+					}
+					// 3.4. 결과 문자열의 앞에 읽어온 글자(c)를 붙여준다.
+					lastLineText.insert(0, c);
 				}
-				// 3.4. 결과 문자열의 앞에 읽어온 글자(c)를 붙여준다.
-				lastLineText.insert(0, c);
-			}
 
-			String[] doneBytes = lastLineText.toString().split("/");
-			doneByte = doneBytes[0];
-			System.out.println("doneByte : " + doneByte);
-			System.out.println("---------------------------------------------------");
-			
-			raf.close();
-			/* 파일 다운로드 진행률 읽기 끝 */
-			
-			// 파일 다운로드 진행률 값 클라이언트로 응답
-			response.getWriter().append(doneByte);
-			
-			if(doneByte.equals("100") && tempTxtFile.exists()) {
-				tempTxtFile.delete();
-				System.out.println("----------------다운로드 완료----------------");
+				String[] doneBytes = lastLineText.toString().split("/");
+				doneByte = doneBytes[0];
+				System.out.println("doneByte : " + doneByte);
+				System.out.println("---------------------------------------------------");
+				
+				raf.close();
+				/* 파일 다운로드 진행률 읽기 끝 */
+				
+				// 파일 다운로드 진행률 값 클라이언트로 응답
+				if(doneByte.length() > 0) { // doneByte값이 있는 경우 => 원본 파일이 있고 다운로드가 진행된 경우 
+					response.getWriter().append(doneByte);
+				}else {  // doneByte 값이 없는 경우 => 원본 파일이 없어 다운로드가 진행되지 않은 경우
+					response.getWriter().append("NULL");
+				}
+				
+				if(doneByte.equals("100") && tempTxtFile.exists()) {
+					tempTxtFile.delete();
+					System.out.println("----------------다운로드 완료----------------");
+				}
+			}catch (Exception e) {
+				// 에러 메시지 클라이언트로 전달
+				response.getWriter().append(e.toString());
 			}
 			
 			return "notJspPath";
