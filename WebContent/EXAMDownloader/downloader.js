@@ -230,7 +230,7 @@
                             // 에러 함수 호출
                             if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
                                 errorCode = "DEC_004"
-                                message = "다운로드 서버 요청 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                                message = "다운로드 서버 처리 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                                 window.EXAMDownloader_OnError(errorCode, message);
                             }
                         }else if(xhttp.responseText == "NULL"){ // 실제 파일이 존재하지 않는 경우
