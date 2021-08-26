@@ -204,51 +204,8 @@ public class UploadController {
 			return "notJspPath";
 		}
 		
-		// 이미지 업로드 서버
-		public String imageUpload(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			
-			// multipartRequest로 파일 생성시 용량
-			int sizeLimit = 10 * 1024 * 1024; // 약 10MB
-			String encType = "UTF-8";
-
-			// 파일 실제 업로드 경로 설정
-			String realPath = request.getServletContext().getRealPath("imageUpload");
-			System.out.println("realPath : " + realPath); //(테스트용)
-			
-			File imageUploadDir = new File(realPath);
-			if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
-				imageUploadDir.mkdirs();
-			};
-			
-			// Multipart로 요청 받기 위한 객체 생성
-			MultipartRequest multiReq = new MultipartRequest(
-					request, 
-					realPath, // 파일을 저장할 디렉토리 지정
-					sizeLimit, // 첨부파일 최대 용량 설정(bite)
-					encType, // 인코딩 방식 지정
-					new DefaultFileRenamePolicy() // 중복 파일 처리(동일한 파일명이 업로드되면 뒤에 숫자 등을 붙여 중복 회피)
-				);
-
-			// 각 파일별 이름 받아오기
-			String fileName = multiReq.getFilesystemName("imgFiles");
-			// System.out.println(fileName);
-			// String originFileName = multiReq.getOriginalFileName("imgFiles");
-			// System.out.println(originFileName);
-			// String fileType = multiReq.getContentType("imgFiles");
-			// System.out.println(fileType);
-			
-			String imgPath = "http://localhost:8086/practiceBoard/imageUpload/" + fileName;
-			
-			// 저장된 파일 이름 클라이언트로 전달
-			response.getWriter().append(imgPath);
-
-			return "notJspPath";
-		}
-		
 		// 서버에서 파일 삭제
 		public String deleteFile(HttpServletRequest request, HttpServletResponse response) {
-//			int relId = Integer.parseInt(request.getParameter("relId"));
-//			int id = Integer.parseInt(request.getParameter("id"));
 			String path = request.getParameter("path");
 			
 			// (테스트용)
@@ -256,10 +213,7 @@ public class UploadController {
 			// System.out.println("id : " + id);
 			// System.out.println("path : " + path);
 			
-//			// 1. DB에서 관련 정보 삭제
-//			genFileService.deleteFileInfo(relId, id);
-			
-			// 2. 실제 파일 삭제
+			// 실제 폴더에서 파일 삭제
 			File file = new File(path);
 			if(file.exists()) {
 				file.delete();
@@ -269,7 +223,7 @@ public class UploadController {
 			return null;
 		}
 		
-		/**
+		/** 중복파일명 넘버링 유틸
 	     * 동일한 파일명의 파일이 존재하는지 확인하여 존재한다면 파일명 뒤에 "_숫자" 를 
 	     * 붙이고 "_숫자"가 존재한다면 "_숫자" +1 을 더한값을 재귀적으로 카운트
 	     * @author digimon1740
@@ -313,3 +267,4 @@ public class UploadController {
 	    }
 
 }
+

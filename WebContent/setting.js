@@ -3,9 +3,10 @@
 function drawProduct(){
     // 에디터 적용
     var editorPath = "http://localhost:8086/practiceBoard/EXAMEditor/editorHolder.html";
-    var editorImgUploadPath = "http://localhost:8086/practiceBoard/usr/upload/imageUpload";
+    var editorImgUploadServerPath = "http://localhost:8086/practiceBoard/usr/editor/server";
+    var editorImgContextpath = "http://localhost:8086/practiceBoard";
     
-    EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+    EXAMEditor.drawEditorHtml(editorPath, editorImgUploadServerPath, editorImgContextpath);
     
     // 업로더 적용
     var uploaderPath = "http://localhost:8086/practiceBoard/EXAMUploader/uploaderHolder.html";

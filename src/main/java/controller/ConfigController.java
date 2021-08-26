@@ -26,10 +26,12 @@ public class ConfigController {
 			configService = Container.configService;
 		}
 
+		/* 설정페이지(setting.jsp)로 리턴 */
 		public String setting(HttpServletRequest request, HttpServletResponse response) {			
 			return "usr/config/setting";
 		}
 		
+		/* DB로부터 환경설정값 가져오기 */
 		@SuppressWarnings("unchecked")
 		public String getOptions(HttpServletRequest request, HttpServletResponse response) throws IOException{
 			GenSet genSet = configService.getOptions();
@@ -46,6 +48,7 @@ public class ConfigController {
 			return "notJspPath";
 		}
 
+		/* 환경설정값 DB에 저장 */
 		public String setOptions(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 			//JSON Parsing

@@ -35,6 +35,7 @@ public class ArticleController {
 			genFileService = Container.genFileService;
 		}
 	
+		/* 리스트페이지 */
 		public String list(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
 			// list요청
@@ -52,6 +53,7 @@ public class ArticleController {
 			return "usr/article/list";
 		}
 		
+		/* 상세페이지 */
 		public String detail(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			int id = Integer.parseInt(request.getParameter("id"));
 			
@@ -65,10 +67,12 @@ public class ArticleController {
 			return "usr/article/detail";
 		}
 		
+		/* 작성페이지(write.jsp)로 리턴 */
 		public String write(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			return "usr/article/write";
 		}
 		
+		/* 작성 게시물 정보 DB에 저장 */
 		public String saveContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
 			//JSON Parsing
@@ -207,6 +211,7 @@ public class ArticleController {
 //			return "notJspPath";
 //		}
 		
+		/* 수정페이지(modify.jsp)로 리턴 */
 		public String modify(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			int id = Integer.parseInt(request.getParameter("id"));
 			
@@ -220,6 +225,7 @@ public class ArticleController {
 			return "usr/article/modify";
 		}
 		
+		/* 기존 게시물 BODY값 가져오기  */
 		public String getBody(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			int id = Integer.parseInt(request.getParameter("id"));
 			
@@ -233,6 +239,7 @@ public class ArticleController {
 			return "notJspPath";
 		}
 		
+		/* 게시물 첨부파일 가져오기  */
 		@SuppressWarnings("unchecked")
 		// 형 변환 시 안전성을 위반할 경우 무점검 경고가 뜨게 된다.
 		// 만약, 형 변환이 정확하다면 이 경고를 무시하기 위해 @SuppressWarnings 어노테이션을 사용한다.
@@ -270,6 +277,7 @@ public class ArticleController {
 			return "notJspPath";
 		}
 		
+		/* 수정 게시물 정보 DB에 저장 */
 		public String modifyContent(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -350,7 +358,7 @@ public class ArticleController {
 						json = (JSONObject) deleteFiles.get(i);
 						
 						String path = json.get("uploadPath").toString();
-						// 실제 파일 삭제
+						// 실제 폴더에서 파일 삭제
 						File delFile = new File(path);
 						if(delFile.exists()) {
 							delFile.delete();

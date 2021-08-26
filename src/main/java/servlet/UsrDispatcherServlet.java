@@ -10,6 +10,7 @@ import container.Container;
 import controller.ArticleController;
 import controller.ConfigController;
 import controller.DownloadController;
+import controller.EditorController;
 import controller.UploadController;
 
 @SuppressWarnings("serial")
@@ -27,17 +28,23 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 		 * Container.homeController; jspPath = homeController.index(request, response);
 		 * }
 		 */
+		/* Editor */
+		if (controllerName.equals("editor")) {
+			EditorController editorController = Container.editorController;
+			if(requestName.equals("server")) {
+				jspPath = editorController.server(request, response);
+			}
+		}
+		/* Uploader */
 		if (controllerName.equals("upload")) {
 			UploadController uploadController = Container.uploadController;
 			if(requestName.equals("server")) {
 				jspPath = uploadController.server(request, response);
-			}else if(requestName.equals("imageUpload")) {
-				jspPath = uploadController.imageUpload(request, response);
 			}else if(requestName.equals("deleteFile")) {
 				jspPath = uploadController.deleteFile(request, response);
 			}
-			
 		}
+		/* Downloader */
 		if (controllerName.equals("download")) {
 			DownloadController downloadController = Container.downloadController;
 			if(requestName.equals("server")) {
@@ -46,6 +53,7 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = downloadController.progress(request, response);
 			}
 		}
+		/* 게시판 */
 		if (controllerName.equals("article")) {
 			ArticleController articleController = Container.articleController;
 			if(requestName.equals("list")) {
@@ -66,6 +74,7 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = articleController.modifyContent(request, response);
 			}
 		}
+		/* 환경설정 */
 		if (controllerName.equals("config")) {
 			ConfigController configController = Container.configController;
 			if(requestName.equals("setting")) {

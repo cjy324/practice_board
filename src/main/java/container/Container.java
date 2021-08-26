@@ -3,6 +3,7 @@ package container;
 import controller.ArticleController;
 import controller.ConfigController;
 import controller.DownloadController;
+import controller.EditorController;
 import controller.HomeController;
 import controller.UploadController;
 import dao.ArticleDao;
@@ -16,6 +17,7 @@ public class Container {
 
 	public static HomeController homeController;
 	public static ConfigController configController;
+	public static EditorController editorController;
 	public static UploadController uploadController;
 	public static DownloadController downloadController;
 	public static ArticleController articleController;
@@ -37,6 +39,7 @@ public class Container {
 		
 		configController = new ConfigController();
 		homeController = new HomeController();
+		editorController = new EditorController();
 		uploadController = new UploadController();
 		downloadController = new DownloadController();
 		articleController = new ArticleController();

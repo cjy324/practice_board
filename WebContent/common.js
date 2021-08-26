@@ -57,9 +57,10 @@ var G_EditorConfig = {
         },
         create: function () {
             var editorPath = contextpath + "/EXAMEditor/editorHolder.html";
-            var editorImgUploadPath = contextpath + "/usr/upload/imageUpload";
+            var editorImgUploadServerPath = contextpath + "/usr/editor/server";
+            var editorImgContextpath = contextpath;
             
-            EXAMEditor.drawEditorHtml(editorPath, editorImgUploadPath);
+            EXAMEditor.drawEditorHtml(editorPath, editorImgUploadServerPath, editorImgContextpath);
         }
     },
     editor2: {

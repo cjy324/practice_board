@@ -9,7 +9,8 @@
         /* *************************************************************************** */
 
         /**** 전역변수 ****/        
-        this.usrImgUploadPath = ""; // 이미지 업로드 경로
+        this.usrImgUploadServerPath = ""; // 이미지 업로드 서버 경로
+        this.usrImgContextpath = "";  // 이미지 Contextpath 경로
         var imageFileList = [];  // 이미지 업로드 파일리스트
         var imageFileListIndex = 0;  // 이미지 업로드 파일리스트 인덱스
 
@@ -21,11 +22,12 @@
 
 
         /* 에디터 그리기 */
-        this.drawEditorHtml = function(usrEditorPath, usrImgUploadPath){
+        this.drawEditorHtml = function(usrEditorPath, usrImgUploadServerPath, usrImgContextpath){
             var src = usrEditorPath;
             var editorHolderFrame = document.getElementById("editor_holder");
             editorHolderFrame.src = src;
-            EXAMEditor.usrImgUploadPath = usrImgUploadPath;
+            EXAMEditor.usrImgUploadServerPath = usrImgUploadServerPath;
+            EXAMEditor.usrImgContextpath = usrImgContextpath;
 
             // 에러 함수 호출
             // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
@@ -37,9 +39,14 @@
                     message = "editorHolder.html의 경로를 확인해주세요."
                     window.EXAMEditor_OnError(errorCode, message, null);
                 }
-                if(usrImgUploadPath == null || usrImgUploadPath == ""){
+                if(usrImgUploadServerPath == null || usrImgUploadServerPath == ""){
                     errorCode = "EEC_002"
                     message = "이미지 업로드 서버 경로를 확인해주세요."
+                    window.EXAMEditor_OnError(errorCode, message, null);
+                }
+                if(usrImgContextpath == null || usrImgContextpath == ""){
+                    errorCode = "EEC_003"
+                    message = "이미지 Contextpath 경로를 확인해주세요."
                     window.EXAMEditor_OnError(errorCode, message, null);
                 }
             }
@@ -164,12 +171,14 @@
 
         /* 이미지 업로드 ajax */
         this.doUploadImgAjax = function(imageFileList, imageFileListIndex){
+            // 이미지 파일리스트 formData로 담기
             var formData = new FormData()
             formData.append("imgFiles", imageFileList[imageFileListIndex]);
+            
             // ajax를 하기 위한 XmlHttpRequest 객체
             var xhttp = new XMLHttpRequest();
             // http 요청 타입 / 주소 / 동기식 여부 설정
-            xhttp.open("POST", EXAMEditor.usrImgUploadPath, true); // 메서드와 주소 설정
+            xhttp.open("POST", EXAMEditor.usrImgUploadServerPath + "?contextpath=" + EXAMEditor.usrImgContextpath, true); // 메서드와 주소 설정
             // http 요청
             xhttp.send(formData);   // 요청 전송
             // XmlHttpRequest의 요청
@@ -206,7 +215,7 @@
                         console.error(xhttp.responseText)
                         // 에러 함수 호출
                         if( typeof(window.EXAMEditor_OnError) == 'function' ) {
-                            errorCode = "EEC_003"
+                            errorCode = "EEC_004"
                             message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status
                             window.EXAMEditor_OnError(errorCode, message, imageFileList);
                         }
@@ -254,3 +263,4 @@
     top.EXAMEditor = EXAMEditor;
     
 })()
+

@@ -38,7 +38,6 @@ public class DownloadController {
 			
 			/* HTTP 헤더 셋팅 시작 */
 			response.reset();
-			
 			// IE체크
 			if(request.getHeader("User-Agent").indexOf("MSIE5.0") > -1) {
 				// IE가 아닌 경우
@@ -114,7 +113,7 @@ public class DownloadController {
 			return "notJspPath";
 		}
 		
-		// 다운로드 진행률
+		// 다운로드 진행률 모니터링
 		public String progress(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			// 파일에 대한 정보를 parameter로 받기
 			String guid = request.getParameter("guid");
