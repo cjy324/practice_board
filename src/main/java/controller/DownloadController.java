@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+
 public class DownloadController {
 	
 		public DownloadController() {
@@ -169,6 +170,7 @@ public class DownloadController {
 				if(doneByte.length() > 0) { // doneByte값이 있는 경우 => 원본 파일이 있고 다운로드가 진행된 경우 
 					response.getWriter().append(doneByte);
 				}else {  // doneByte 값이 없는 경우 => 원본 파일이 없어 다운로드가 진행되지 않은 경우
+					tempTxtFile.delete();
 					response.getWriter().append("NULL");
 				}
 				
