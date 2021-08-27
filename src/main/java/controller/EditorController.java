@@ -19,7 +19,7 @@ public class EditorController {
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				String contextpath = request.getParameter("contextpath");
-				System.out.println("contextpath: " + contextpath);
+				// System.out.println("contextpath: " + contextpath); //(테스트용)
 				
 				// multipartRequest로 파일 생성시 용량
 				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
@@ -27,7 +27,7 @@ public class EditorController {
 
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("imageUpload");
-				System.out.println("realPath : " + realPath); //(테스트용)
+				// System.out.println("realPath : " + realPath); //(테스트용)
 				
 				File imageUploadDir = new File(realPath);
 				if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -47,7 +47,7 @@ public class EditorController {
 				
 				// 이미지 경로
 				String imgPath = contextpath + "/imageUpload/" + fileName;
-				System.out.println("imgPath: " + imgPath);
+				// System.out.println("imgPath: " + imgPath); //(테스트용)
 				
 				// 이미지 경로 클라이언트로 전달
 				response.getWriter().append(imgPath);

@@ -55,7 +55,7 @@ public class UploadController {
 
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("upload");
-				System.out.println("realPath : " + realPath); //(테스트용)
+				// System.out.println("realPath : " + realPath); //(테스트용)
 				
 				File uploadDir = new File(realPath);
 				if(!uploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -67,7 +67,7 @@ public class UploadController {
 				
 				// 파일 임시 업로드 경로 설정
 				String tempPath = request.getServletContext().getRealPath("temp");
-				System.out.println("tempPath : " + tempPath); //(테스트용)
+				// System.out.println("tempPath : " + tempPath); //(테스트용)
 
 				File tempDir = new File(tempPath);
 				if(!tempDir.exists()){	// 만약, tempPath 경로에 폴더가 없으면 폴더 생성

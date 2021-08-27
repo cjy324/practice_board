@@ -168,7 +168,7 @@
         this.doUpload = function(e){
             // 기존 이미지 리스트 초기화
             imageFileList = [];
-             // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
+            // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
             for(let i = 0; i < e.target.files.length; i++){
                 imageFileList.push(e.target.files[i]);
             }
