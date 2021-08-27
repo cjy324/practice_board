@@ -22,13 +22,13 @@ label, button, select{
     display: inline-block;
     border: none;
     border-radius: 3px;
-    padding: 5px;
+    padding: 2px;
     margin: 0;
     text-decoration: none;
     background: #8d8d8f;
     color: #ffffff;
     font-family: sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
     cursor: pointer;
@@ -43,7 +43,7 @@ label:active, button:active, select:active{
     box-shadow: 0px 0px 0 rgb(0,0,0,0.5);
 }
 label, button{
-    padding: 8px;
+    padding: 6px;
 }
 
 /* 업로더 */
@@ -56,28 +56,29 @@ label, button{
     display: inline-block;
     height: 190px;
     width: 95%;
-    border: solid black 3px;
-    border-radius: 5px;
+    border: solid black 1px;
+    border-radius: 2px;
 }
 .top_area{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 30px;
+    background-color: rgba(200, 200, 200, 0.5);
     padding-left: 10px;
     padding-right: 15px;
     font-weight: bold;
+    font-size: 12px;
 }
 .upload_area{
-    height: 86px;
+    height: 96px;
     width: 100%;
     text-align: left;  
-    border-top: solid rgb(167, 167, 167) 2px;
-    border-bottom: solid rgb(167, 167, 167) 2px;
+    border-top: solid rgb(167, 167, 167) 1px;
+    border-bottom: solid rgb(167, 167, 167) 1px;
 }
 .uploadZone{
 	height: 100%;
-	border: 2px solid;
 	z-index: 500;
 	padding-left: 7px;
     padding-right: 7px;
@@ -93,7 +94,7 @@ label, button{
 	width: 100%;
 }
 .uploadZone > li > span{
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: bold; 
 }
 .uploadZone > li > input{
@@ -110,6 +111,7 @@ label, button{
 
 .info_area{
     height: 24px;
+    background-color: rgba(200, 200, 200, 0.2);
     border-bottom: solid rgb(167, 167, 167) 1px;
     padding-top: 5px;
 }
@@ -117,9 +119,10 @@ label, button{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    font-size: 14px;
+    font-size: 12px;
 }
 .btn_area{
-    height: 30px;
+    height: 34px;
+    background-color: rgba(200, 200, 200, 0.5);    
     text-align: left;
 }

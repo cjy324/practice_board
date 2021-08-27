@@ -3,7 +3,7 @@ body, ul, li{
     margin:0; 
     list-style:none; 
     padding:0; 
-} 
+}
 a{ 
     text-decoration:none; 
     color:inherit; 
@@ -25,13 +25,13 @@ label, button, select{
     display: inline-block;
     border: none;
     border-radius: 3px;
-    padding: 5px;
+    padding: 2px;
     margin: 0;
     text-decoration: none;
     background: #8d8d8f;
     color: #ffffff;
     font-family: sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 1;
     cursor: pointer;
@@ -46,7 +46,7 @@ label:active, button:active, select:active{
     box-shadow: 0px 0px 0 rgb(0,0,0,0.5);
 }
 label, button{
-    padding: 8px;
+    padding: 6px;
 }
 
 
@@ -61,12 +61,13 @@ label, button{
     display: inline-block;
     height: 100%;
     width: 95%;
-    border: solid black 3px;
-    border-radius: 5px;
+    border: solid black 1px;
+    border-radius: 2px;
 }
 .toolbar{
-    height: 55px;
+    height: 50px;
     width: 100%;
+    background-color: rgba(200, 200, 200, 0.5);     
     overflow-x: auto;
     white-space: nowrap;
 }
@@ -74,28 +75,29 @@ label, button{
     width: auto;
 }
 .text_area{
-    height: 405px;
+    height: 420px;
     text-align: center;  
-    border-top: solid rgb(167, 167, 167) 2px;
-    border-bottom: solid rgb(167, 167, 167) 2px;
+    border-top: solid rgb(167, 167, 167) 1px;
+    border-bottom: solid rgb(167, 167, 167) 1px;
 }
 .text_area > iframe{
     height: 100%;
     width: 100%;
 }
 .btn_area_bottom{
-    height: 35px;
+    height: 30px;
+    background-color: rgba(200, 200, 200, 0.5);     
     text-align: left;
-    margin-top: 2px;
-    margin-left: 2px;
+    padding-top: 4px;
+    padding-left: 4px;
 }
 
-@media (min-width: 1030px) {
+@media (min-width: 900px) {
 	.toolbar{
-	    height: 40px;
+	    height: 35px;
 	    overflow-x: hidden;
 	}
 	.text_area{
-	    height: 420px;
+	    height: 435px;
 	}
 }

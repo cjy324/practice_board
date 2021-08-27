@@ -18,8 +18,9 @@
         this.globalFileList = [];  // 업로드/다운로드 fileList를 담을 배열
         this.uploadCompleteList = []  // 업로드 완료 파일리스트
         this.relId = 0;  // 게시물 id
-        this.totalNum = 0;  // 업로드 대기리스트 수
-        this.totalSize = 0;  // 업로드 대기리스트 용량
+        // 용량 제한시 사용
+        // this.totalNum = 0;  // 업로드 대기리스트 수
+        // this.totalSize = 0;  // 업로드 대기리스트 용량
         this.popupWindow = null;  // 프로그래스바 팝업 윈도우
         this.forUploadFileList = [];  // 실제 업로드될 리스트(실제 선택된 파일들을 담을)
         this.forUploadFileListIndex = 0;  // 업로드를 위한 파일 인덱스
@@ -90,20 +91,24 @@
             uploadZone.addEventListener("dragenter", function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                uploadZone.style.background = "rgba(180, 180, 180, 0.5)";
             })
             // 드래그한 파일이 uploadZone을 벗어났을 때
             uploadZone.addEventListener("dragleave", function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                uploadZone.style.background = "white";
             })
             // 드래그한 파일이 uploadZone에 머물러 있을 때
             uploadZone.addEventListener("dragover", function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                uploadZone.style.background = "rgba(180, 180, 180, 0.5)";
             })
             // 드래그한 파일이 uploadZone에 드랍되었을 때
             uploadZone.addEventListener("drop", function(e) {
                 e.preventDefault();
+                uploadZone.style.background = "white";
                 
                 var droppedFiles = e.dataTransfer && e.dataTransfer.files;
                 console.log("droppedFiles: " + droppedFiles);
@@ -114,20 +119,20 @@
                         alert("폴더 업로드 불가");
                         return;
                     }
-                    if((EXAMUploader.totalNum + droppedFiles.length) > 20){
-                        alert("최대 업로드 가능 갯수 초과(최대: 20개)");
-                        return;
-                    }
+                    // if((EXAMUploader.totalNum + droppedFiles.length) > 20){
+                    //     alert("최대 업로드 가능 갯수 초과(최대: 20개)");
+                    //     return;
+                    // }
         
-                    let filesSize = 0;
-                    for(let i = 0; i < droppedFiles.length; i++){
-                        filesSize += Number(droppedFiles[i].size); 
-                    }
+                    // let filesSize = 0;
+                    // for(let i = 0; i < droppedFiles.length; i++){
+                    //     filesSize += Number(droppedFiles[i].size); 
+                    // }
         
-                    if((EXAMUploader.totalSize + filesSize) > 314572800){
-                        alert("최대 업로드 가능 용량 초과(최대: 300MB)");
-                        return;
-                    }
+                    // if((EXAMUploader.totalSize + filesSize) > 314572800){
+                    //     alert("최대 업로드 가능 용량 초과(최대: 300MB)");
+                    //     return;
+                    // }
 
                     // uploadZone에 드랍된 파일들로 파일리스트 세팅
                     for(let i = 0; i < droppedFiles.length; i++){
@@ -192,20 +197,20 @@
         /* 파일 업로드를 위한 데이터 셋팅(from Input) */
         this.setUploadFiles = function(e) {
 
-            if((EXAMUploader.totalNum + e.target.files.length) > 20){
-                alert("최대 업로드 가능 갯수 초과(최대: 20개)");
-                return;
-            }
+            // if((EXAMUploader.totalNum + e.target.files.length) > 20){
+            //     alert("최대 업로드 가능 갯수 초과(최대: 20개)");
+            //     return;
+            // }
 
-            let filesSize = 0;
-            for(let i = 0; i < e.target.files.length; i++){
-                filesSize += Number(e.target.files[i].size); 
-            }
+            // let filesSize = 0;
+            // for(let i = 0; i < e.target.files.length; i++){
+            //     filesSize += Number(e.target.files[i].size); 
+            // }
 
-            if((EXAMUploader.totalSize + filesSize) > 314572800){
-                alert("최대 업로드 가능 용량 초과(최대: 300MB)");
-                return;
-            }
+            // if((EXAMUploader.totalSize + filesSize) > 314572800){
+            //     alert("최대 업로드 가능 용량 초과(최대: 300MB)");
+            //     return;
+            // }
 
             // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
             for(let i = 0; i < e.target.files.length; i++){

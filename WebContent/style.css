@@ -32,22 +32,22 @@ iframe{
 	display: inline-block;
     min-height: 300px;
     width: 70%;
-    border: solid black 3px;
+    border: solid black 2px;
     border-radius: 5px;
     font-size: 14px;
 }
 .article_list_body__head{
 	display: flex;
 	width: 100%;
-	border-bottom: 3px outset black;
+	border-bottom: 2px outset black;
 }
 .article_list_body__head > div{
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 25px;
-	background-color: gray;	
-	color: white;
+	background-color: rgba(200, 200, 200, 1);	
+	color: black;
 	font-weight: bold;
 }
 .article_list_body__body{
@@ -101,25 +101,25 @@ iframe{
 	display: inline-block;
     min-height: 600px;
     width: 90%;
-    border: solid black 3px;
+    border: solid black 2px;
     border-radius: 5px;
     font-size: 14px;
 }
 .article_detail_body__head{
 	width: 100%;
-	background-color: rgba(200, 200, 200, 1);
+	background-color: rgba(200, 200, 200, 0.5);
 	text-align: left;
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 }
 .article_detail_body__body{
 	display: block;
 	width: 100%;
-	height: 320px;
+	height: 420px;
 	text-align: left;
 	overflow-y: scroll;
-	border-top: 3px solid;
-	border-bottom: 3px solid; 
+	border-top: 1px solid;
+	border-bottom: 1px solid; 
 	margin-bottom: 3px;
 }
 .detail_body__content{
@@ -140,7 +140,7 @@ iframe{
 	display: inline-block;
     height: 100%;
     width: 70%;
-    border: solid black 3px;
+    border: solid black 2px;
     border-radius: 5px;
 }
 .article_write_foot{
@@ -156,7 +156,7 @@ iframe{
 	display: inline-block;
     height: 100%;
     width: 70%;
-    border: solid black 3px;
+    border: solid black 2px;
     border-radius: 5px;
 }
 .article_modify_foot{
@@ -207,14 +207,14 @@ iframe{
 /* 작성영역 */
 .EDITOR_AREA{
 	display: inline-block;
-    height: 530px;
+    height: 520px;
     width: 100%;
 }
 
 .editor_header{
 	width: 100%; 
 	height: 50px; 
-	font-size: 18px;
+	font-size: 15px;
 }
 .editor_header > div {
 	width: 100%; 
@@ -229,7 +229,7 @@ iframe{
 }
 .editor_header > div > input{
 	width: 70%; 
-	font-size: 15px;
+	font-size: 14px;
 }
 
 /* 업로더 영역 */

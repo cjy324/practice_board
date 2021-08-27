@@ -20,7 +20,7 @@
 			        <div>
 			            <span>제목</span>
 			        </div>
-			        <input id="titleInput" type="text" placeholder="제목 입력란">
+			        <input id="titleInput" type="text" placeholder="이곳에 제목을 입력하세요.">
 			    </div>
 			</div>
 			
