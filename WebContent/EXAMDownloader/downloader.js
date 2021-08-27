@@ -95,30 +95,38 @@
             var infoZone = componentWindow.document.getElementById("current_file_info");
             
             let forDownloadFileListLi = "";	// uploadedZone에 upload한 파일별 태그 생성
-            
-            for(let i = 0; i < fileList.length; i++) {
-                forDownloadFileListLi += "<li>";
-                forDownloadFileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' name='downFiles' value='false' checked>";
-                forDownloadFileListLi += "<span>" + fileList[i].name + "</span>";
-                forDownloadFileListLi += "<span> " + this.formatBytes(fileList[i].size, 2) + "</span>";
-                forDownloadFileListLi += "</li>";
-            }
-
-            downloadZone.innerHTML = forDownloadFileListLi;
-
-            let filesSize = 0;
-            let fileListInfo = "";
-                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
-                fileListInfo += fileList.length;
-                fileListInfo += "</span>개 / ";
-                fileListInfo += "<span style='font-weight:bold; color: brown;'>";
-                for(let k = 0; k < fileList.length; k++){
-                    filesSize += Number(fileList[k].size); 
+            if(fileList.length > 0){
+                
+                for(let i = 0; i < fileList.length; i++) {
+                    forDownloadFileListLi += "<li>";
+                    forDownloadFileListLi += "<input id='chk_file_" + [i] + "' type='checkbox' name='downFiles' value='false' checked>";
+                    forDownloadFileListLi += "<span>" + fileList[i].name + "</span>";
+                    forDownloadFileListLi += "<span> " + this.formatBytes(fileList[i].size, 2) + "</span>";
+                    forDownloadFileListLi += "</li>";
                 }
-                fileListInfo += this.formatBytes(filesSize, 2);
-                fileListInfo += " </span>";
 
-            infoZone.innerHTML = fileListInfo;
+                downloadZone.innerHTML = forDownloadFileListLi;
+
+                let filesSize = 0;
+                let fileListInfo = "";
+                    fileListInfo += "<span style='font-weight:bold; color: brown;'>";
+                    fileListInfo += fileList.length;
+                    fileListInfo += "</span>개 / ";
+                    fileListInfo += "<span style='font-weight:bold; color: brown;'>";
+                    for(let k = 0; k < fileList.length; k++){
+                        filesSize += Number(fileList[k].size); 
+                    }
+                    fileListInfo += this.formatBytes(filesSize, 2);
+                    fileListInfo += " </span>";
+
+                infoZone.innerHTML = fileListInfo;
+            }else{
+                forDownloadFileListLi += "<li style='height: 100%; display: flex; justify-content: center; align-items: center;'>";
+                forDownloadFileListLi += "<span style='position: inherit; font-weight: normal; color: blue; font-size: 12px;'>첨부 파일 없음</span>";
+                forDownloadFileListLi += "</li>";
+                
+                downloadZone.innerHTML = forDownloadFileListLi;
+            }
 
             // 파일리스트 셋팅
             EXAMDownloader.globalFileList = fileList;

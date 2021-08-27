@@ -10,6 +10,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/raonkupload/js/raonkupload.js"></script>
 <script defer="defer" src="${pageContext.request.contextPath}/EXAMEditor/editor.js"></script>
 <script defer src="${pageContext.request.contextPath}/EXAMUploader/uploader.js"></script>
+<script defer src="${pageContext.request.contextPath}/EXAMDownloader/downloader.js"></script>
 <script defer src="${pageContext.request.contextPath}/setting.js"></script>
 <title>SETTING</title>
 </head>
@@ -78,6 +79,7 @@
 			<div>
 				<h2>미리보기</h2>
 			</div>
+			<!-- 에디터 미리보기 -->
 			<div style="text-align: center; width: 100%;">
 				<h4>EXAMEditor</h4>
 				<div style="width: 80%; display:inline-block;">
@@ -96,10 +98,12 @@
 					            Width: '100%',
 					            DefaultMessage: "<span>이곳에 내용을 입력하세요.</span>"
 					        }
-						var editor = new RAONKEditor(raonkParam);
+						new RAONKEditor(raonkParam);
 					</script>
 				</div>
 			</div>
+			<h2>-------------------------------------------------</h2>
+			<!-- 업로더 미리보기 -->
 			<div style="text-align: center; width: 100%;">
 				<h4>EXAMUploader</h4>
 				<div style="width: 80%; display:inline-block;">
@@ -115,10 +119,35 @@
 								Id: "K_Uploader",
 					            Width: '100%'
 					        }
-						var upload = new RAONKUpload(raonkParam);
+						new RAONKUpload(raonkParam);
 					</script>
 				</div>
 			</div>
+			<h2>-------------------------------------------------</h2>
+			<!-- 다운로더 미리보기 -->
+			<div style="text-align: center; width: 100%;">
+				<h4>EXAMDownloader</h4>
+				<div style="width: 80%; display:inline-block;">
+					<!-- Uploader -->
+        			<iframe id='downloader_holder' class='downloader_holder' src="" frameborder='0'></iframe>
+				</div>
+			</div>
+			<div style="text-align: center; width: 100%;">
+				<h4>K_Downloader</h4>
+				<div style="width: 80%; display:inline-block;">
+					<script type="text/javascript">
+						var raonkParam = {
+								Id: "K_Downloader",
+				                Width: '100%',
+				                Mode: 'view', // 다운로더 모드
+					        }
+						new RAONKUpload(raonkParam);
+					</script>
+				</div>
+			</div>
+		</div>
+		<div style="margin-top: 10px;">
+			<button onclick="setOptions()">설정값 저장</button>
 		</div>
 	</section>
 </body>

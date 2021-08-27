@@ -13,6 +13,14 @@ function drawProduct(){
     var uploaderServerPath = "http://localhost:8086/practiceBoard/usr/upload/server";
     
     EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+
+    // 다운로더 적용
+    var downloaderPath = "http://localhost:8086/practiceBoard/EXAMDownloader/downloaderHolder.html";
+    var downloaderServerPath = "http://localhost:8086/practiceBoard/usr/download/server";
+    var downloadProgressPath = "http://localhost:8086/practiceBoard/usr/download/progress";
+        
+    EXAMDownloader.drawDownloaderHtml(downloaderPath, downloaderServerPath, downloadProgressPath);
+
 }
 
 /* 라디오 값 가져오기 */
