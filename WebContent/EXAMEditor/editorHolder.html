@@ -59,7 +59,7 @@
 	                            <span>U</span>
 	                        </button>
 	                        <form id="uploadForm" action='doUpload' method='POST' enctype="multipart/form-data">
-	                            <label id="uploadBtnLabel" for="uploadBtn" style="background-color: midnightblue;">이미지</label>
+	                            <label id="uploadBtnLabel" tabindex="0" onkeypress="document.getElementById('uploadBtn').click()" for="uploadBtn" style="background-color: midnightblue;">이미지</label>
 	                            <input id="uploadBtn" onchange="top.EXAMEditor.doUpload(event)" type='file' name='imgFiles' multiple style="display: none;">
 	                        </form>
 	                        <button id="justifyLeft_btn" type="button" onclick="top.EXAMEditor.setStyle('justifyLeft', null)">

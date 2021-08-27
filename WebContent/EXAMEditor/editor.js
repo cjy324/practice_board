@@ -79,7 +79,11 @@
         document.getElementById("editor_holder").addEventListener("load", function(e) {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
-            editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("mouseover", function(e){
+            editorHolderFrameWindow.document.getElementById("uploadForm").addEventListener("mouseover", function(e){
+                selection = editWindow.document.getSelection();
+                range = selection.getRangeAt(0);
+            })
+            editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("keypress", function(e){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
             })
@@ -162,6 +166,8 @@
 
         /* 이미지 업로드("이미지"버튼 클릭시) */
         this.doUpload = function(e){
+            // 기존 이미지 리스트 초기화
+            imageFileList = [];
              // Input으로부터 추가된 FileList를 기존 globalFileList에 추가
             for(let i = 0; i < e.target.files.length; i++){
                 imageFileList.push(e.target.files[i]);

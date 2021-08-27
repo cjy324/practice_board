@@ -316,8 +316,8 @@
                 }
             }
 
-            console.log("EXAMUploader.globalFileList.length: " + EXAMUploader.globalFileList.length)
-            console.log("EXAMUploader.forUploadFileList.length: " + EXAMUploader.forUploadFileList.length)
+            // console.log("EXAMUploader.globalFileList.length: " + EXAMUploader.globalFileList.length)
+            // console.log("EXAMUploader.forUploadFileList.length: " + EXAMUploader.forUploadFileList.length)
 
             // 업로드 시나리오별 필터링
             if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
