@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +22,7 @@ public class UploadController {
 		boolean isDevMode;
 		
 		public UploadController() {
-			isDevMode = false;		// (디버깅 모드)
+			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 파일 업로드 서버
@@ -35,17 +38,15 @@ public class UploadController {
 				int index = Integer.parseInt(request.getParameter("index"));
 				int slicedFilesLength = Integer.parseInt(request.getParameter("slicedFilesLength"));
 				
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
-					System.out.println("LOG { LINE 30, INFO " + "GUID: " + guid + " }");
-					System.out.println("LOG { LINE 31, INFO " + "LimitSize: " + limitSize + " }");
-					System.out.println("LOG { LINE 32, INFO " + "OriginName: " + originName + " }");
-					System.out.println("LOG { LINE 33, INFO " + "OriginSize: " + originSize + " }");
-					System.out.println("LOG { LINE 34, INFO " + "OriginType: " + originType + " }");
-					System.out.println("LOG { LINE 35, INFO " + "SlicedFileIndex: " + index + " }");
-					System.out.println("LOG { LINE 36, INFO " + "SlicedFilesLength: " + slicedFilesLength + " }");
-				}
-
+				// (DevMode)
+				printLogInDevMode(request, guid, 32, "GUID", guid);
+				printLogInDevMode(request, guid, 33, "LimitSize", String.valueOf(limitSize));
+				printLogInDevMode(request, guid, 34, "OriginName", originName);
+				printLogInDevMode(request, guid, 35, "OriginSize", String.valueOf(originSize));
+				printLogInDevMode(request, guid, 36, "OriginType", originType);
+				printLogInDevMode(request, guid, 37, "SlicedFileIndex", String.valueOf(index));
+				printLogInDevMode(request, guid, 38, "SlicedFilesLength", String.valueOf(slicedFilesLength));
+		
 				// multipartRequest로 파일 생성시 용량
 				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
 				String encType = "UTF-8";
@@ -59,9 +60,8 @@ public class UploadController {
 
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("upload");
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { LINE 61, INFO " + "RealPath: " + realPath + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, guid, 61, "RealPath", realPath);
 				
 				File uploadDir = new File(realPath);
 				if(!uploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -70,15 +70,13 @@ public class UploadController {
 				
 				// 파일 경로
 				String path = realPath + "\\" + originName;
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { LINE 72, INFO " + "FilePath: " + path + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, guid, 71, "FilePath", path);
 				
 				// 파일 임시 업로드 경로 설정
 				String tempPath = request.getServletContext().getRealPath("temp");
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { LINE 78, INFO " + "TempFolderPath: " + tempPath + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, guid, 76, "TempFolderPath", tempPath);
 
 				File tempDir = new File(tempPath);
 				if(!tempDir.exists()){	// 만약, tempPath 경로에 폴더가 없으면 폴더 생성
@@ -91,23 +89,19 @@ public class UploadController {
 				
 				// 분할 파일인 경우...
 				if(isSliced != null && isSliced.equals("true")) {
-					
-					if(isDevMode) {		// (디버깅 모드)
-						System.out.println("LOG { LINE 93, INFO " + "IsSlicedFile: " + isSliced + " }");
-					}
+					// (DevMode)
+					printLogInDevMode(request, guid, 90, "IsSlicedFile", isSliced);
 					
 					// 분할 파일을 담을 실제 파일 경로
 					String NewFileLocation = realPath + "\\" + guid;
-					if(isDevMode) {		// (디버깅 모드)
-						System.out.println("LOG { LINE 100, INFO " + "NewFilePathDuringMergingProcess: " + NewFileLocation + " }");
-					}
+					// (DevMode)
+					printLogInDevMode(request, guid, 95, "NewFilePathDuringMergingProcess", NewFileLocation);
 					
 					// 실제 업로드파일 저장경로, 원본파일명 등을 임시 저장해 놓을 txt파일 생성
 					String tempTxtPath = tempPath + "\\" + guid + ".txt";
 					File tempTxtFile = new File(tempTxtPath);
-					if(isDevMode) {		// (디버깅 모드)
-						System.out.println("LOG { LINE 106, INFO " + "TempTxtFilePathForMerge: " + tempTxtPath + " }");
-					}
+					// (DevMode)
+					printLogInDevMode(request, guid, 100, "TempTxtFilePathForMerge", tempTxtPath);
 									
 					// 만약, 들어온 분할 파일이 첫번째 분할 파일일 경우
 					if(index == 0) { 
@@ -185,10 +179,8 @@ public class UploadController {
 					}
 					
 				}else {	// 단일 파일인 경우
-					
-					if(isDevMode) {		// (디버깅 모드)
-						System.out.println("LOG { LINE 187, INFO " + "IsSlicedFile: " + isSliced + " }");
-					}
+					// (DevMode)
+					printLogInDevMode(request, guid, 180, "IsSlicedFile", isSliced);
 					
 					// Multipart로 요청 받기 위한 객체 생성
 					MultipartRequest multiReq = new MultipartRequest(
@@ -204,9 +196,8 @@ public class UploadController {
 					
 					// 실제 업로드 폴더에 중복파일명 있는지 검사 후 넘버링
 					path = appendSuffixName(path, 0); // 중복파일명 넘버링 유틸
-					if(isDevMode) {		// (디버깅 모드)
-						System.out.println("LOG { LINE 206, INFO " + "NewFilePath: " + path + " }");
-					}
+					// (DevMode)
+					printLogInDevMode(request, guid, 197, "NewFilePath", path);
 				
 					// 새로 들어온 파일 읽기
 					FileInputStream fr = new FileInputStream(newFile);
@@ -232,20 +223,21 @@ public class UploadController {
 				
 				}
 			}catch (Exception e) {
+				if(isDevMode) {		// (DevMode)
+					System.out.println("ERROR { " + e + " }");
+				}
 				// 에러 메시지 클라이언트로 전달
 				response.getWriter().append(e.toString());
 			}
 			return "notJspPath";
 		}
-		
+
 		// 서버에서 파일 삭제
 		public String deleteFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				String path = request.getParameter("path");
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
-					System.out.println("LOG { LINE 244, INFO " + "ForDeleteFilePath: " + path + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, "none", 237, "ForDeleteFilePath", path);
 				
 				// 실제 폴더에서 파일 삭제
 				File file = new File(path);
@@ -254,11 +246,32 @@ public class UploadController {
 					System.out.println("file 삭제 완료");
 				}
 			}catch (Exception e) {
+				if(isDevMode) {		// (DevMode)
+					System.out.println("ERROR { " + e + " }");
+				}
 				// 에러 메시지 클라이언트로 전달
 				response.getWriter().append(e.toString());
 			}
 	
 			return null;
+		}
+		
+		// isDevMode 로그 출력 유틸
+		private void printLogInDevMode(HttpServletRequest request, String guid, int lineNum, String infoTitle, String infoStr) {
+			if(isDevMode) {
+				// 현재시간 구하기
+				SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+				Date date = new Date();
+				String nowTime = sdf.format(date);
+				
+				if(guid.equals("none")) {
+					guid = UUID.randomUUID().toString();
+				}
+				
+				// LOG 출력
+				System.out.println(nowTime + " LOG { RequestURL: " + request.getRequestURL() 
+				+ ", GUID: " + guid + ", LINE " + lineNum + ", INFO " + infoTitle + ": " + infoStr + " }");
+			}
 		}
 		
 		/** 중복파일명 넘버링 유틸

@@ -2,6 +2,9 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,17 +18,15 @@ public class EditorController {
 		boolean isDevMode; 
 		
 		public EditorController() {
-			isDevMode = false;  // 디버깅 모드
+			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 이미지 업로드 서버
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
-				String contextpath = request.getParameter("contextpath");				
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
-					System.out.println("LOG { LINE 25, INFO " + "Contextpath: " + contextpath + " }");
-				}
+				String contextpath = request.getParameter("contextpath");
+				// (DevMode)
+				printLogInDevMode(request, "none", 27, "Contextpath", contextpath);
 				
 				// multipartRequest로 파일 생성시 용량
 				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
@@ -34,9 +35,8 @@ public class EditorController {
 
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("imageUpload");
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { LINE 35, INFO " + "RealPath : " + realPath + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, "none", 37, "RealPath", realPath);
 				
 				File imageUploadDir = new File(realPath);
 				if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -56,19 +56,38 @@ public class EditorController {
 				
 				// 이미지 경로
 				String imgUploadPath = contextpath + "/imageUpload/" + fileName;
-				if(isDevMode) {		// (디버깅 모드)
-					System.out.println("LOG { LINE 57, INFO " + "ImgUploadPath: " + imgUploadPath + " }");
-				}
+				// (DevMode)
+				printLogInDevMode(request, "none", 58, "ImgUploadPath", imgUploadPath);
 				
 				// 이미지 경로 클라이언트로 전달
 				response.getWriter().append(imgUploadPath);
 			}catch (Exception e) {
+				if(isDevMode) {		// (DevMode)
+					System.out.println("ERROR { " + e + " }");
+				}
 				// 에러 메시지 클라이언트로 전달
 				response.getWriter().append(e.toString());
 			}
 			
-
 			return "notJspPath";
+		}
+		
+		// isDevMode 로그 출력 유틸
+		private void printLogInDevMode(HttpServletRequest request, String guid, int lineNum, String infoTitle, String infoStr) {
+			if(isDevMode) {
+				// 현재시간 구하기
+				SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+				Date date = new Date();
+				String nowTime = sdf.format(date);
+				
+				if(guid.equals("none")) {
+					guid = UUID.randomUUID().toString();
+				}
+				
+				// LOG 출력
+				System.out.println(nowTime + " LOG { RequestURL: " + request.getRequestURL() 
+				+ ", GUID: " + guid + ", LINE " + lineNum + ", INFO " + infoTitle + ": " + infoStr + " }");
+			}
 		}
 
 }
