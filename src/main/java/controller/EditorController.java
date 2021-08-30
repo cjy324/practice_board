@@ -26,7 +26,8 @@ public class EditorController {
 			try {
 				String contextpath = request.getParameter("contextpath");
 				// (DevMode)
-				printLogInDevMode(request, "none", 27, "Contextpath", contextpath);
+				String forDevModeGuid = UUID.randomUUID().toString();
+				printLogInDevMode(request, forDevModeGuid, 27, "Contextpath", contextpath);
 				
 				// multipartRequest로 파일 생성시 용량
 				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
@@ -36,7 +37,7 @@ public class EditorController {
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("imageUpload");
 				// (DevMode)
-				printLogInDevMode(request, "none", 37, "RealPath", realPath);
+				printLogInDevMode(request, forDevModeGuid, 37, "RealPath", realPath);
 				
 				File imageUploadDir = new File(realPath);
 				if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -57,7 +58,7 @@ public class EditorController {
 				// 이미지 경로
 				String imgUploadPath = contextpath + "/imageUpload/" + fileName;
 				// (DevMode)
-				printLogInDevMode(request, "none", 58, "ImgUploadPath", imgUploadPath);
+				printLogInDevMode(request, forDevModeGuid, 58, "ImgUploadPath", imgUploadPath);
 				
 				// 이미지 경로 클라이언트로 전달
 				response.getWriter().append(imgUploadPath);
@@ -79,11 +80,7 @@ public class EditorController {
 				SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date();
 				String nowTime = sdf.format(date);
-				
-				if(guid.equals("none")) {
-					guid = UUID.randomUUID().toString();
-				}
-				
+
 				// LOG 출력
 				System.out.println(nowTime + " LOG { RequestURL: " + request.getRequestURL() 
 				+ ", GUID: " + guid + ", LINE " + lineNum + ", INFO " + infoTitle + ": " + infoStr + " }");

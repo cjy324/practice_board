@@ -39,6 +39,9 @@ public class UploadController {
 				int slicedFilesLength = Integer.parseInt(request.getParameter("slicedFilesLength"));
 				
 				// (DevMode)
+				if(guid.equals("none")) {
+					guid = UUID.randomUUID().toString();
+				}
 				printLogInDevMode(request, guid, 32, "GUID", guid);
 				printLogInDevMode(request, guid, 33, "LimitSize", String.valueOf(limitSize));
 				printLogInDevMode(request, guid, 34, "OriginName", originName);
@@ -237,7 +240,8 @@ public class UploadController {
 			try {
 				String path = request.getParameter("path");
 				// (DevMode)
-				printLogInDevMode(request, "none", 237, "ForDeleteFilePath", path);
+				String forDevModeGuid = UUID.randomUUID().toString();
+				printLogInDevMode(request, forDevModeGuid, 237, "ForDeleteFilePath", path);
 				
 				// 실제 폴더에서 파일 삭제
 				File file = new File(path);
@@ -263,10 +267,6 @@ public class UploadController {
 				SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date();
 				String nowTime = sdf.format(date);
-				
-				if(guid.equals("none")) {
-					guid = UUID.randomUUID().toString();
-				}
 				
 				// LOG 출력
 				System.out.println(nowTime + " LOG { RequestURL: " + request.getRequestURL() 

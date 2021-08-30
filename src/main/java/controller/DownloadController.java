@@ -207,11 +207,7 @@ public class DownloadController {
 				SimpleDateFormat sdf = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date();
 				String nowTime = sdf.format(date);
-				
-				if(guid.equals("none")) {
-					guid = UUID.randomUUID().toString();
-				}
-				
+
 				// LOG 출력
 				System.out.println(nowTime + " LOG { RequestURL: " + request.getRequestURL() 
 				+ ", GUID: " + guid + ", LINE " + lineNum + ", INFO " + infoTitle + ": " + infoStr + " }");
