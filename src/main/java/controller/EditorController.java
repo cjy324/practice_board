@@ -11,23 +11,32 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 
 public class EditorController {
+	
+		boolean isDevMode; 
 		
 		public EditorController() {
+			isDevMode = false;  // 디버깅 모드
 		}
 	
 		// 이미지 업로드 서버
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
-				String contextpath = request.getParameter("contextpath");
-				// System.out.println("contextpath: " + contextpath); //(테스트용)
+				String contextpath = request.getParameter("contextpath");				
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
+					System.out.println("LOG { LINE 25, INFO " + "Contextpath: " + contextpath + " }");
+				}
 				
 				// multipartRequest로 파일 생성시 용량
 				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
+				
 				String encType = "UTF-8";
 
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("imageUpload");
-				// System.out.println("realPath : " + realPath); //(테스트용)
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 35, INFO " + "RealPath : " + realPath + " }");
+				}
 				
 				File imageUploadDir = new File(realPath);
 				if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -46,11 +55,13 @@ public class EditorController {
 				String fileName = multiReq.getFilesystemName("imgFiles");			
 				
 				// 이미지 경로
-				String imgPath = contextpath + "/imageUpload/" + fileName;
-				// System.out.println("imgPath: " + imgPath); //(테스트용)
+				String imgUploadPath = contextpath + "/imageUpload/" + fileName;
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 57, INFO " + "ImgUploadPath: " + imgUploadPath + " }");
+				}
 				
 				// 이미지 경로 클라이언트로 전달
-				response.getWriter().append(imgPath);
+				response.getWriter().append(imgUploadPath);
 			}catch (Exception e) {
 				// 에러 메시지 클라이언트로 전달
 				response.getWriter().append(e.toString());

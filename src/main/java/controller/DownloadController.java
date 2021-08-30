@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DownloadController {
 	
+		boolean isDevMode;
+	
 		public DownloadController() {
+			isDevMode = false;		// (디버깅 모드)
 		}
 	
 		// 다운로드 서버
@@ -28,18 +31,20 @@ public class DownloadController {
 				long originSize = Long.parseLong(request.getParameter("originSize"));
 				String originPath = request.getParameter("originPath");
 				
-				// (테스트용)
-//				System.out.println("guid : " + guid);
-//				System.out.println("originName : " + originName);
-//				System.out.println("originSize : " + originSize);
-//				System.out.println("originPath : " + originPath);
-				
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
+					System.out.println("LOG { LINE 29, INFO " + "GUID: " + guid + " }");
+					System.out.println("LOG { LINE 30, INFO " + "OriginName: " + originName + " }");
+					System.out.println("LOG { LINE 31, INFO " + "OriginSize: " + originSize + " }");
+					System.out.println("LOG { LINE 32, INFO " + "OriginPath: " + originPath + " }");
+				}
 
 				/* 파일 다운로드(브라우저로 전송) 시작 */
-			
 				// 다운로드 상태 임시저장 경로 설정
 				String tempPath = request.getServletContext().getRealPath("temp");
-				// System.out.println("tempPath : " + tempPath); //(테스트용)
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 43, INFO " + "TempFolderPath: " + tempPath + " }");
+				}
 
 				File tempDir = new File(tempPath);
 				if(!tempDir.exists()){	// 만약, tempPath 경로에 폴더가 없으면 폴더 생성
@@ -51,6 +56,10 @@ public class DownloadController {
 				File tempTxtFile = new File(tempTxtPath);			
 				tempTxtFile.createNewFile();
 				FileOutputStream fos = new FileOutputStream(tempTxtFile);
+				
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 54, INFO " + "TempTxtPathForRecodingPercentage: " + tempTxtPath + " }");
+				}
 				
 				File file = new File(originPath);
 				if(file.exists()) {
@@ -110,7 +119,6 @@ public class DownloadController {
 				}else {
 					fos.close();
 				}
-
 				/* 파일 다운로드(브라우저로 전송) 끝 */
 			}catch (Exception e) {
 				// 에러 메시지 클라이언트로 전달
@@ -126,14 +134,19 @@ public class DownloadController {
 				// 파일에 대한 정보를 parameter로 받기
 				String guid = request.getParameter("guid");
 				
-				// (테스트용)
-				// System.out.println("guid : " + guid);
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { ------- RequestURL: " + request.getRequestURL() + " ------- }");
+					System.out.println("LOG { LINE 135, INFO " + "GUID: " + guid + " }");
+				}
 				
-				// 다운로드 상태를 임시 저장해 놓을 txt파일 읽기
+				// 다운로드 상태를 임시 저장해 놓은 txt파일 읽기
 				String tempPath = request.getServletContext().getRealPath("temp");
 				String tempTxtPath = tempPath + "\\" + guid + ".txt";
 				File tempTxtFile = new File(tempTxtPath);			
-
+				
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 144, INFO " + "TempTxtPathWhichRecodedPercentage: " + tempTxtPath + " }");
+				}
 
 				/* 파일 다운로드 진행률 읽기 시작 */
 				// 1. RandomAcessFile
@@ -160,8 +173,10 @@ public class DownloadController {
 
 				String[] doneBytes = lastLineText.toString().split("/");
 				doneByte = doneBytes[0];
-				System.out.println("doneByte : " + doneByte);
-				System.out.println("---------------------------------------------------");
+				
+				if(isDevMode) {		// (디버깅 모드)
+					System.out.println("LOG { LINE 175, INFO " + "RecodedPercentage: " + doneByte + " }");
+				}
 				
 				raf.close();
 				/* 파일 다운로드 진행률 읽기 끝 */

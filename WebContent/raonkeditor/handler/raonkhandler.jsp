@@ -15,7 +15,7 @@
   	//2번째 파라미터의 Log Mode 설명
   	//- C : 일반로그 출력(System.out.println 로그 출력)
   	//- L : Log4j 모듈에 의한 로그 출력(/handler/JAVA 폴더의 log4j.properties 파일을 WEB-INF/classes에 적용)
-  	//editor.settingVo.setDebugMode(true, "C");
+  	editor.settingVo.setDebugMode(true, "C");
   	//editor.settingVo.setDebugMode(true, "L");
 	
   	///////////////////////////////

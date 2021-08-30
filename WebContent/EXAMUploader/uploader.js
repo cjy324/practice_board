@@ -492,11 +492,11 @@
 
                 // params 추가 정보 담기
                 params += "&sliced=false";
-                params += "&guid=" + "0";
+                params += "&guid=" + "none";
                 params += "&slicedFilesLength=" + 0;
                 
                 // ajax통신 시작
-                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "0", params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "none", params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
 
             /* 단일 파일 전송 끝 */
             }
