@@ -33,6 +33,10 @@
         var errorCode = "";
         var message = "";
 
+        /**** 개발자 모드 ****/
+        // console.log()형식으로 기록
+        var isDevMode = true;   // 디버깅 모드(OFF: false / ON: true)
+
         /* *************************************************************************** */
 
 
@@ -45,23 +49,17 @@
             EXAMUploader.usrServerPath = usrServerPath;
 
             // 에러 함수 호출
-            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
-            if( typeof(window.EXAMUploader_OnError) == 'function' ) {
-                if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){
-                    // JS에서 string 포함 여부 확인하는 방법
-                    // 참고: https://han.gl/3jiPg
-                    errorCode = "UEC_001"
-                    message = "uploaderHolder.html의 경로를 확인해주세요."
-                    window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
-                }
-                if(usrServerPath == null || usrServerPath == ""){
-                    errorCode = "UEC_002"
-                    message = "EXAMUploader 서버 경로를 확인해주세요."
-                    window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
-                }
+            if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
+                errorCode = "UEC_001"
+                message = "uploaderHolder.html의 경로를 확인해주세요."
+                EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
+            }
+            if(usrServerPath == null || usrServerPath == ""){
+                errorCode = "UEC_002"
+                message = "EXAMUploader 서버 경로를 확인해주세요."
+                EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
             }
         }
-
 
         /* 단위변환 유틸 함수 */
         this.formatBytes = function(bytes, decimals) {
@@ -400,11 +398,9 @@
                         console.error(xhttp.responseText);
 
                         // 에러 함수 호출
-                        if( typeof(window.EXAMUploader_OnError) == 'function' ) {
-                            errorCode = "UEC_004"
-                            message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
-                            window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
-                        }
+                        errorCode = "UEC_004"
+                        message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                        EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
                     }
                 }
             }
@@ -726,11 +722,9 @@
                         // console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
 
                         // 에러 함수 호출
-                        if( typeof(window.EXAMUploader_OnError) == 'function' ) {
-                            errorCode = "UEC_003"
-                            message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
-                            window.EXAMUploader_OnError(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
-                        }
+                        errorCode = "UEC_003"
+                        message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                        EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
                     }
                 }
             }
@@ -767,6 +761,33 @@
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
             console.log("-------------upload canceled-------------");
         }
+
+        /* On에러 이벤트 */
+        this.sendOnErrorMsg = function(errorCode, message, uploadCompleteList, forDeleteFileList){
+            if( typeof(window.EXAMUploader_OnError) == 'function' ) {  // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+                window.EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList);
+            }
+        }
+
+        // isDevMode 로그 출력 유틸(21.08.31 작성중)
+        this.printLogInDevMode = function(){
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = ('0' + (today.getMonth() + 1)).slice(-2);
+            var day = ('0' + today.getDate()).slice(-2);
+            var dateStr = year + '-' + month  + '-' + day;
+            
+            var hours = ('0' + today.getHours()).slice(-2); 
+            var minutes = ('0' + today.getMinutes()).slice(-2);
+            var seconds = ('0' + today.getSeconds()).slice(-2); 
+            var timeStr = hours + ':' + minutes  + ':' + seconds;
+
+            var nowTime = dateStr + " " + timeStr;
+
+            var logStr = nowTime + " LOG { API: " + api + ", "
+
+            console.log(logStr);
+        }   
     }
 
     /* Uploader를 새 Object 객체 생성 */

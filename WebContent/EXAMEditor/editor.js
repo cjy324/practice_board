@@ -29,26 +29,21 @@
             EXAMEditor.usrImgUploadServerPath = usrImgUploadServerPath;
             EXAMEditor.usrImgContextpath = usrImgContextpath;
 
-            // 에러 함수 호출
-            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
-            if( typeof(window.EXAMEditor_OnError) == 'function' ) {
-                if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){
-                    // JS에서 string 포함 여부 확인하는 방법
-                    // 참고: https://han.gl/3jiPg
-                    errorCode = "EEC_001"
-                    message = "editorHolder.html의 경로를 확인해주세요."
-                    window.EXAMEditor_OnError(errorCode, message, null);
-                }
-                if(usrImgUploadServerPath == null || usrImgUploadServerPath == ""){
-                    errorCode = "EEC_002"
-                    message = "이미지 업로드 서버 경로를 확인해주세요."
-                    window.EXAMEditor_OnError(errorCode, message, null);
-                }
-                if(usrImgContextpath == null || usrImgContextpath == ""){
-                    errorCode = "EEC_003"
-                    message = "이미지 Contextpath 경로를 확인해주세요."
-                    window.EXAMEditor_OnError(errorCode, message, null);
-                }
+            // 에러 함수 호출            
+            if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
+                errorCode = "EEC_001"
+                message = "editorHolder.html의 경로를 확인해주세요."
+                EXAMEditor.sendOnErrorMsg(errorCode, message, null);
+            }
+            if(usrImgUploadServerPath == null || usrImgUploadServerPath == ""){
+                errorCode = "EEC_002"
+                message = "이미지 업로드 서버 경로를 확인해주세요."
+                EXAMEditor.sendOnErrorMsg(errorCode, message, null);
+            }
+            if(usrImgContextpath == null || usrImgContextpath == ""){
+                errorCode = "EEC_003"
+                message = "이미지 Contextpath 경로를 확인해주세요."
+                EXAMEditor.sendOnErrorMsg(errorCode, message, null);
             }
         }
 
@@ -220,11 +215,9 @@
                     }else{
                         console.error(xhttp.responseText)
                         // 에러 함수 호출
-                        if( typeof(window.EXAMEditor_OnError) == 'function' ) {
-                            errorCode = "EEC_004"
-                            message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
-                            window.EXAMEditor_OnError(errorCode, message, imageFileList);
-                        }
+                        errorCode = "EEC_004"
+                        message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                        EXAMEditor.sendOnErrorMsg(errorCode, message, imageFileList);
                     }
                 }
             } 
@@ -261,6 +254,12 @@
             return editWindow.document.getElementById("edit_area").innerHTML;
         }
 
+        /* On에러 이벤트 */
+        this.sendOnErrorMsg = function(errorCode, message, imageFileList){
+            if( typeof(window.EXAMEditor_OnError) == 'function' ) {  // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+                window.EXAMEditor_OnError(errorCode, message, imageFileList);
+            }
+        }
     }
 
     /* Editor를 새 Object 객체 생성 */

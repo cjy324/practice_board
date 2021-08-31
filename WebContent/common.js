@@ -1,3 +1,6 @@
+/** 사용자 커스텀 **/
+/** Common **/
+
 /* contextpath */
 var contextpath = "http://localhost:8086/practiceBoard";
 
@@ -41,115 +44,135 @@ function getOptionsAndDrawProduct(){
     }
 }
 
-/* 에디터 config */
-var G_EditorConfig = {
-    editor1: {
-        url: '/EXAMEditor/editor.js',
-        beforeCreate: function () {
-            var editorAreaNode = document.getElementById('EDITOR_AREA');
-            var editorFrame = document.createElement('iframe');
-            editorFrame.id = 'editor_holder';
-            editorFrame.className = 'editor_holder';
-            editorFrame.width = '100%';
-            editorFrame.height = '100%';
+// /* 에디터 config */
+// var G_EditorConfig = {
+//     editor1: {
+//         url: '/EXAMEditor/editor.js',
+//         beforeCreate: function () {
+//             var editorAreaNode = document.getElementById('EDITOR_AREA');
+//             var editorFrame = document.createElement('iframe');
+//             editorFrame.id = 'editor_holder';
+//             editorFrame.className = 'editor_holder';
+//             editorFrame.width = '100%';
+//             editorFrame.height = '100%';
             
-            editorAreaNode.appendChild(editorFrame);
-        },
-        create: function () {
-            var editorPath = contextpath + "/EXAMEditor/editorHolder.html";
-            var editorImgUploadServerPath = contextpath + "/usr/editor/server";
-            var editorImgContextpath = contextpath;
+//             editorAreaNode.appendChild(editorFrame);
+//         },
+//         create: function () {
+//             var editorPath = contextpath + "/EXAMEditor/editorHolder.html";
+//             var editorImgUploadServerPath = contextpath + "/usr/editor/server";
+//             var editorImgContextpath = contextpath;
             
-            EXAMEditor.drawEditorHtml(editorPath, editorImgUploadServerPath, editorImgContextpath);
-        }
-    },
-    editor2: {
-        url: '/raonkeditor/js/raonkeditor.js',
-        beforeCreate: function () {},
-        create: function () {
-            var raonkParam = {
-                Id: "K_Editor",
-                Width: '100%',
-                EditorHolder: "EDITOR_AREA",  // EditorHolder를 지정해 주면 해당 id 태그에 에디터를 그린다.
-                DefaultMessage: "<span>이곳에 내용을 입력하세요.</span>"
-            }
-            new RAONKEditor(raonkParam);
-        }
-    }
-};
+//             EXAMEditor.drawEditorHtml(editorPath, editorImgUploadServerPath, editorImgContextpath);
+//         }
+//     },
+//     editor2: {
+//         url: '/raonkeditor/js/raonkeditor.js',
+//         beforeCreate: function () {},
+//         create: function () {
+//             var raonkParam = {
+//                 Id: "K_Editor",
+//                 Width: '100%',
+//                 EditorHolder: "EDITOR_AREA",  // EditorHolder를 지정해 주면 해당 id 태그에 에디터를 그린다.
+//                 DefaultMessage: "<span>이곳에 내용을 입력하세요.</span>"
+//             }
+//             new RAONKEditor(raonkParam);
+//         }
+//     }
+// };
 
-/* 업로더 config */
-var G_UploaderConfig = {
-    uploader1: {
-        url: '/EXAMUploader/uploader.js',
-        beforeCreate: function () {
-            var uploaderAreaNode = document.getElementById('UPLOADER_AREA');
-            var uploaderFrame = document.createElement('iframe');
-            uploaderFrame.id = 'uploader_holder';
-            uploaderFrame.className = 'uploader_holder';
-            uploaderFrame.width = '100%';
-            uploaderFrame.height = '100%';
+// /* 업로더 config */
+// var G_UploaderConfig = {
+//     uploader1: {
+//         url: '/EXAMUploader/uploader.js',
+//         beforeCreate: function () {
+//             var uploaderAreaNode = document.getElementById('UPLOADER_AREA');
+//             var uploaderFrame = document.createElement('iframe');
+//             uploaderFrame.id = 'uploader_holder';
+//             uploaderFrame.className = 'uploader_holder';
+//             uploaderFrame.width = '100%';
+//             uploaderFrame.height = '100%';
             
-            uploaderAreaNode.appendChild(uploaderFrame);
-        },
-        create: function () {
-            var uploaderPath = contextpath + "/EXAMUploader/uploaderHolder.html";
-            var uploaderServerPath = contextpath + "/usr/upload/server";
+//             uploaderAreaNode.appendChild(uploaderFrame);
+//         },
+//         create: function () {
+//             var uploaderPath = contextpath + "/EXAMUploader/uploaderHolder.html";
+//             var uploaderServerPath = contextpath + "/usr/upload/server";
             
-            EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
-            EXAMUploader.forDeleteFilePath = contextpath + "/usr/upload/deleteFile";
-        }
-    },
-    uploader2: {
-        url: '/raonkupload/js/raonkupload.js',
-        beforeCreate: function () {},
-        create: function () {
-            var raonkParam = {
-                Id: "K_Uploader",
-                Width: '100%',
-                UploadHolder: "UPLOADER_AREA"  // UploadHolder를 지정해 주면 해당 id 태그에 업로더를 그린다.
-            }
-            new RAONKUpload(raonkParam);
-        }
-    }
-};
+//             EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
+//             EXAMUploader.forDeleteFilePath = contextpath + "/usr/upload/deleteFile";
+//         }
+//     },
+//     uploader2: {
+//         url: '/raonkupload/js/raonkupload.js',
+//         beforeCreate: function () {},
+//         create: function () {
+//             var raonkParam = {
+//                 Id: "K_Uploader",
+//                 Width: '100%',
+//                 UploadHolder: "UPLOADER_AREA"  // UploadHolder를 지정해 주면 해당 id 태그에 업로더를 그린다.
+//             }
+//             new RAONKUpload(raonkParam);
+//         }
+//     }
+// };
 
-/* 다운로더 config */
-var G_DownloaderConfig = {
-    downloader1: {
-        url: '/EXAMDownloader/downloader.js',
-        beforeCreate: function () {
-            var downloaderAreaNode = document.getElementById('DOWNLOADER_AREA');
-            var downloaderFrame = document.createElement('iframe');
-            downloaderFrame.id = 'downloader_holder';
-            downloaderFrame.className = 'downloader_holder';
-            downloaderFrame.width = '100%';
-            downloaderFrame.height = '100%';
+// /* 다운로더 config */
+// var G_DownloaderConfig = {
+//     downloader1: {
+//         url: '/EXAMDownloader/downloader.js',
+//         beforeCreate: function () {
+//             var downloaderAreaNode = document.getElementById('DOWNLOADER_AREA');
+//             var downloaderFrame = document.createElement('iframe');
+//             downloaderFrame.id = 'downloader_holder';
+//             downloaderFrame.className = 'downloader_holder';
+//             downloaderFrame.width = '100%';
+//             downloaderFrame.height = '100%';
             
-            downloaderAreaNode.appendChild(downloaderFrame);
-        },
-        create: function () {	
-            var downloaderPath = contextpath + "/EXAMDownloader/downloaderHolder.html";
-            var downloaderServerPath = contextpath + "/usr/download/server";
-            var downloadProgressPath = contextpath + "/usr/download/progress";
+//             downloaderAreaNode.appendChild(downloaderFrame);
+//         },
+//         create: function () {	
+//             var downloaderPath = contextpath + "/EXAMDownloader/downloaderHolder.html";
+//             var downloaderServerPath = contextpath + "/usr/download/server";
+//             var downloadProgressPath = contextpath + "/usr/download/progress";
                 
-            EXAMDownloader.drawDownloaderHtml(downloaderPath, downloaderServerPath, downloadProgressPath);
+//             EXAMDownloader.drawDownloaderHtml(downloaderPath, downloaderServerPath, downloadProgressPath);
+//         }
+//     },
+//     downloader2: {
+//         url: '/raonkupload/js/raonkupload.js',
+//         beforeCreate: function () {},
+//         create: function () {
+//             var raonkParam = {
+//                 Id: "K_Downloader",
+//                 Width: '100%',
+//                 Mode: 'view', // 다운로더 모드
+//                 UploadHolder: "DOWNLOADER_AREA"  // UploadHolder를 지정해 주면 해당 id 태그에 업로더를 그린다.
+//             }
+//             new RAONKUpload(raonkParam);
+//         }
+//     }
+// };
+
+/* 제품별 config.js script 그리기 */
+function loadAndApplyProductConfig(urlStr){
+    // 제품config.js script 태그 생성
+    var script = document.createElement('script');
+    script.src = contextpath + "/productConfig/" + urlStr + ".js";
+    script.defer = "defer";
+    document.head.appendChild(script);
+
+    // script태그 생성 후 제품별 config값 적용
+    script.onload = function () {
+        if(urlStr.indexOf("editor_") !== -1){
+            applyProductConfig(G_EditorConfig);
+        }else if(urlStr.indexOf("uploader_") !== -1){
+            applyProductConfig(G_UploaderConfig);
+        }else if(urlStr.indexOf("downloader_") !== -1){
+            applyProductConfig(G_DownloaderConfig);
         }
-    },
-    downloader2: {
-        url: '/raonkupload/js/raonkupload.js',
-        beforeCreate: function () {},
-        create: function () {
-            var raonkParam = {
-                Id: "K_Downloader",
-                Width: '100%',
-                Mode: 'view', // 다운로더 모드
-                UploadHolder: "DOWNLOADER_AREA"  // UploadHolder를 지정해 주면 해당 id 태그에 업로더를 그린다.
-            }
-            new RAONKUpload(raonkParam);
-        }
-    }
-};
+    };
+}
 
 /* 제품별 config값 적용 */
 function applyProductConfig(productConfig){
@@ -198,7 +221,6 @@ function RAONKEDITOR_OnError(editorId, codemessage) {
     // codemessage.type; // 에러가 발생한 기능
     // codemessage.message; // 에러 메세지
     alert("에러 발생 기능: " + codemessage.type + "\n에러 메세지: " + codemessage.message);
-
 };
 
 /* EXAM업로더 */

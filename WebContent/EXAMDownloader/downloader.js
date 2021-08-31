@@ -35,25 +35,20 @@
             EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
 
             // 에러 함수 호출
-            // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
-            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
-                if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){
-                    // JS에서 string 포함 여부 확인하는 방법
-                    // 참고: https://han.gl/3jiPg
-                    errorCode = "DEC_001"
-                    message = "downloaderHolder.html의 경로를 확인해주세요."
-                    window.EXAMDownloader_OnError(errorCode, message);
-                }
-                if(usrDownloaderServerPath == null || usrDownloaderServerPath == ""){
-                    errorCode = "DEC_002"
-                    message = "EXAMDownloader 서버 경로를 확인해주세요."
-                    window.EXAMDownloader_OnError(errorCode, message);
-                }
-                if(usrDownloadProgressPath == null || usrDownloadProgressPath == ""){
-                    errorCode = "DEC_003"
-                    message = "EXAMDownloader 진행률 서버 경로를 확인해주세요."
-                    window.EXAMDownloader_OnError(errorCode, message);
-                }
+            if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
+                errorCode = "DEC_001"
+                message = "downloaderHolder.html의 경로를 확인해주세요."
+                EXAMDownloader.sendOnErrorMsg(errorCode, message);
+            }
+            if(usrDownloaderServerPath == null || usrDownloaderServerPath == ""){
+                errorCode = "DEC_002"
+                message = "EXAMDownloader 서버 경로를 확인해주세요."
+                EXAMDownloader.sendOnErrorMsg(errorCode, message);
+            }
+            if(usrDownloadProgressPath == null || usrDownloadProgressPath == ""){
+                errorCode = "DEC_003"
+                message = "EXAMDownloader 진행률 서버 경로를 확인해주세요."
+                EXAMDownloader.sendOnErrorMsg(errorCode, message);
             }
         }
 
@@ -236,19 +231,15 @@
                         if(xhttp.responseText.length > 10){  // 서버 로직수행 중 오류
                             EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // 에러 함수 호출
-                            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
-                                errorCode = "DEC_004"
-                                message = "다운로드 서버 처리 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
-                                window.EXAMDownloader_OnError(errorCode, message);
-                            }
+                            errorCode = "DEC_004"
+                            message = "다운로드 서버 처리 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                            EXAMDownloader.sendOnErrorMsg(errorCode, message);
                         }else if(xhttp.responseText == "NULL"){ // 실제 파일이 존재하지 않는 경우
                             EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // 에러 함수 호출
-                            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
-                                errorCode = "DEC_005"
-                                message = "\"" + forDownloadFilelist[forDownloadFilelistIndex].name + "\" 파일이 존재하지 않습니다.\nhttp status=" + req.status;
-                                window.EXAMDownloader_OnError(errorCode, message);
-                            }
+                            errorCode = "DEC_005"
+                            message = "\"" + forDownloadFilelist[forDownloadFilelistIndex].name + "\" 파일이 존재하지 않습니다.\nhttp status=" + req.status;
+                            EXAMDownloader.sendOnErrorMsg(errorCode, message);
                         }else{
                             console.log("doneByte : " + xhttp.responseText);
                             progressPercentage = Number(xhttp.responseText);
@@ -262,11 +253,9 @@
                         EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
                         // 에러 함수 호출
-                        if( typeof(window.EXAMDownloader_OnError) == 'function' ) {
-                            errorCode = "DEC_006"
-                            message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
-                            window.EXAMDownloader_OnError(errorCode, message);
-                        }
+                        errorCode = "DEC_006"
+                        message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                        EXAMDownloader.sendOnErrorMsg(errorCode, message);
                     }
                 }
             }
@@ -318,6 +307,14 @@
                 EXAMDownloader.popupWindow.close(); // 팝업창 닫기
             }
         }
+
+        /* On에러 이벤트 */
+        this.sendOnErrorMsg = function(errorCode, message){
+            if( typeof(window.EXAMDownloader_OnError) == 'function' ) {  // 함수 존재여부 체크 참고: https://zzznara2.tistory.com/310
+                window.EXAMDownloader_OnError(errorCode, message);
+            }
+        }
+
     }
 
     /* Downloader를 새 Object 객체 생성 */

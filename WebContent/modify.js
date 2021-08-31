@@ -4,9 +4,9 @@
 /* 제품 그리기 */
 function drawProduct(genSet){
     /* 에디터 config 적용 */
-    applyProductConfig(G_EditorConfig['editor' + genSet.editorNum]);
+    loadAndApplyProductConfig("editor_" + genSet.editorNum);
     /* 업로더 config 적용 */
-    applyProductConfig(G_UploaderConfig['uploader' + genSet.uploaderNum]);
+    loadAndApplyProductConfig("uploader_" + genSet.uploaderNum);
     
     // 상세페이지 그리기
     id = getIdByUrl();

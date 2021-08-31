@@ -4,7 +4,7 @@
 /* 제품 그리기 */
 function drawProduct(genSet){
     /* 다운로더 config 적용 */
-    applyProductConfig(G_DownloaderConfig['downloader' + genSet.downloaderNum]);
+    loadAndApplyProductConfig("downloader_" + genSet.downloaderNum);
 
     // 상세페이지 그리기
     id = getIdByUrl();
