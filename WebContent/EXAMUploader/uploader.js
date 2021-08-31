@@ -464,7 +464,7 @@
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
-            var limitSize = 1 * 1024 * 1024;  // Byte // 약 1MB
+            var limitSize = 3 * 1024 * 1024;  // Byte // 약 1MB
             
             // 분할한 파일을 담을 배열 객체
             var slicedFiles = [];

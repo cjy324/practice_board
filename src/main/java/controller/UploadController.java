@@ -199,13 +199,14 @@ public class UploadController {
 				
 					// 새로 들어온 파일 읽기
 					FileInputStream fr = new FileInputStream(newFile);
-					int fileByte;
+					int read = 0;
+					byte[] bytes = new byte[1024];
 					// RandomAccessFile로 실제 저장할 파일 쓰기(read/write)
 					RandomAccessFile raf = new RandomAccessFile(path, "rw");
 					
 					// 1바이트씩 읽으면서 파일쓰기
-					while((fileByte = fr.read()) != -1) {
-						raf.write(fileByte); // 파일쓰기
+					while((read=fr.read(bytes)) != -1) {
+						raf.write(bytes, 0, read); // 파일쓰기
 					}
 
 					raf.close(); // 자원 사용 종료
