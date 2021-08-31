@@ -26,7 +26,7 @@ function getOptionsAndDrawProduct(){
 
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 genSet = JSON.parse(xhttp.responseText);
                 // window 전역변수로 저장
                 window.GENSET = {

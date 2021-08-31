@@ -48,6 +48,9 @@
             uploaderHolderFrame.src = src;
             EXAMUploader.usrServerPath = usrServerPath;
 
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 49, "EXAMUploader Load", "Complete!!");
+
             // 에러 함수 호출
             if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
                 errorCode = "UEC_001"
@@ -109,7 +112,6 @@
                 uploadZone.style.background = "white";
                 
                 var droppedFiles = e.dataTransfer && e.dataTransfer.files;
-                console.log("droppedFiles: " + droppedFiles);
                 
                 if (droppedFiles != null) {
                     // 만약 files의 갯수가 1보다 작으면 "폴더 업로드 불가" 알림
@@ -175,7 +177,6 @@
                 fileListInfo += "<span>추가됨</span>";
 
             EXAMUploader.totalSize = filesSize;
-            
 
             infoZone.innerHTML = fileListInfo;
 
@@ -190,6 +191,9 @@
 
             // 파일리스트 셋팅
             EXAMUploader.globalFileList = files;
+
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("showFiles", EXAMUploader.createGuid(), 193, "Set 'globalFileList'", EXAMUploader.globalFileList);
         }
 
         /* 파일 업로드를 위한 데이터 셋팅(from Input) */
@@ -261,19 +265,24 @@
                     
                     for(let k = 0; k < tempArray.length; k++){
                         if(removeTargetIndex == k){  // 체크된 파일 index와 tempArray의 index가 일치하면.....
-                            console.log("tempArray[k].uploaded : " + tempArray[k].uploaded);
+                            // console.log("tempArray[k].uploaded : " + tempArray[k].uploaded);
                             if(tempArray[k].uploaded){  // 1. 기존 업로드됐던 파일인 경우 실제 파일도 삭제하기 위해 forDeleteFileList에 정보 담아두기
                                 EXAMUploader.forDeleteFileList.push(tempArray[k]);  
-                                console.log(k + " file pushed to 'forDeleteFileList'");
+                                // (DevMode)
+                                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 270, "Set 'forDeleteFileList'", Number(k+1) + " file pushed to 'forDeleteFileList'");
+                                // console.log(k + " file pushed to 'forDeleteFileList'");
                             }
-                            delete tempArray[k]; // 2. tempArray의 index가 removeTargetIndex인 원소의 내용 삭제(빈 공간만 남음)
-                            console.log(k + " file delete")
+                            delete tempArray[k]; // 2. tempArray의 index가 removeTargetIndex인 원소의 내용 삭제(빈 공간만 남음)                            
+                            // console.log(k + " file delete")
                         }
                     }
                 }
             }
-            console.log("EXAMUploader.forDeleteFileList.length: " + EXAMUploader.forDeleteFileList.length)
-    
+            // (DevMode)
+            if(EXAMUploader.forDeleteFileList.length > 0){
+                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 282, "forDeleteFileList Length", EXAMUploader.forDeleteFileList.length);
+            }
+
             // 2. tempArray 내 비어있는 요소 삭제(공간까지 삭제, index가 순차적으로 변경됨)
             for(let y = 0; y < tempArray.length; y++){
                 if(tempArray[y] === undefined){
@@ -318,9 +327,8 @@
                     EXAMUploader.forUploadFileList.push(EXAMUploader.globalFileList[i])
                 }
             }
-
-            // console.log("EXAMUploader.globalFileList.length: " + EXAMUploader.globalFileList.length)
-            // console.log("EXAMUploader.forUploadFileList.length: " + EXAMUploader.forUploadFileList.length)
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("setUploadFileList", EXAMUploader.createGuid(), 325, "Set 'forUploadFileList'", EXAMUploader.forUploadFileList);
 
             // 업로드 시나리오별 필터링
             if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
@@ -358,9 +366,15 @@
 
         /* 기존 업로드된 파일 삭제 */
         this.deleteFiles = function(forDeleteFileIndex){
-            // console.log("forDeleteFileIndex: " + forDeleteFileIndex)
-            var params = "path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
-
+            var guid = EXAMUploader.createGuid();
+            var params = "guid=" + guid
+                       + "&path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
+                       
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 368, "forDeleteFileIndex", forDeleteFileIndex);
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 369, "guid", guid);
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 371, "path", EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
+            
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
         }
 
@@ -378,7 +392,7 @@
                 
                 if(req.readyState === 4) {
                     if(req.status === 200) {
-                        console.log("------통신 성공------");
+                        // console.log("------통신 성공------");
                         if(forDeleteFileIndex < EXAMUploader.forDeleteFileList.length-1){ // 만약, index가 forDeleteFileList.length 보다 작으면
                             forDeleteFileIndex++; // index 1 증가
                             EXAMUploader.deleteFiles(forDeleteFileIndex);
@@ -444,7 +458,9 @@
         this.startUpload = function(forUploadFileListIndex) {
 
             EXAMUploader.indicator = "START";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-            // console.log("startUpload--------------- forUploadFileListIndex: " + forUploadFileListIndex + " ---------------");  
+            // (DevMode)
+            var forDevModeGuid = EXAMUploader.createGuid();
+            EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 458, "forUploadFileListIndex", forUploadFileListIndex);
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
@@ -460,7 +476,8 @@
             if(EXAMUploader.forUploadFileList[forUploadFileListIndex].size >= limitSize){ 
                 // 용량에 따른 분할 수 계산
                 var slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
-                // console.log("slicedFilesNum: " + slicedFilesNum);
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 478, "slicedFilesNum", slicedFilesNum);
                 // 파일 분할
                 for(let f = 0; f < slicedFilesNum; f++){
                     // 각 분할 횟수별 분할 시작 포인트 설정
@@ -470,9 +487,8 @@
                     // 분할된 파일 slicedFiles 배열 객체에 담기
                     slicedFiles.push(slicedFile);
                 }
-                // console.log("slicedFiles : " + slicedFiles);
-                // console.log("slicedFiles.length : " + slicedFiles.length);
-                
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 482, "slicedFiles", slicedFiles);
             }
             /* 분할 끝 */
 
@@ -484,24 +500,34 @@
 
             /* 단일 파일일 경우 단일 전송 시작 */
             if(slicedFiles.length == 0){
-                // console.log("------단일 파일 전송 시작------");
+                let oneFileGuid = EXAMUploader.createGuid();
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 502, "Start One File Upload Message", "단일 파일 전송 시작");
 
                 // params 추가 정보 담기
                 params += "&sliced=false";
-                params += "&guid=" + "none";
+                params += "&guid=" + oneFileGuid;
                 params += "&slicedFilesLength=" + 0;
                 
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 496, "limitSize", limitSize);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 497, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 498, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 499, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 508, "sliced", "false");
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 509, "guid", oneFileGuid);
+
                 // ajax통신 시작
-                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, "none", params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
+                EXAMUploader.startAjax(slicedFiles, slicedFileIndex, oneFileGuid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
 
             /* 단일 파일 전송 끝 */
             }
             
             /* 분할 파일일 경우 분할 전송 시작 */
             if(slicedFiles.length > 0){
-                // console.log("------분할 파일 전송 시작------");
-
                 let guid = EXAMUploader.createGuid();
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", guid, 525, "Start Sliced File Upload Message", "분할 파일 전송 시작");
             
                 /* 로컬스토리지에 저장된 기존 업로드 중단된 파일 정보들 확인 시작 */
                 // Key: "resume_upload_" + guid
@@ -513,17 +539,25 @@
                     // console.log("localStorage.length : " + localStorage.length);
                     for(let l = 0; l < localStorage.length; l++){
                         // 로컬스토리지로부터 정보 가져와 구분자를 기준으로 문자열 자르기
-                        // console.log("localStorage.getItem(localStorage.key(l)) : " + localStorage.getItem(localStorage.key(l)));
                         canceledFileName = localStorage.getItem(localStorage.key(l)).split("__")[2];
                         canceledFileSize = localStorage.getItem(localStorage.key(l)).split("__")[3];
 
                         // 파일명과 파일크기로 파일 정보 대조
                         if(EXAMUploader.forUploadFileList[forUploadFileListIndex].name == canceledFileName && EXAMUploader.forUploadFileList[forUploadFileListIndex].size == canceledFileSize){
+                            // (DevMode)
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 540, "Canceled File Name", canceledFileName);
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 541, "Canceled File Size", canceledFileSize);
                             // 이어올리기 선택
                             if(confirm("기존에 업로드된 데이터가 있습니다. 이어서 업로드하시겠습니까?")){
+                                // (DevMode)
+                                var beforeGuid = guid;
                                 // 저장되있던 정보로 현재 파일의 정보 업데이트
                                 guid = localStorage.getItem(localStorage.key(l)).split("__")[0];
                                 slicedFileIndex = Number(localStorage.getItem(localStorage.key(l)).split("__")[1]);
+
+                                // (DevMode)
+                                EXAMUploader.printLogInDevMode("startUpload", guid, 553, "Before GUID(GUID Was Changed By Resume Upload)", beforeGuid);
+
                                 // 해당 파일에 대한 로컬스토리지 정보 삭제
                                 localStorage.removeItem(localStorage.key(l));
                             }else{
@@ -538,6 +572,15 @@
                 params += "&sliced=true";
                 params += "&guid=" + guid;
                 params += "&slicedFilesLength=" + slicedFiles.length;
+
+                // (DevMode)
+                EXAMUploader.printLogInDevMode("startUpload", guid, 494, "limitSize", limitSize);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 495, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 496, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 497, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 570, "sliced", "true");
+                EXAMUploader.printLogInDevMode("startUpload", guid, 571, "guid", guid);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 572, "slicedFilesLength", slicedFiles.length);
 
                 // ajax통신 시작
                 EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
@@ -557,7 +600,8 @@
             var allFilesMessage = EXAMUploader.popupWindow.document.getElementById("allFilesMessage");
             var allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
             var message = EXAMUploader.popupWindow.document.getElementById("message");
-            // console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("startAjax", guid, 591, "Start Ajax Message", forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
             /* progressBar 시작 */
             xhttp.upload.onloadstart = function (e) {
@@ -661,9 +705,11 @@
                                 path: decodeURI(xhttp.responseText).replace("%3A", ":")
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
+                            // (DevMode)
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 697, "Upload Complete File", uploadedFile);
 
                             forUploadFileListIndex++;
-                            console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
+                            // console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
                             EXAMUploader.startUpload(forUploadFileListIndex);
                         }else{
                             // 업로드된 파일 경로 받아 저장하기
@@ -674,8 +720,10 @@
                                 path: decodeURI(xhttp.responseText).replace("%3A", ":")
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
+                            // (DevMode)
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 712, "Upload Complete File", uploadedFile);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 712, "All Files Upload Complete Message", "업로드 - 완료");
 
-                            console.log(forUploadFileList[forUploadFileListIndex].name + " file" + "업로드 - 종료")
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
                             EXAMUploader.indicator = "DONE"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
@@ -686,15 +734,19 @@
                             }
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
-                        console.log("---업로드 중단---");
-                        console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
+                        //console.log("---업로드 중단---");
+                        //console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
                         // 업로드시 여러 파일이 중단될 수도 있으니 
                         // 여러 파일이 중단될 경우를 고려해서
                         // loacalStorage에 담을때 구분자, 배열 등을 활용해 잘 저장해 놓는 것이 중요
                         // 나중에 이어올리기시 localStorage에 있는 해당 키들을 for문으로 돌리면서 일치하는 값 찾을 수 있도록 하기 위함..
                         localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
-                        console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
-                        console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+                        //console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                        //console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+
+                        // (DevMode)
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 734, "Upload Cancel Message", "업로드 중단");
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 734, "Upload Cancel And Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
 
                         // 업로드 중단 함수 호출
                         if( typeof(window.EXAMUploader_UploadInterruption) == 'function' ) {
@@ -759,7 +811,9 @@
             // 따라서,
             // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-            console.log("-------------upload canceled-------------");
+
+            // (DevMode)
+            EXAMUploader.printLogInDevMode("cancelUpload", EXAMUploader.createGuid(), 806, "Upload Status", EXAMUploader.indicator);
         }
 
         /* On에러 이벤트 */
@@ -769,24 +823,33 @@
             }
         }
 
-        // isDevMode 로그 출력 유틸(21.08.31 작성중)
-        this.printLogInDevMode = function(){
-            var today = new Date();
-            var year = today.getFullYear();
-            var month = ('0' + (today.getMonth() + 1)).slice(-2);
-            var day = ('0' + today.getDate()).slice(-2);
-            var dateStr = year + '-' + month  + '-' + day;
-            
-            var hours = ('0' + today.getHours()).slice(-2); 
-            var minutes = ('0' + today.getMinutes()).slice(-2);
-            var seconds = ('0' + today.getSeconds()).slice(-2); 
-            var timeStr = hours + ':' + minutes  + ':' + seconds;
+        /* isDevMode 로그 출력 유틸 */
+        this.printLogInDevMode = function(api, guid, lineNum, infoTitle, infoObj){
+            if(isDevMode){
+                var today = new Date();
+                var year = today.getFullYear();
+                var month = ('0' + (today.getMonth() + 1)).slice(-2);
+                var day = ('0' + today.getDate()).slice(-2);
+                var dateStr = year + '-' + month  + '-' + day;
+                
+                var hours = ('0' + today.getHours()).slice(-2); 
+                var minutes = ('0' + today.getMinutes()).slice(-2);
+                var seconds = ('0' + today.getSeconds()).slice(-2); 
+                var timeStr = hours + ':' + minutes  + ':' + seconds;
 
-            var nowTime = dateStr + " " + timeStr;
+                var nowTime = dateStr + " " + timeStr;
 
-            var logStr = nowTime + " LOG { API: " + api + ", "
+                var logStrStart = nowTime + " LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrEnd = " }";
 
-            console.log(logStr);
+                if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){
+                    console.log(logStrStart + infoObj + logStrEnd);
+                }else{
+                    console.log(logStrStart);
+                    console.log(infoObj);
+                    console.log(logStrEnd);
+                }
+            }        
         }   
     }
 

@@ -8,7 +8,6 @@ import java.io.RandomAccessFile;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +38,6 @@ public class UploadController {
 				int slicedFilesLength = Integer.parseInt(request.getParameter("slicedFilesLength"));
 				
 				// (DevMode)
-				if(guid.equals("none")) {
-					guid = UUID.randomUUID().toString();
-				}
 				printLogInDevMode(request, guid, 32, "GUID", guid);
 				printLogInDevMode(request, guid, 33, "LimitSize", String.valueOf(limitSize));
 				printLogInDevMode(request, guid, 34, "OriginName", originName);
@@ -137,7 +133,6 @@ public class UploadController {
 					// 새로 들어온 분할 파일 객체 생성
 					File newFile = multiReq.getFile("slicedFiles");
 					// System.out.println("newFile : " + newFile.getName()); //(테스트용)
-				
 					// 새로 들어온 분할 파일 읽기
 					FileInputStream fr = new FileInputStream(newFile);
 					int fileByte;
@@ -151,19 +146,17 @@ public class UploadController {
 					while((fileByte = fr.read()) != -1) {
 						raf.write(fileByte); // 파일쓰기
 					}
-
 					// (테스트용)
 					// System.out.println("getFilePointer : " + raf.getFilePointer());
 
 					raf.close(); // 자원 사용 종료
 					fr.close(); // 자원 사용 종료
-					
 					// 분할 파일 삭제
 					if(newFile.exists()) {
 						newFile.delete();
-						System.out.println(newFile.getName() + "_" + index + " 삭제 완료");
+						// (DevMode)
+						printLogInDevMode(request, guid, 157, "SlicedFile Delete Message", newFile.getName() + "_" + index + " 삭제 완료");
 					}
-					System.out.println("-------------------------------------------");
 
 					// 모든 분할 파일 업로드가 완료 되었을 경우
 					if(index == slicedFilesLength-1 && tempTxtFile.exists()) {
@@ -174,7 +167,8 @@ public class UploadController {
 						uploadedFile.renameTo(originFileName);
 						// 2. 임시 txt파일 삭제
 						tempTxtFile.delete();
-						System.out.println("\"" + originName + "\"" + " 업로드 완료");
+						// (DevMode)
+						printLogInDevMode(request, guid, 163, "Upload Complete Message", "\"" + originName + "\"" + " 업로드 완료");
 						
 						// 업로드된 파일 경로 리턴
 						response.getWriter().append(URLEncoder.encode(path, "UTF-8"));
@@ -183,7 +177,7 @@ public class UploadController {
 					
 				}else {	// 단일 파일인 경우
 					// (DevMode)
-					printLogInDevMode(request, guid, 180, "IsSlicedFile", isSliced);
+					printLogInDevMode(request, guid, 179, "IsSlicedFile", isSliced);
 					
 					// Multipart로 요청 받기 위한 객체 생성
 					MultipartRequest multiReq = new MultipartRequest(
@@ -200,7 +194,7 @@ public class UploadController {
 					// 실제 업로드 폴더에 중복파일명 있는지 검사 후 넘버링
 					path = appendSuffixName(path, 0); // 중복파일명 넘버링 유틸
 					// (DevMode)
-					printLogInDevMode(request, guid, 197, "NewFilePath", path);
+					printLogInDevMode(request, guid, 196, "NewFilePath", path);
 				
 					// 새로 들어온 파일 읽기
 					FileInputStream fr = new FileInputStream(newFile);
@@ -218,8 +212,9 @@ public class UploadController {
 					
 					// 임시 파일 삭제
 					newFile.delete();
-				
-					System.out.println("\"" + originName + "\"" + " 업로드 완료");
+					
+					// (DevMode)
+					printLogInDevMode(request, guid, 218, "Upload Complete Message", "\"" + originName + "\"" + " 업로드 완료");
 					
 					// 업로드된 파일 경로 리턴
 					response.getWriter().append(URLEncoder.encode(path, "UTF-8"));
@@ -238,10 +233,11 @@ public class UploadController {
 		// 서버에서 파일 삭제
 		public String deleteFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
+				String guid = request.getParameter("guid");
 				String path = request.getParameter("path");
 				// (DevMode)
-				String forDevModeGuid = UUID.randomUUID().toString();
-				printLogInDevMode(request, forDevModeGuid, 237, "ForDeleteFilePath", path);
+				printLogInDevMode(request, guid, 237, "GUID", guid);
+				printLogInDevMode(request, guid, 238, "Path", path);
 				
 				// 실제 폴더에서 파일 삭제
 				File file = new File(path);

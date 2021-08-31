@@ -18,6 +18,10 @@
         var errorCode = "";
         var message = "";
 
+        /**** 개발자 모드 ****/
+        // console.log()형식으로 기록
+        var isDevMode = true;   // 디버깅 모드(OFF: false / ON: true)
+
         /* *************************************************************************** */
 
 
@@ -28,6 +32,9 @@
             editorHolderFrame.src = src;
             EXAMEditor.usrImgUploadServerPath = usrImgUploadServerPath;
             EXAMEditor.usrImgContextpath = usrImgContextpath;
+
+            // (DevMode)
+            EXAMEditor.printLogInDevMode("drawEditorHtml", 29, "EXAMEditor Load", "Complete!!");
 
             // 에러 함수 호출            
             if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
@@ -55,7 +62,8 @@
                 var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
                 if(editWindow.document.getElementById("edit_area")){
                     editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
-                    // console.log("------Draw Body Content Complete!!------");
+                    // (DevMode)
+                    EXAMEditor.printLogInDevMode("drawBodyContent", 58, "Draw Body Content", "Complete!!");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -77,10 +85,16 @@
             editorHolderFrameWindow.document.getElementById("uploadForm").addEventListener("mouseover", function(e){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
+                // (DevMode)
+                EXAMEditor.printLogInDevMode("NONE", 80, "Set Selection", selection);
+                EXAMEditor.printLogInDevMode("NONE", 81, "Set range", range);
             })
             editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("keypress", function(e){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
+                // (DevMode)
+                EXAMEditor.printLogInDevMode("NONE", 80, "Set Selection", selection);
+                EXAMEditor.printLogInDevMode("NONE", 81, "Set range", range);
             })
         })
 
@@ -167,6 +181,9 @@
             for(let i = 0; i < e.target.files.length; i++){
                 imageFileList.push(e.target.files[i]);
             }
+            // (DevMode)
+            EXAMEditor.printLogInDevMode("doUpload", 177, "Set 'imageFileList'", imageFileList);
+            
             EXAMEditor.doUploadImgAjax(imageFileList, imageFileListIndex)
         };
 
@@ -194,19 +211,25 @@
                     if(req.status === 200) {
                         if(imageFileList.length == 1){
                             imagePath = req.responseText;
+                            // (DevMode)
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
                             EXAMEditor.setFocusForIE();
                         }else if(imageFileList.length > 1 && imageFileListIndex < imageFileList.length-1){ // 만약, index가 imageFileList.length 보다 작으면
-                            imagePath = req.responseText; 
+                            imagePath = req.responseText;
+                            // (DevMode)
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);
                             // img 태그 생성
                             EXAMEditor.drawImg(imagePath);
 
                             imageFileListIndex++; // index 1 증가
                             EXAMEditor.doUploadImgAjax(imageFileList, imageFileListIndex);
                         }else{
-                            imagePath = req.responseText;  
+                            imagePath = req.responseText;
+                            // (DevMode)
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);  
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
@@ -251,6 +274,8 @@
         this.getBodyContent = function(){
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
+            // (DevMode)
+            EXAMEditor.printLogInDevMode("getBodyContent", 274, "getBodyContent", editWindow.document.getElementById("edit_area").innerHTML);
             return editWindow.document.getElementById("edit_area").innerHTML;
         }
 
@@ -260,6 +285,35 @@
                 window.EXAMEditor_OnError(errorCode, message, imageFileList);
             }
         }
+
+        /* isDevMode 로그 출력 유틸 */
+        this.printLogInDevMode = function(api, lineNum, infoTitle, infoObj){
+            if(isDevMode){
+                var today = new Date();
+                var year = today.getFullYear();
+                var month = ('0' + (today.getMonth() + 1)).slice(-2);
+                var day = ('0' + today.getDate()).slice(-2);
+                var dateStr = year + '-' + month  + '-' + day;
+                
+                var hours = ('0' + today.getHours()).slice(-2); 
+                var minutes = ('0' + today.getMinutes()).slice(-2);
+                var seconds = ('0' + today.getSeconds()).slice(-2); 
+                var timeStr = hours + ':' + minutes  + ':' + seconds;
+
+                var nowTime = dateStr + " " + timeStr;
+
+                var logStrStart = nowTime + " LOG { API: " + api + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrEnd = " }";
+
+                if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){
+                    console.log(logStrStart + infoObj + logStrEnd);
+                }else{
+                    console.log(logStrStart);
+                    console.log(infoObj);
+                    console.log(logStrEnd);
+                }
+            }        
+        } 
     }
 
     /* Editor를 새 Object 객체 생성 */

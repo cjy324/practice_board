@@ -18,7 +18,7 @@ public class EditorController {
 		boolean isDevMode; 
 		
 		public EditorController() {
-			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
+			isDevMode = false;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 이미지 업로드 서버

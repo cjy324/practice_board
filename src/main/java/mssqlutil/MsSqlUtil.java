@@ -29,7 +29,7 @@ public class MsSqlUtil {
     						+ "database=TEST;"  // 연결할 DB
     						+ "integratedSecurity=true;";  // windows 인증일 경우 
 		con = DriverManager.getConnection(connectionUrl);
-		System.out.println("MS-SQL 서버 접속에 성공했습니다.");
+		//System.out.println("MS-SQL 서버 접속에 성공했습니다.");
 	}
     
     // SQLserver와 연결 종료
@@ -39,7 +39,7 @@ public class MsSqlUtil {
     	}
         stmt.close();
         con.close();
-        System.out.println("MS-SQL 서버 연결을 종료했습니다.");
+        //System.out.println("MS-SQL 서버 연결을 종료했습니다.");
 	}
 
     // 게시물 리스트 가져오기

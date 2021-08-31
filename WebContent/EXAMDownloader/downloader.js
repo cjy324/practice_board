@@ -22,6 +22,10 @@
         /**** 에러 관련 ****/
         var errorCode = "";
         var message = "";
+
+        /**** 개발자 모드 ****/
+        // console.log()형식으로 기록
+        var isDevMode = true;   // 디버깅 모드(OFF: false / ON: true)
         
         /* *************************************************************************** */
         
@@ -33,6 +37,9 @@
             downloaderHolderFrame.src = src;
             EXAMDownloader.usrDownloaderServerPath = usrDownloaderServerPath;
             EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
+
+            // (DevMode)
+            EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 34, "EXAMDownloader Load", "Complete!!");
 
             // 에러 함수 호출
             if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
@@ -125,6 +132,9 @@
 
             // 파일리스트 셋팅
             EXAMDownloader.globalFileList = fileList;
+
+            // (DevMode)
+            EXAMDownloader.printLogInDevMode("setAndDrawDownloadFileList", EXAMDownloader.createGuid(), 134, "Set 'globalFileList'", EXAMDownloader.globalFileList);
         }
 
         /* 다운로드 시작("다운로드" 버튼 클릭시) */
@@ -155,6 +165,9 @@
                     }
                 }
             }
+
+            // (DevMode)
+            EXAMDownloader.printLogInDevMode("startDownload", EXAMDownloader.createGuid(), 157, "Set 'forDownloadFilelist'", forDownloadFilelist);
 
             if(forDownloadFilelist.length == 0){
                 alert("선택된 파일이 없습니다.")
@@ -188,6 +201,13 @@
             forDownloadServerUrl += "&originName=" + forDownloadFilelist[forDownloadFilelistIndex].name;
             forDownloadServerUrl += "&originSize=" + forDownloadFilelist[forDownloadFilelistIndex].size;
             forDownloadServerUrl += "&originPath=" + forDownloadFilelist[forDownloadFilelistIndex].path;
+
+            // (DevMode)
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 197, "forDownloadServerUrl", forDownloadServerUrl);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 200, "guid", downFileGuid);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 201, "originName", forDownloadFilelist[forDownloadFilelistIndex].name);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 202, "originSize", forDownloadFilelist[forDownloadFilelistIndex].size);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 203, "originPath", forDownloadFilelist[forDownloadFilelistIndex].path);
 
             // iframe으로 서버에 요청 전송
             downlaodFrame.src = encodeURI(forDownloadServerUrl); // encodeURI 참고 : https://jamesdreaming.tistory.com/2
@@ -227,7 +247,7 @@
     
                 if(req.readyState === 4) {
                     if(req.status === 200) {
-                        console.log("------통신 성공------");
+                        //console.log("------통신 성공------");
                         if(xhttp.responseText.length > 10){  // 서버 로직수행 중 오류
                             EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
                             // 에러 함수 호출
@@ -241,7 +261,9 @@
                             message = "\"" + forDownloadFilelist[forDownloadFilelistIndex].name + "\" 파일이 존재하지 않습니다.\nhttp status=" + req.status;
                             EXAMDownloader.sendOnErrorMsg(errorCode, message);
                         }else{
-                            console.log("doneByte : " + xhttp.responseText);
+                            // console.log("doneByte : " + xhttp.responseText);
+                            // (DevMode)
+                            EXAMDownloader.printLogInDevMode("checkDownProgress", downFileGuid, 263, "progressPercentage", xhttp.responseText);
                             progressPercentage = Number(xhttp.responseText);
                             EXAMDownloader.drawDownloadProgressBar(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex);
                         }
@@ -314,6 +336,35 @@
                 window.EXAMDownloader_OnError(errorCode, message);
             }
         }
+
+        /* isDevMode 로그 출력 유틸 */
+        this.printLogInDevMode = function(api, guid, lineNum, infoTitle, infoObj){
+            if(isDevMode){
+                var today = new Date();
+                var year = today.getFullYear();
+                var month = ('0' + (today.getMonth() + 1)).slice(-2);
+                var day = ('0' + today.getDate()).slice(-2);
+                var dateStr = year + '-' + month  + '-' + day;
+                
+                var hours = ('0' + today.getHours()).slice(-2); 
+                var minutes = ('0' + today.getMinutes()).slice(-2);
+                var seconds = ('0' + today.getSeconds()).slice(-2); 
+                var timeStr = hours + ':' + minutes  + ':' + seconds;
+
+                var nowTime = dateStr + " " + timeStr;
+
+                var logStrStart = nowTime + " LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrEnd = " }";
+
+                if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){
+                    console.log(logStrStart + infoObj + logStrEnd);
+                }else{
+                    console.log(logStrStart);
+                    console.log(infoObj);
+                    console.log(logStrEnd);
+                }
+            }        
+        } 
 
     }
 

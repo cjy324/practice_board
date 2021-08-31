@@ -36,7 +36,7 @@ function articleSaveAndAttchedFilesMappingByAjax(resultFileList) {
 
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 // 생성된 신규 게시물 ID값 받기
                 id = Number(xhttp.responseText);
                 alert(id + "번 게시물 작성 완료!!")

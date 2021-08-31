@@ -34,7 +34,7 @@ function getBody(id){
         const req = e.target;
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 // DB로 부터 게시물 body 가져오기
                 originBody = xhttp.responseText;
                 setBody(originBody); // 게시물 body 그리기
@@ -59,7 +59,7 @@ function fileLoad() {
         const req = e.target;
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
                 
                 if(attFileList.length !== 0){
@@ -80,7 +80,7 @@ function fileLoad() {
                         EXAMUploader.showFiles(attFileList); // 파일 리스트 그리기
                     }
                 }
-                console.log("------첨부파일 로드 완료------");
+                // console.log("------첨부파일 로드 완료------");
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -135,7 +135,7 @@ function articleSaveAndAttchedFilesMappingByAjax(resultFileList, deleteFileList)
 
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 alert(id + "번 게시물 수정 완료!!");
                 goToDetailPage(id);
             }else{

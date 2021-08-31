@@ -27,7 +27,7 @@ function getBody(id){
 
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 // DB로 부터 게시물 body 가져오기
                 const body = xhttp.responseText;
                 setBody(body); // 게시물 body 그리기
@@ -54,7 +54,7 @@ function fileLoad() {
 
         if(req.readyState === 4) {
             if(req.status === 200) {
-                console.log("------통신 성공------");
+                // console.log("------통신 성공------");
                 attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
                 
                 /* EXAM다운로더 */
@@ -74,7 +74,7 @@ function fileLoad() {
                     EXAMDownloader.setAndDrawDownloadFileList(attFileList);
                 }
 
-                console.log("------첨부파일 로드 완료------");
+                // console.log("------첨부파일 로드 완료------");
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);

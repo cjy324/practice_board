@@ -22,7 +22,7 @@ public class DownloadController {
 		boolean isDevMode;
 	
 		public DownloadController() {
-			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
+			isDevMode = false;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 다운로드 서버
