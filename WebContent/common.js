@@ -154,21 +154,28 @@ function getOptionsAndDrawProduct(){
 //     }
 // };
 
-/* 제품별 config.js script 그리기 */
-function loadAndApplyProductConfig(urlStr){
-    // 제품config.js script 태그 생성
+/* script 태그 그리기 */
+function drawScriptTag(url){
     var script = document.createElement('script');
-    script.src = contextpath + "/productConfig/" + urlStr + ".js";
+    script.src = contextpath + url;
     script.defer = "defer";
     document.head.appendChild(script);
 
+    return script;
+}
+
+/* 제품별 config.js script 그리기 */
+function loadAndApplyProductConfig(product){
+    // 제품config.js script 태그 생성
+    var script = drawScriptTag("/productConfig/" + product + ".js");
+
     // script태그 생성 후 제품별 config값 적용
     script.onload = function () {
-        if(urlStr.indexOf("editor_") !== -1){
+        if(product.indexOf("editor_") !== -1){
             applyProductConfig(G_EditorConfig);
-        }else if(urlStr.indexOf("uploader_") !== -1){
+        }else if(product.indexOf("uploader_") !== -1){
             applyProductConfig(G_UploaderConfig);
-        }else if(urlStr.indexOf("downloader_") !== -1){
+        }else if(product.indexOf("downloader_") !== -1){
             applyProductConfig(G_DownloaderConfig);
         }
     };
@@ -180,10 +187,7 @@ function applyProductConfig(productConfig){
     productConfig.beforeCreate();
 
     // 제품.js script 태그 생성
-    var script = document.createElement('script');
-    script.src = contextpath + productConfig.url;
-    script.defer = "defer";
-    document.head.appendChild(script);
+    var script = drawScriptTag(productConfig.url);
 
     // script태그 생성 후 제품 그리기
     script.onload = function () {
@@ -209,36 +213,36 @@ function goToDetailPage(id){
 }
 
 
-/** 에러 정보 콜백함수 모음 **/
-/* EXAM에디터 */
-function EXAMEditor_OnError(errorCode, message, imageFileList){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
-    console.log("imageFileList: " + imageFileList);
-};
+// /** 에러 정보 콜백함수 모음 **/
+// /* EXAM에디터 */
+// function EXAMEditor_OnError(errorCode, message, imageFileList){
+//     alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+//     console.log("imageFileList: " + imageFileList);
+// };
 
-/* K에디터 */
-function RAONKEDITOR_OnError(editorId, codemessage) {
-    // codemessage.type; // 에러가 발생한 기능
-    // codemessage.message; // 에러 메세지
-    alert("에러 발생 기능: " + codemessage.type + "\n에러 메세지: " + codemessage.message);
-};
+// /* K에디터 */
+// function RAONKEDITOR_OnError(editorId, codemessage) {
+//     // codemessage.type; // 에러가 발생한 기능
+//     // codemessage.message; // 에러 메세지
+//     alert("에러 발생 기능: " + codemessage.type + "\n에러 메세지: " + codemessage.message);
+// };
 
-/* EXAM업로더 */
-function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
-    console.log("uploadCompleteList: " + uploadCompleteList);
-    console.log("uploadCompleteList: " + forDeleteFileList);
-};
+// /* EXAM업로더 */
+// function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
+//     alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+//     console.log("uploadCompleteList: " + uploadCompleteList);
+//     console.log("uploadCompleteList: " + forDeleteFileList);
+// };
 
-/* K업로더&다운로더 */
-function RAONKUPLOAD_OnError(uploadID, paramObj){
-    //에러 발생 후 오류메시지 띄어주는 예제
-    alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
-};
+// /* K업로더&다운로더 */
+// function RAONKUPLOAD_OnError(uploadID, paramObj){
+//     //에러 발생 후 오류메시지 띄어주는 예제
+//     alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
+// };
 
-/* EXAM다운로더 */
-function EXAMDownloader_OnError(errorCode, message){
-    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
-};
+// /* EXAM다운로더 */
+// function EXAMDownloader_OnError(errorCode, message){
+//     alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+// };
 
 

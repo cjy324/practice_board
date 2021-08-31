@@ -18,4 +18,11 @@ var G_UploaderConfig = {
         EXAMUploader.drawUploaderHtml(uploaderPath, uploaderServerPath);
         EXAMUploader.forDeleteFilePath = contextpath + "/usr/upload/deleteFile";
     }
-}
+};
+
+/* 에러 정보 콜백함수 */
+function EXAMUploader_OnError(errorCode, message, uploadCompleteList, forDeleteFileList){
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+    console.log("uploadCompleteList: " + uploadCompleteList);
+    console.log("uploadCompleteList: " + forDeleteFileList);
+};

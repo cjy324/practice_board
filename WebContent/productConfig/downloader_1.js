@@ -19,3 +19,8 @@ var G_DownloaderConfig = {
         EXAMDownloader.drawDownloaderHtml(downloaderPath, downloaderServerPath, downloadProgressPath);
     }
 };
+
+/* 에러 정보 콜백함수 */
+function EXAMDownloader_OnError(errorCode, message){
+    alert("에러 코드: " + errorCode + "\n에러 메세지: " + message);
+};

@@ -12,3 +12,10 @@ var G_EditorConfig = {
         new RAONKEditor(raonkParam);
     }
 };
+
+/* 에러 정보 콜백함수 */
+function RAONKEDITOR_OnError(editorId, codemessage) {
+    // codemessage.type; // 에러가 발생한 기능
+    // codemessage.message; // 에러 메세지
+    alert("에러 발생 기능: " + codemessage.type + "\n에러 메세지: " + codemessage.message);
+};

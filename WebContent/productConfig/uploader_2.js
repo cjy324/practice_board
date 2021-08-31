@@ -10,4 +10,10 @@ var G_UploaderConfig = {
         }
         new RAONKUpload(raonkParam);
     }
-}
+};
+
+/* 에러 정보 콜백함수 */
+function RAONKUPLOAD_OnError(uploadID, paramObj){
+    //에러 발생 후 오류메시지 띄어주는 예제
+    alert("Error Code : " + paramObj.strCode + "\nError Message : " + paramObj.strMessage);
+};
