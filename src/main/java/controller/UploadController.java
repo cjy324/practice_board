@@ -135,7 +135,8 @@ public class UploadController {
 					// System.out.println("newFile : " + newFile.getName()); //(테스트용)
 					// 새로 들어온 분할 파일 읽기
 					FileInputStream fr = new FileInputStream(newFile);
-					int fileByte;
+					int read = 0;
+					byte[] bytes = new byte[1024];
 					// RandomAccessFile로 분할 파일들을 담을 임시파일 가져오기(read/write)
 					RandomAccessFile raf = new RandomAccessFile(NewFileLocation, "rw");
 					
@@ -143,8 +144,8 @@ public class UploadController {
 					// seekPoint 설정
 					raf.seek(seekPoint); 
 					// 1바이트씩 읽으면서 파일쓰기
-					while((fileByte = fr.read()) != -1) {
-						raf.write(fileByte); // 파일쓰기
+					while((read=fr.read(bytes)) != -1) {
+						raf.write(bytes, 0, read); // 파일쓰기
 					}
 					// (테스트용)
 					// System.out.println("getFilePointer : " + raf.getFilePointer());
@@ -155,7 +156,7 @@ public class UploadController {
 					if(newFile.exists()) {
 						newFile.delete();
 						// (DevMode)
-						printLogInDevMode(request, guid, 157, "SlicedFile Delete Message", newFile.getName() + "_" + index + " 삭제 완료");
+						printLogInDevMode(request, guid, 156, "SlicedFile Delete Message", newFile.getName() + "_" + index + " 삭제 완료");
 					}
 
 					// 모든 분할 파일 업로드가 완료 되었을 경우
