@@ -49,7 +49,7 @@
             EXAMUploader.usrServerPath = usrServerPath;
 
             // (DevMode)
-            EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 49, "EXAMUploader Load", "Complete!!");
+            EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 44, "EXAMUploader Load", "Complete!!");
 
             // 에러 함수 호출
             if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
@@ -527,7 +527,7 @@
             if(slicedFiles.length > 0){
                 let guid = EXAMUploader.createGuid();
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", guid, 525, "Start Sliced File Upload Message", "분할 파일 전송 시작");
+                EXAMUploader.printLogInDevMode("startUpload", guid, 527, "Start Sliced File Upload Message", "분할 파일 전송 시작");
             
                 /* 로컬스토리지에 저장된 기존 업로드 중단된 파일 정보들 확인 시작 */
                 // Key: "resume_upload_" + guid
@@ -545,8 +545,8 @@
                         // 파일명과 파일크기로 파일 정보 대조
                         if(EXAMUploader.forUploadFileList[forUploadFileListIndex].name == canceledFileName && EXAMUploader.forUploadFileList[forUploadFileListIndex].size == canceledFileSize){
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startUpload", guid, 540, "Canceled File Name", canceledFileName);
-                            EXAMUploader.printLogInDevMode("startUpload", guid, 541, "Canceled File Size", canceledFileSize);
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 542, "Canceled File Name", canceledFileName);
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 543, "Canceled File Size", canceledFileSize);
                             // 이어올리기 선택
                             if(confirm("기존에 업로드된 데이터가 있습니다. 이어서 업로드하시겠습니까?")){
                                 // (DevMode)
@@ -556,7 +556,7 @@
                                 slicedFileIndex = Number(localStorage.getItem(localStorage.key(l)).split("__")[1]);
 
                                 // (DevMode)
-                                EXAMUploader.printLogInDevMode("startUpload", guid, 553, "Before GUID(GUID Was Changed By Resume Upload)", beforeGuid);
+                                EXAMUploader.printLogInDevMode("startUpload", guid, 553, "Before GUID(GUID Was Changed Due To Resume Upload)", beforeGuid);
 
                                 // 해당 파일에 대한 로컬스토리지 정보 삭제
                                 localStorage.removeItem(localStorage.key(l));
@@ -574,13 +574,13 @@
                 params += "&slicedFilesLength=" + slicedFiles.length;
 
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", guid, 494, "limitSize", limitSize);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 495, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 496, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 497, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 570, "sliced", "true");
-                EXAMUploader.printLogInDevMode("startUpload", guid, 571, "guid", guid);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 572, "slicedFilesLength", slicedFiles.length);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 496, "limitSize", limitSize);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 497, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 498, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 499, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 572, "sliced", "true");
+                EXAMUploader.printLogInDevMode("startUpload", guid, 573, "guid", guid);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 574, "slicedFilesLength", slicedFiles.length);
 
                 // ajax통신 시작
                 EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
@@ -601,7 +601,7 @@
             var allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
             var message = EXAMUploader.popupWindow.document.getElementById("message");
             // (DevMode)
-            EXAMUploader.printLogInDevMode("startAjax", guid, 591, "Start Ajax Message", forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
+            EXAMUploader.printLogInDevMode("startAjax", guid, 593, "Start Ajax Message", forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
             /* progressBar 시작 */
             xhttp.upload.onloadstart = function (e) {
@@ -625,7 +625,7 @@
                     allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     message.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     if(forUploadFileListIndex+1 == forUploadFileList.length){
-                        allFilesMessage.textContent = "ALL Files Upload Complete!!!";
+                        allFilesMessage.textContent = "ALL Files Upload Complete!!";
                         allMessage.textContent = "";
                         message.textContent = "";
                     }
@@ -690,14 +690,14 @@
                     // 3=interactive 요청 처리 중 상태
                     // 4=complete 요청 완료되고 응답 준비된 상태
                     if(req.status === 200 && EXAMUploader.indicator === "START") {
-                        var uploadedFile = null;
+                        var uploadedFile = null;  // 업로드된 파일 정보 받아 저장할 임시 객체
                         
                         if(slicedFileIndex < slicedFiles.length-1){ // 만약, index가 slicedFiles.length 보다 작으면
                             slicedFileIndex++; // index 1 증가
                             // 재귀함수: 함수 내에서 자신을 다시 호출
                             EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, forUploadFileList, forUploadFileListIndex);
                         }else if(forUploadFileListIndex < forUploadFileList.length-1){
-                            // 업로드된 파일 경로 받아 저장하기
+                            // 업로드된 파일 정보 받아 임시객체에 저장하기
                             uploadedFile = {
                                 name: forUploadFileList[forUploadFileListIndex].name,
                                 size: forUploadFileList[forUploadFileListIndex].size,
@@ -706,13 +706,13 @@
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 697, "Upload Complete File", uploadedFile);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 701, "Upload Complete File", uploadedFile);
 
                             forUploadFileListIndex++;
                             // console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
                             EXAMUploader.startUpload(forUploadFileListIndex);
                         }else{
-                            // 업로드된 파일 경로 받아 저장하기
+                            // 업로드된 파일 정보 받아 임시객체에 저장하기
                             uploadedFile = {
                                 name: forUploadFileList[forUploadFileListIndex].name,
                                 size: forUploadFileList[forUploadFileListIndex].size,
@@ -721,8 +721,8 @@
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 712, "Upload Complete File", uploadedFile);
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 712, "All Files Upload Complete Message", "업로드 - 완료");
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 716, "Upload Complete File", uploadedFile);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 729, "All Files Upload Complete Message", "업로드 - 완료");
 
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
@@ -734,19 +734,19 @@
                             }
                         }              
                     }else if(req.status === 200 && EXAMUploader.indicator === "STOP" && slicedFileIndex < slicedFiles.length-1){
-                        //console.log("---업로드 중단---");
-                        //console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
+                        //---업로드 중단---
+                        //----LocalStorage에 현재 파일 정보 저장 시작----
                         // 업로드시 여러 파일이 중단될 수도 있으니 
                         // 여러 파일이 중단될 경우를 고려해서
                         // loacalStorage에 담을때 구분자, 배열 등을 활용해 잘 저장해 놓는 것이 중요
                         // 나중에 이어올리기시 localStorage에 있는 해당 키들을 for문으로 돌리면서 일치하는 값 찾을 수 있도록 하기 위함..
                         localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                         //console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
-                        //console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+                        //----LocalStorage에 현재 파일 정보 저장 완료----
 
                         // (DevMode)
-                        EXAMUploader.printLogInDevMode("startAjax", guid, 734, "Upload Cancel Message", "업로드 중단");
-                        EXAMUploader.printLogInDevMode("startAjax", guid, 734, "Upload Cancel And Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 736, "Upload Cancel Message", "업로드 중단");
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 743, "Upload Cancel And Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
 
                         // 업로드 중단 함수 호출
                         if( typeof(window.EXAMUploader_UploadInterruption) == 'function' ) {
@@ -760,18 +760,15 @@
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
 
-                        // console.log("---에러로 인한 업로드 중단---");
-                        // console.log("----LocalStorage에 현재 파일 정보 저장 시작----");
-                        // // 업로드시 여러 파일이 중단될 수도 있으니 
-                        // // 여러 파일이 중단될 경우를 고려해서
-                        // // loacalStorage에 담을때 구분자, 배열 등을 활용해 잘 저장해 놓는 것이 중요
-                        // // 나중에 이어올리기시 localStorage에 있는 해당 키들을 for문으로 돌리면서 일치하는 값 찾을 수 있도록 하기 위함..
-                        // if(){
-
-                        // }
-                        // localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
-                        // console.log("resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
-                        // console.log("----LocalStorage에 현재 파일 정보 저장 완료----");
+                        if(slicedFileIndex < slicedFiles.length-1){
+                            //---통신 에러로 인한 업로드 중단---
+                            //----LocalStorage에 현재 파일 정보 저장 시작----
+                            localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                            // (DevMode)
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 757, "Upload Error Message", "통신 장애로 인한 업로드 중단");
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 766, "Interrupted Upload File Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                            //----LocalStorage에 현재 파일 정보 저장 완료----
+                        }
 
                         // 에러 함수 호출
                         errorCode = "UEC_003"
@@ -804,16 +801,16 @@
             infoZone.innerHTML = resetFileListInfo;
         }
 
-        // 업로드 중단 버튼
+        /* 업로드 중단 버튼 */
         this.cancelUpload = function() {
             // xhttp.abort(); // 통신 강제 중단
             // 만약, abort()를 통해 통신을 강제 중단시켜버리면 업로드 상태가 어떨지 알 수 없기 때문에 위험하다.
             // 따라서,
-            // 통신 indicator를 false로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
+            // 통신 indicator를 STOP으로 변경해서 다음 로직을 타지 않게끔해서 비교적 안전하게 업로드를 중단해준다.
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
             // (DevMode)
-            EXAMUploader.printLogInDevMode("cancelUpload", EXAMUploader.createGuid(), 806, "Upload Status", EXAMUploader.indicator);
+            EXAMUploader.printLogInDevMode("cancelUpload", EXAMUploader.createGuid(), 810, "Upload Indicator", EXAMUploader.indicator);
         }
 
         /* On에러 이벤트 */

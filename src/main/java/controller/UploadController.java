@@ -21,7 +21,7 @@ public class UploadController {
 		boolean isDevMode;
 		
 		public UploadController() {
-			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
+			isDevMode = false;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 파일 업로드 서버
@@ -156,7 +156,7 @@ public class UploadController {
 					if(newFile.exists()) {
 						newFile.delete();
 						// (DevMode)
-						printLogInDevMode(request, guid, 156, "SlicedFile Delete Message", newFile.getName() + "_" + index + " 삭제 완료");
+						printLogInDevMode(request, guid, 157, "SlicedFile Delete Message", newFile.getName() + "_" + index + " 삭제 완료");
 					}
 
 					// 모든 분할 파일 업로드가 완료 되었을 경우
@@ -238,8 +238,8 @@ public class UploadController {
 				String guid = request.getParameter("guid");
 				String path = request.getParameter("path");
 				// (DevMode)
-				printLogInDevMode(request, guid, 237, "GUID", guid);
-				printLogInDevMode(request, guid, 238, "Path", path);
+				printLogInDevMode(request, guid, 238, "GUID", guid);
+				printLogInDevMode(request, guid, 239, "Path", path);
 				
 				// 실제 폴더에서 파일 삭제
 				File file = new File(path);

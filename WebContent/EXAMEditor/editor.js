@@ -212,7 +212,7 @@
                         if(imageFileList.length == 1){
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 213, "imagePath", imagePath);
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
@@ -220,7 +220,7 @@
                         }else if(imageFileList.length > 1 && imageFileListIndex < imageFileList.length-1){ // 만약, index가 imageFileList.length 보다 작으면
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 221, "imagePath", imagePath);
                             // img 태그 생성
                             EXAMEditor.drawImg(imagePath);
 
@@ -229,7 +229,7 @@
                         }else{
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 211, "imagePath", imagePath);  
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 230, "imagePath", imagePath);  
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함

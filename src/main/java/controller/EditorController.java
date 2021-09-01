@@ -37,7 +37,7 @@ public class EditorController {
 				// 파일 실제 업로드 경로 설정
 				String realPath = request.getServletContext().getRealPath("imageUpload");
 				// (DevMode)
-				printLogInDevMode(request, forDevModeGuid, 37, "RealPath", realPath);
+				printLogInDevMode(request, forDevModeGuid, 38, "RealPath", realPath);
 				
 				File imageUploadDir = new File(realPath);
 				if(!imageUploadDir.exists()){	// 만약, realPath 경로에 폴더가 없으면 폴더 생성
@@ -58,7 +58,7 @@ public class EditorController {
 				// 이미지 경로
 				String imgUploadPath = contextpath + "/imageUpload/" + fileName;
 				// (DevMode)
-				printLogInDevMode(request, forDevModeGuid, 58, "ImgUploadPath", imgUploadPath);
+				printLogInDevMode(request, forDevModeGuid, 59, "ImgUploadPath", imgUploadPath);
 				
 				// 이미지 경로 클라이언트로 전달
 				response.getWriter().append(imgUploadPath);
