@@ -36,7 +36,7 @@
             // (DevMode)
             EXAMEditor.printLogInDevMode("drawEditorHtml", 29, "EXAMEditor Load", "Complete!!");
 
-            // 에러 함수 호출            
+            // On Error Event
             if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
                 errorCode = "EEC_001"
                 message = "editorHolder.html의 경로를 확인해주세요."
@@ -237,7 +237,7 @@
                         } 
                     }else{
                         console.error(xhttp.responseText)
-                        // 에러 함수 호출
+                        // On Error Event
                         errorCode = "EEC_004"
                         message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                         EXAMEditor.sendOnErrorMsg(errorCode, message, imageFileList);
@@ -302,7 +302,7 @@
 
                 var nowTime = dateStr + " " + timeStr;
 
-                var logStrStart = nowTime + " LOG { API: " + api + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrStart = nowTime + " EXAMEditor LOG { API: " + api + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
                 var logStrEnd = " }";
 
                 if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){

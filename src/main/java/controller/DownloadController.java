@@ -10,7 +10,6 @@ import java.io.RandomAccessFile;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,7 @@ public class DownloadController {
 		boolean isDevMode;
 	
 		public DownloadController() {
-			isDevMode = false;		// 디버깅 모드(OFF: false / ON: true)
+			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 다운로드 서버
@@ -35,16 +34,16 @@ public class DownloadController {
 				String originPath = request.getParameter("originPath");
 				
 				// (DevMode)
-				printLogInDevMode(request, guid, 32, "GUID", guid);
-				printLogInDevMode(request, guid, 33, "OriginName", originName);
-				printLogInDevMode(request, guid, 34, "OriginSize", String.valueOf(originSize));
-				printLogInDevMode(request, guid, 35, "OriginPath", originPath);
+				printLogInDevMode(request, guid, 31, "GUID", guid);
+				printLogInDevMode(request, guid, 32, "OriginName", originName);
+				printLogInDevMode(request, guid, 33, "OriginSize", String.valueOf(originSize));
+				printLogInDevMode(request, guid, 34, "OriginPath", originPath);
 
 				/* 파일 다운로드(브라우저로 전송) 시작 */
 				// 다운로드 상태 임시저장 경로 설정
 				String tempPath = request.getServletContext().getRealPath("temp");
 				// (DevMode)
-				printLogInDevMode(request, guid, 45, "TempFolderPath", tempPath);
+				printLogInDevMode(request, guid, 44, "TempFolderPath", tempPath);
 
 				File tempDir = new File(tempPath);
 				if(!tempDir.exists()){	// 만약, tempPath 경로에 폴더가 없으면 폴더 생성
@@ -58,7 +57,7 @@ public class DownloadController {
 				FileOutputStream fos = new FileOutputStream(tempTxtFile);
 				
 				// (DevMode)
-				printLogInDevMode(request, guid, 55, "TempTxtPathForRecodingPercentage", tempTxtPath);
+				printLogInDevMode(request, guid, 54, "TempTxtPathForRecodingPercentage", tempTxtPath);
 				
 				File file = new File(originPath);
 				if(file.exists()) {
@@ -135,7 +134,7 @@ public class DownloadController {
 				// 파일에 대한 정보를 parameter로 받기
 				String guid = request.getParameter("guid");
 				// (DevMode)
-				printLogInDevMode(request, guid, 136, "GUID", guid);
+				printLogInDevMode(request, guid, 135, "GUID", guid);
 				
 				// 다운로드 상태를 임시 저장해 놓은 txt파일 읽기
 				String tempPath = request.getServletContext().getRealPath("temp");
@@ -143,7 +142,7 @@ public class DownloadController {
 				File tempTxtFile = new File(tempTxtPath);			
 				
 				// (DevMode)
-				printLogInDevMode(request, guid, 142, "TempTxtPathWhichRecodedPercentage", tempTxtPath);
+				printLogInDevMode(request, guid, 141, "TempTxtPathWhichRecodedPercentage", tempTxtPath);
 
 				/* 파일 다운로드 진행률 읽기 시작 */
 				// 1. RandomAcessFile
@@ -172,7 +171,7 @@ public class DownloadController {
 				doneByte = doneBytes[0];
 				
 				// (DevMode)
-				printLogInDevMode(request, guid, 172, "RecodedPercentage", doneByte);
+				printLogInDevMode(request, guid, 171, "RecodedPercentage", doneByte);
 				
 				raf.close();
 				/* 파일 다운로드 진행률 읽기 끝 */

@@ -41,7 +41,7 @@
             // (DevMode)
             EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 34, "EXAMDownloader Load", "Complete!!");
 
-            // 에러 함수 호출
+            // On Error Event
             if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
                 errorCode = "DEC_001"
                 message = "downloaderHolder.html의 경로를 확인해주세요."
@@ -250,13 +250,13 @@
                         //console.log("------통신 성공------");
                         if(xhttp.responseText.length > 10){  // 서버 로직수행 중 오류
                             EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-                            // 에러 함수 호출
+                            // On Error Event
                             errorCode = "DEC_004"
                             message = "다운로드 서버 처리 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                             EXAMDownloader.sendOnErrorMsg(errorCode, message);
                         }else if(xhttp.responseText == "NULL"){ // 실제 파일이 존재하지 않는 경우
                             EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
-                            // 에러 함수 호출
+                            // On Error Event
                             errorCode = "DEC_005"
                             message = "\"" + forDownloadFilelist[forDownloadFilelistIndex].name + "\" 파일이 존재하지 않습니다.\nhttp status=" + req.status;
                             EXAMDownloader.sendOnErrorMsg(errorCode, message);
@@ -274,7 +274,7 @@
 
                         EXAMDownloader.indicator = "ERROR"; // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
-                        // 에러 함수 호출
+                        // On Error Event
                         errorCode = "DEC_006"
                         message = "다운로드 진행률 모니터링 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                         EXAMDownloader.sendOnErrorMsg(errorCode, message);
@@ -353,7 +353,7 @@
 
                 var nowTime = dateStr + " " + timeStr;
 
-                var logStrStart = nowTime + " LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrStart = nowTime + " EXAMDownloader LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
                 var logStrEnd = " }";
 
                 if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){

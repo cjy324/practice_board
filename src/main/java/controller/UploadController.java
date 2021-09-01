@@ -21,7 +21,7 @@ public class UploadController {
 		boolean isDevMode;
 		
 		public UploadController() {
-			isDevMode = false;		// 디버깅 모드(OFF: false / ON: true)
+			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
 		// 파일 업로드 서버

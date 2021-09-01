@@ -51,7 +51,7 @@
             // (DevMode)
             EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 44, "EXAMUploader Load", "Complete!!");
 
-            // 에러 함수 호출
+            // On Error Event
             if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
                 errorCode = "UEC_001"
                 message = "uploaderHolder.html의 경로를 확인해주세요."
@@ -269,7 +269,7 @@
                             if(tempArray[k].uploaded){  // 1. 기존 업로드됐던 파일인 경우 실제 파일도 삭제하기 위해 forDeleteFileList에 정보 담아두기
                                 EXAMUploader.forDeleteFileList.push(tempArray[k]);  
                                 // (DevMode)
-                                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 270, "Set 'forDeleteFileList'", Number(k+1) + " file pushed to 'forDeleteFileList'");
+                                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 270, "Set 'forDeleteFileList'", "file["+ Number(k+1) + "] pushed to 'forDeleteFileList'");
                                 // console.log(k + " file pushed to 'forDeleteFileList'");
                             }
                             delete tempArray[k]; // 2. tempArray의 index가 removeTargetIndex인 원소의 내용 삭제(빈 공간만 남음)                            
@@ -411,7 +411,7 @@
                         console.error("req.status: " + req.status);
                         console.error(xhttp.responseText);
 
-                        // 에러 함수 호출
+                        // On Error Event
                         errorCode = "UEC_004"
                         message = "기존 파일 삭제 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                         EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
@@ -770,7 +770,7 @@
                             //----LocalStorage에 현재 파일 정보 저장 완료----
                         }
 
-                        // 에러 함수 호출
+                        // On Error Event
                         errorCode = "UEC_003"
                         message = "업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
                         EXAMUploader.sendOnErrorMsg(errorCode, message, EXAMUploader.uploadCompleteList, EXAMUploader.forDeleteFileList);
@@ -836,7 +836,7 @@
 
                 var nowTime = dateStr + " " + timeStr;
 
-                var logStrStart = nowTime + " LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
+                var logStrStart = nowTime + " EXAMUploader LOG { API: " + api + ", GUID: " + guid + ", LINE: " + lineNum + ", INFO " + infoTitle + ": ";
                 var logStrEnd = " }";
 
                 if(typeof(infoObj) == 'string' || typeof(infoObj) == 'number'){
