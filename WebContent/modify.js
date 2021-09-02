@@ -14,6 +14,8 @@ function drawProduct(genSet){
     getBody(id);
 }
 
+/* 첨부파일리스트 */
+let attFileList = [];
 /* DB에서 삭제할 첨부파일리스트 */
 let forDeleteFileList = [];
 /* 게시물 원본 body */
@@ -37,7 +39,7 @@ function getBody(id){
                 // console.log("------통신 성공------");
                 // DB로 부터 게시물 body 가져오기
                 originBody = xhttp.responseText;
-                setBody(originBody); // 게시물 body 그리기
+                fileLoad(); // 첨부파일 로드
             }else{
                 console.error("------통신 실패------");
                 console.error("req.status: " + req.status);
@@ -60,26 +62,7 @@ function fileLoad() {
         if(req.readyState === 4) {
             if(req.status === 200) {
                 // console.log("------통신 성공------");
-                attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});
-                
-                if(attFileList.length !== 0){
-                    /* EXAM업로더 */
-                    /* 첨부파일 리스트 그리기 */
-                    if(GENSET.uploaderNum === 1){
-                        // 업로더 제품(가이드)
-                        // 업로드 대상 리스트를 인수로 넘겨주어야 함
-                        // 리스트 내 객체의 속성으로 (name, size, type, path, uploaded)가 필수로 들어가야 함
-                        // 예시) 
-                        // files[0] = {
-                        //     name: "테스트파일.jpg",
-                        //     size: 50000,
-                        //     type: "image/png",
-                        //     path: "경로",
-                        //     uploaded: "true"
-                        // }
-                        EXAMUploader.showFiles(attFileList); // 파일 리스트 그리기
-                    }
-                }
+                attFileList = Object.keys(JSON.parse(xhttp.responseText)).map(function(i) { return JSON.parse(xhttp.responseText)[i]});                
                 // console.log("------첨부파일 로드 완료------");
             }else{
                 console.error("------통신 실패------");
@@ -92,12 +75,29 @@ function fileLoad() {
 }
 
 /* EXAM에디터 */
-/* 게시물 body 그리기 */
-function setBody(body){
-    if(GENSET.editorNum === 1){  
-        EXAMEditor.drawBodyContent(body);
+/* EXAM에디터로 편집영역에 body값 넣기 */
+function EXAMEditor_OnLoad(){
+    // 에디터 제품(가이드)
+    // 편집영역에 삽입할 BodyContent를 String형 인수로 넘겨주어야 함
+    EXAMEditor.drawBodyContent(originBody);
+}
+/* EXAM업로더 */
+/* EXAM업로더로 기존 업로드 파일 리스트 그리기 */
+function EXAMUploader_OnLoad(){
+    // 업로더 제품(가이드)
+    // 업로드 대상 리스트를 인수로 넘겨주어야 함
+    // 리스트 내 객체의 속성으로 (name, size, type, path, uploaded)가 필수로 들어가야 함
+    // 예시) 
+    // files[0] = {
+    //     name: "테스트파일.jpg",
+    //     size: 50000,
+    //     type: "image/png",
+    //     path: "경로",
+    //     uploaded: "true"
+    // }
+    if(attFileList.length !== 0){
+        EXAMUploader.showFiles(attFileList);
     }
-    fileLoad();
 }
 
 /* K에디터 */
@@ -108,7 +108,7 @@ function RAONKEDITOR_CreationComplete() {
     RAONKEDITOR.SetHtmlContents(html, 'K_Editor');
 }
 /* K업로더 */
-// K업로더로 기존 업로드 파일 리스트 그리기
+/* K업로더로 기존 업로드 파일 리스트 그리기 */
 function RAONKUPLOAD_CreationComplete(K_Uploader) {
     for(let i = 0; i < attFileList.length; i++){
         RAONKUPLOAD.AddUploadedFile('1', attFileList[i].name, attFileList[i].path, attFileList[i].size, 'CustomValue', K_Uploader);

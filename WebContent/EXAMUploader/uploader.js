@@ -47,9 +47,19 @@
 
             uploaderHolderFrame.src = src;
             EXAMUploader.usrServerPath = usrServerPath;
-
-            // (DevMode)
-            EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 44, "EXAMUploader Load", "Complete!!");
+            
+            // On Load Event
+            var startInterval = setInterval(function(){  
+                var uploaderWindow = uploaderHolderFrame.contentWindow;
+                if(uploaderWindow.document.getElementById("uploadZone")){
+                    if( typeof(window.EXAMUploader_OnLoad) == 'function' ) { 
+                        window.EXAMUploader_OnLoad();
+                    }
+                    // (DevMode)
+                    EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 52, "EXAMUploader Load", "Complete!!");
+                    clearInterval(startInterval);
+                }
+            }, 100);  // ex) 1초 = 1000
 
             // On Error Event
             if(usrUploaderPath == null || usrUploaderPath.indexOf("uploaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg

@@ -38,9 +38,19 @@
             EXAMDownloader.usrDownloaderServerPath = usrDownloaderServerPath;
             EXAMDownloader.usrDownloadProgressPath = usrDownloadProgressPath;  
 
-            // (DevMode)
-            EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 34, "EXAMDownloader Load", "Complete!!");
-
+            // On Load Event
+            var startInterval = setInterval(function(){  
+                var downloaderWindow = downloaderHolderFrame.contentWindow;
+                if(downloaderWindow.document.getElementById("downloadZone")){
+                    if( typeof(window.EXAMDownloader_OnLoad) == 'function' ) { 
+                        window.EXAMDownloader_OnLoad();
+                    }
+                    // (DevMode)
+                    EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 42, "EXAMDownloader Load", "Complete!!");
+                    clearInterval(startInterval);
+                }
+            }, 100);  // ex) 1초 = 1000
+            
             // On Error Event
             if(usrDownloaderPath == null || usrDownloaderPath.indexOf("downloaderHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
                 errorCode = "DEC_001"

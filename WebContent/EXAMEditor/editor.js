@@ -33,8 +33,19 @@
             EXAMEditor.usrImgUploadServerPath = usrImgUploadServerPath;
             EXAMEditor.usrImgContextpath = usrImgContextpath;
 
-            // (DevMode)
-            EXAMEditor.printLogInDevMode("drawEditorHtml", 29, "EXAMEditor Load", "Complete!!");
+            // On Load Event
+            var startInterval = setInterval(function(){  
+                var editorHolderFrameWindow = editorHolderFrame.contentWindow;
+                var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
+                if(editWindow.document.getElementById("edit_area")){
+                    if( typeof(window.EXAMEditor_OnLoad) == 'function' ) { 
+                        window.EXAMEditor_OnLoad();
+                    }
+                    // (DevMode)
+                    EXAMEditor.printLogInDevMode("drawEditorHtml", 37, "EXAMEditor Load", "Complete!!");
+                    clearInterval(startInterval);
+                }
+            }, 100);  // ex) 1초 = 1000
 
             // On Error Event
             if(usrEditorPath == null || usrEditorPath.indexOf("editorHolder.html") == -1){  // JS에서 string 포함 여부 확인하는 방법 참고: https://han.gl/3jiPg
