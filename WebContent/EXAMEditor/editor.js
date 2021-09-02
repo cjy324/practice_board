@@ -38,11 +38,11 @@
                 var editorHolderFrameWindow = editorHolderFrame.contentWindow;
                 var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
                 if(editWindow.document.getElementById("edit_area")){
+                    // (DevMode)
+                    EXAMEditor.printLogInDevMode("drawEditorHtml", 40, "EXAMEditor Load", "Complete!!");
                     if( typeof(window.EXAMEditor_OnLoad) == 'function' ) { 
                         window.EXAMEditor_OnLoad();
                     }
-                    // (DevMode)
-                    EXAMEditor.printLogInDevMode("drawEditorHtml", 37, "EXAMEditor Load", "Complete!!");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -74,7 +74,7 @@
                 if(editWindow.document.getElementById("edit_area")){
                     editWindow.document.getElementById("edit_area").innerHTML = bodyContent;
                     // (DevMode)
-                    EXAMEditor.printLogInDevMode("drawBodyContent", 58, "Draw Body Content", "Complete!!");
+                    EXAMEditor.printLogInDevMode("drawBodyContent", 74, "Draw Body Content", "Complete!!");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -97,15 +97,15 @@
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
                 // (DevMode)
-                EXAMEditor.printLogInDevMode("NONE", 80, "Set Selection", selection);
-                EXAMEditor.printLogInDevMode("NONE", 81, "Set range", range);
+                EXAMEditor.printLogInDevMode("NONE", 91, "Set Selection", selection);
+                EXAMEditor.printLogInDevMode("NONE", 92, "Set range", range);
             })
             editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("keypress", function(e){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
                 // (DevMode)
-                EXAMEditor.printLogInDevMode("NONE", 80, "Set Selection", selection);
-                EXAMEditor.printLogInDevMode("NONE", 81, "Set range", range);
+                EXAMEditor.printLogInDevMode("NONE", 91, "Set Selection", selection);
+                EXAMEditor.printLogInDevMode("NONE", 92, "Set range", range);
             })
         })
 
@@ -193,7 +193,7 @@
                 imageFileList.push(e.target.files[i]);
             }
             // (DevMode)
-            EXAMEditor.printLogInDevMode("doUpload", 177, "Set 'imageFileList'", imageFileList);
+            EXAMEditor.printLogInDevMode("doUpload", 192, "Set 'imageFileList'", imageFileList);
             
             EXAMEditor.doUploadImgAjax(imageFileList, imageFileListIndex)
         };
@@ -223,7 +223,7 @@
                         if(imageFileList.length == 1){
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 213, "imagePath", imagePath);
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 224, "imagePath", imagePath);
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
@@ -231,7 +231,7 @@
                         }else if(imageFileList.length > 1 && imageFileListIndex < imageFileList.length-1){ // 만약, index가 imageFileList.length 보다 작으면
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 221, "imagePath", imagePath);
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 232, "imagePath", imagePath);
                             // img 태그 생성
                             EXAMEditor.drawImg(imagePath);
 
@@ -240,7 +240,7 @@
                         }else{
                             imagePath = req.responseText;
                             // (DevMode)
-                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 230, "imagePath", imagePath);  
+                            EXAMEditor.printLogInDevMode("doUploadImgAjax", 241, "imagePath", imagePath);  
                             // img 태그 생성  
                             EXAMEditor.drawImg(imagePath);
                             // IE상에서 focus 위치를 잡지 못해 다시 focus를 잡아주어야 함
@@ -286,7 +286,7 @@
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
             // (DevMode)
-            EXAMEditor.printLogInDevMode("getBodyContent", 274, "getBodyContent", editWindow.document.getElementById("edit_area").innerHTML);
+            EXAMEditor.printLogInDevMode("getBodyContent", 290, "getBodyContent", editWindow.document.getElementById("edit_area").innerHTML);
             return editWindow.document.getElementById("edit_area").innerHTML;
         }
 

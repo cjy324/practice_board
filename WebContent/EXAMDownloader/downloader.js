@@ -42,11 +42,11 @@
             var startInterval = setInterval(function(){  
                 var downloaderWindow = downloaderHolderFrame.contentWindow;
                 if(downloaderWindow.document.getElementById("downloadZone")){
+                    // (DevMode)
+                    EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 44, "EXAMDownloader Load", "Complete!!");
                     if( typeof(window.EXAMDownloader_OnLoad) == 'function' ) { 
                         window.EXAMDownloader_OnLoad();
                     }
-                    // (DevMode)
-                    EXAMDownloader.printLogInDevMode("drawDownloaderHtml", EXAMDownloader.createGuid(), 42, "EXAMDownloader Load", "Complete!!");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -144,7 +144,7 @@
             EXAMDownloader.globalFileList = fileList;
 
             // (DevMode)
-            EXAMDownloader.printLogInDevMode("setAndDrawDownloadFileList", EXAMDownloader.createGuid(), 134, "Set 'globalFileList'", EXAMDownloader.globalFileList);
+            EXAMDownloader.printLogInDevMode("setAndDrawDownloadFileList", EXAMDownloader.createGuid(), 144, "Set 'globalFileList'", EXAMDownloader.globalFileList);
         }
 
         /* 다운로드 시작("다운로드" 버튼 클릭시) */
@@ -177,7 +177,7 @@
             }
 
             // (DevMode)
-            EXAMDownloader.printLogInDevMode("startDownload", EXAMDownloader.createGuid(), 157, "Set 'forDownloadFilelist'", forDownloadFilelist);
+            EXAMDownloader.printLogInDevMode("startDownload", EXAMDownloader.createGuid(), 167, "Set 'forDownloadFilelist'", forDownloadFilelist);
 
             if(forDownloadFilelist.length == 0){
                 alert("선택된 파일이 없습니다.")
@@ -213,11 +213,11 @@
             forDownloadServerUrl += "&originPath=" + forDownloadFilelist[forDownloadFilelistIndex].path;
 
             // (DevMode)
-            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 197, "forDownloadServerUrl", forDownloadServerUrl);
-            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 200, "guid", downFileGuid);
-            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 201, "originName", forDownloadFilelist[forDownloadFilelistIndex].name);
-            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 202, "originSize", forDownloadFilelist[forDownloadFilelistIndex].size);
-            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 203, "originPath", forDownloadFilelist[forDownloadFilelistIndex].path);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 207, "forDownloadServerUrl", forDownloadServerUrl);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 210, "guid", downFileGuid);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 211, "originName", forDownloadFilelist[forDownloadFilelistIndex].name);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 212, "originSize", forDownloadFilelist[forDownloadFilelistIndex].size);
+            EXAMDownloader.printLogInDevMode("startIframRequestForDownload", downFileGuid, 213, "originPath", forDownloadFilelist[forDownloadFilelistIndex].path);
 
             // iframe으로 서버에 요청 전송
             downlaodFrame.src = encodeURI(forDownloadServerUrl); // encodeURI 참고 : https://jamesdreaming.tistory.com/2
@@ -273,7 +273,7 @@
                         }else{
                             // console.log("doneByte : " + xhttp.responseText);
                             // (DevMode)
-                            EXAMDownloader.printLogInDevMode("checkDownProgress", downFileGuid, 263, "progressPercentage", xhttp.responseText);
+                            EXAMDownloader.printLogInDevMode("checkDownProgress", downFileGuid, 273, "progressPercentage", xhttp.responseText);
                             progressPercentage = Number(xhttp.responseText);
                             EXAMDownloader.drawDownloadProgressBar(progressPercentage, forDownloadFilelist, forDownloadFilelistIndex);
                         }

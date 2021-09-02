@@ -47,16 +47,16 @@
 
             uploaderHolderFrame.src = src;
             EXAMUploader.usrServerPath = usrServerPath;
-            
+
             // On Load Event
             var startInterval = setInterval(function(){  
                 var uploaderWindow = uploaderHolderFrame.contentWindow;
                 if(uploaderWindow.document.getElementById("uploadZone")){
+                    // (DevMode)
+                    EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 54, "EXAMUploader Load", "Complete!!");
                     if( typeof(window.EXAMUploader_OnLoad) == 'function' ) { 
                         window.EXAMUploader_OnLoad();
                     }
-                    // (DevMode)
-                    EXAMUploader.printLogInDevMode("drawUploaderHtml", EXAMUploader.createGuid(), 52, "EXAMUploader Load", "Complete!!");
                     clearInterval(startInterval);
                 }
             }, 100);  // ex) 1초 = 1000
@@ -203,7 +203,7 @@
             EXAMUploader.globalFileList = files;
 
             // (DevMode)
-            EXAMUploader.printLogInDevMode("showFiles", EXAMUploader.createGuid(), 193, "Set 'globalFileList'", EXAMUploader.globalFileList);
+            EXAMUploader.printLogInDevMode("showFiles", EXAMUploader.createGuid(), 203, "Set 'globalFileList'", EXAMUploader.globalFileList);
         }
 
         /* 파일 업로드를 위한 데이터 셋팅(from Input) */
@@ -279,7 +279,7 @@
                             if(tempArray[k].uploaded){  // 1. 기존 업로드됐던 파일인 경우 실제 파일도 삭제하기 위해 forDeleteFileList에 정보 담아두기
                                 EXAMUploader.forDeleteFileList.push(tempArray[k]);  
                                 // (DevMode)
-                                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 270, "Set 'forDeleteFileList'", "file["+ Number(k+1) + "] pushed to 'forDeleteFileList'");
+                                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 280, "Set 'forDeleteFileList'", "file["+ Number(k+1) + "] pushed to 'forDeleteFileList'");
                                 // console.log(k + " file pushed to 'forDeleteFileList'");
                             }
                             delete tempArray[k]; // 2. tempArray의 index가 removeTargetIndex인 원소의 내용 삭제(빈 공간만 남음)                            
@@ -290,7 +290,7 @@
             }
             // (DevMode)
             if(EXAMUploader.forDeleteFileList.length > 0){
-                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 282, "forDeleteFileList Length", EXAMUploader.forDeleteFileList.length);
+                EXAMUploader.printLogInDevMode("removeSelectedFiles", EXAMUploader.createGuid(), 292, "forDeleteFileList Length", EXAMUploader.forDeleteFileList.length);
             }
 
             // 2. tempArray 내 비어있는 요소 삭제(공간까지 삭제, index가 순차적으로 변경됨)
@@ -338,7 +338,7 @@
                 }
             }
             // (DevMode)
-            EXAMUploader.printLogInDevMode("setUploadFileList", EXAMUploader.createGuid(), 325, "Set 'forUploadFileList'", EXAMUploader.forUploadFileList);
+            EXAMUploader.printLogInDevMode("setUploadFileList", EXAMUploader.createGuid(), 335, "Set 'forUploadFileList'", EXAMUploader.forUploadFileList);
 
             // 업로드 시나리오별 필터링
             if(EXAMUploader.globalFileList.length > 0 && EXAMUploader.forUploadFileList.length == 0){  // 1. 신규 업로드될 파일이 없는 경우
@@ -381,9 +381,9 @@
                        + "&path="+ encodeURI(EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
                        
             // (DevMode)
-            EXAMUploader.printLogInDevMode("deleteFiles", guid, 368, "forDeleteFileIndex", forDeleteFileIndex);
-            EXAMUploader.printLogInDevMode("deleteFiles", guid, 369, "guid", guid);
-            EXAMUploader.printLogInDevMode("deleteFiles", guid, 371, "path", EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 378, "forDeleteFileIndex", forDeleteFileIndex);
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 379, "guid", guid);
+            EXAMUploader.printLogInDevMode("deleteFiles", guid, 381, "path", EXAMUploader.forDeleteFileList[forDeleteFileIndex].path);
             
             EXAMUploader.startDeleteAjax(params, forDeleteFileIndex);
         }
@@ -470,7 +470,7 @@
             EXAMUploader.indicator = "START";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
             // (DevMode)
             var forDevModeGuid = EXAMUploader.createGuid();
-            EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 458, "forUploadFileListIndex", forUploadFileListIndex);
+            EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 468, "forUploadFileListIndex", forUploadFileListIndex);
 
             // 단일 파일 제한 용량 설정
             // 참고: Tomcat은 기본적으로 Post로 전송할 데이터의 크기를 최대2MB까지 Default로 잡고있다.(https://youngram2.tistory.com/110)
@@ -487,7 +487,7 @@
                 // 용량에 따른 분할 수 계산
                 var slicedFilesNum = Math.ceil(EXAMUploader.forUploadFileList[forUploadFileListIndex].size / limitSize); 
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 478, "slicedFilesNum", slicedFilesNum);
+                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 488, "slicedFilesNum", slicedFilesNum);
                 // 파일 분할
                 for(let f = 0; f < slicedFilesNum; f++){
                     // 각 분할 횟수별 분할 시작 포인트 설정
@@ -498,7 +498,7 @@
                     slicedFiles.push(slicedFile);
                 }
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 482, "slicedFiles", slicedFiles);
+                EXAMUploader.printLogInDevMode("startUpload", forDevModeGuid, 492, "slicedFiles", slicedFiles);
             }
             /* 분할 끝 */
 
@@ -512,7 +512,7 @@
             if(slicedFiles.length == 0){
                 let oneFileGuid = EXAMUploader.createGuid();
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 502, "Start One File Upload Message", "단일 파일 전송 시작");
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 512, "Start One File Upload Message", "단일 파일 전송 시작");
 
                 // params 추가 정보 담기
                 params += "&sliced=false";
@@ -520,12 +520,12 @@
                 params += "&slicedFilesLength=" + 0;
                 
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 496, "limitSize", limitSize);
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 497, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 498, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 499, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 508, "sliced", "false");
-                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 509, "guid", oneFileGuid);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 506, "limitSize", limitSize);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 507, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 508, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 509, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 518, "sliced", "false");
+                EXAMUploader.printLogInDevMode("startUpload", oneFileGuid, 519, "guid", oneFileGuid);
 
                 // ajax통신 시작
                 EXAMUploader.startAjax(slicedFiles, slicedFileIndex, oneFileGuid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
@@ -537,7 +537,7 @@
             if(slicedFiles.length > 0){
                 let guid = EXAMUploader.createGuid();
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", guid, 527, "Start Sliced File Upload Message", "분할 파일 전송 시작");
+                EXAMUploader.printLogInDevMode("startUpload", guid, 537, "Start Sliced File Upload Message", "분할 파일 전송 시작");
             
                 /* 로컬스토리지에 저장된 기존 업로드 중단된 파일 정보들 확인 시작 */
                 // Key: "resume_upload_" + guid
@@ -555,8 +555,8 @@
                         // 파일명과 파일크기로 파일 정보 대조
                         if(EXAMUploader.forUploadFileList[forUploadFileListIndex].name == canceledFileName && EXAMUploader.forUploadFileList[forUploadFileListIndex].size == canceledFileSize){
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startUpload", guid, 542, "Canceled File Name", canceledFileName);
-                            EXAMUploader.printLogInDevMode("startUpload", guid, 543, "Canceled File Size", canceledFileSize);
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 552, "Canceled File Name", canceledFileName);
+                            EXAMUploader.printLogInDevMode("startUpload", guid, 553, "Canceled File Size", canceledFileSize);
                             // 이어올리기 선택
                             if(confirm("기존에 업로드된 데이터가 있습니다. 이어서 업로드하시겠습니까?")){
                                 // (DevMode)
@@ -566,7 +566,7 @@
                                 slicedFileIndex = Number(localStorage.getItem(localStorage.key(l)).split("__")[1]);
 
                                 // (DevMode)
-                                EXAMUploader.printLogInDevMode("startUpload", guid, 553, "Before GUID(GUID Was Changed Due To Resume Upload)", beforeGuid);
+                                EXAMUploader.printLogInDevMode("startUpload", guid, 563, "Before GUID(GUID Was Changed Due To Resume Upload)", beforeGuid);
 
                                 // 해당 파일에 대한 로컬스토리지 정보 삭제
                                 localStorage.removeItem(localStorage.key(l));
@@ -584,13 +584,13 @@
                 params += "&slicedFilesLength=" + slicedFiles.length;
 
                 // (DevMode)
-                EXAMUploader.printLogInDevMode("startUpload", guid, 496, "limitSize", limitSize);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 497, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 498, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 499, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 572, "sliced", "true");
-                EXAMUploader.printLogInDevMode("startUpload", guid, 573, "guid", guid);
-                EXAMUploader.printLogInDevMode("startUpload", guid, 574, "slicedFilesLength", slicedFiles.length);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 506, "limitSize", limitSize);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 507, "originName", EXAMUploader.forUploadFileList[forUploadFileListIndex].name);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 508, "originSize", EXAMUploader.forUploadFileList[forUploadFileListIndex].size);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 509, "originType", EXAMUploader.forUploadFileList[forUploadFileListIndex].type);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 582, "sliced", "true");
+                EXAMUploader.printLogInDevMode("startUpload", guid, 583, "guid", guid);
+                EXAMUploader.printLogInDevMode("startUpload", guid, 584, "slicedFilesLength", slicedFiles.length);
 
                 // ajax통신 시작
                 EXAMUploader.startAjax(slicedFiles, slicedFileIndex, guid, params, EXAMUploader.forUploadFileList, forUploadFileListIndex);
@@ -611,7 +611,7 @@
             var allMessage = EXAMUploader.popupWindow.document.getElementById("allMessage");
             var message = EXAMUploader.popupWindow.document.getElementById("message");
             // (DevMode)
-            EXAMUploader.printLogInDevMode("startAjax", guid, 593, "Start Ajax Message", forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
+            EXAMUploader.printLogInDevMode("startAjax", guid, 603, "Start Ajax Message", forUploadFileList[forUploadFileListIndex].name + " file" + "[" + Number(slicedFileIndex+1) + "]" + "업로드 시작");
             
             /* progressBar 시작 */
             xhttp.upload.onloadstart = function (e) {
@@ -716,7 +716,7 @@
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 701, "Upload Complete File", uploadedFile);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 711, "Upload Complete File", uploadedFile);
 
                             forUploadFileListIndex++;
                             // console.log(forUploadFileList[forUploadFileListIndex].name + " file 업로드 시작");  
@@ -731,8 +731,8 @@
                             }
                             EXAMUploader.uploadCompleteList.push(uploadedFile);
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 716, "Upload Complete File", uploadedFile);
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 729, "All Files Upload Complete Message", "업로드 - 완료");
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 726, "Upload Complete File", uploadedFile);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 739, "All Files Upload Complete Message", "업로드 - 완료");
 
                             EXAMUploader.afterUploaded(); // 업로드 후 대기 파일리스트 리셋
                             EXAMUploader.popupWindow.close(); // 팝업창 닫기
@@ -755,8 +755,8 @@
                         //----LocalStorage에 현재 파일 정보 저장 완료----
 
                         // (DevMode)
-                        EXAMUploader.printLogInDevMode("startAjax", guid, 736, "Upload Cancel Message", "업로드 중단");
-                        EXAMUploader.printLogInDevMode("startAjax", guid, 743, "Upload Cancel And Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 746, "Upload Cancel Message", "업로드 중단");
+                        EXAMUploader.printLogInDevMode("startAjax", guid, 753, "Upload Cancel And Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
 
                         // 업로드 중단 함수 호출
                         if( typeof(window.EXAMUploader_UploadInterruption) == 'function' ) {
@@ -775,8 +775,8 @@
                             //----LocalStorage에 현재 파일 정보 저장 시작----
                             localStorage.setItem("resume_upload_" + guid, guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                             // (DevMode)
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 757, "Upload Error Message", "통신 장애로 인한 업로드 중단");
-                            EXAMUploader.printLogInDevMode("startAjax", guid, 766, "Interrupted Upload File Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 767, "Upload Error Message", "통신 장애로 인한 업로드 중단");
+                            EXAMUploader.printLogInDevMode("startAjax", guid, 776, "Interrupted Upload File Save In LocalStorage", "resume_upload_" + guid + " : " + guid + "__" + slicedFileIndex + "__" + forUploadFileList[forUploadFileListIndex].name + "__" + forUploadFileList[forUploadFileListIndex].size);
                             //----LocalStorage에 현재 파일 정보 저장 완료----
                         }
 
@@ -820,7 +820,7 @@
             EXAMUploader.indicator = "STOP";  // DEFUALT: 초기값, START: 시작, DONE: 종료, STOP: 중단, ERROR: 에러
 
             // (DevMode)
-            EXAMUploader.printLogInDevMode("cancelUpload", EXAMUploader.createGuid(), 810, "Upload Indicator", EXAMUploader.indicator);
+            EXAMUploader.printLogInDevMode("cancelUpload", EXAMUploader.createGuid(), 820, "Upload Indicator", EXAMUploader.indicator);
         }
 
         /* On에러 이벤트 */
