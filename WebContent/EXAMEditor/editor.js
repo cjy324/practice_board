@@ -90,17 +90,17 @@
         /* caret 저장 */
         let selection;  //selection, range 도입
         let range;  //range : 현재 커서가 위치한 node 정보와 위치 index 값이 저장되어 있음
-        document.getElementById("editor_holder").addEventListener("load", function(e) {
+        document.getElementById("editor_holder").addEventListener("load", function() {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
-            editorHolderFrameWindow.document.getElementById("uploadForm").addEventListener("mouseover", function(e){
+            editorHolderFrameWindow.document.getElementById("uploadForm").addEventListener("mouseover", function(){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
                 // (DevMode)
                 EXAMEditor.printLogInDevMode("NONE", 91, "Set Selection", selection);
                 EXAMEditor.printLogInDevMode("NONE", 92, "Set range", range);
             })
-            editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("keypress", function(e){
+            editorHolderFrameWindow.document.getElementById("uploadBtnLabel").addEventListener("keypress", function(){
                 selection = editWindow.document.getSelection();
                 range = selection.getRangeAt(0);
                 // (DevMode)
@@ -110,10 +110,10 @@
         })
 
         /* p태그 자동 생성 */
-        document.getElementById("editor_holder").addEventListener("load", function(e) {
+        document.getElementById("editor_holder").addEventListener("load", function() {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
             var editWindow = editorHolderFrameWindow.document.getElementById("edit_frame").contentWindow;
-            editWindow.addEventListener("keyup", function(e){
+            editWindow.addEventListener("keyup", function(){
                 var editArea = editWindow.document.getElementById("edit_area");
                 if(editArea.lastElementChild == null){
                     var pTag = editWindow.document.createElement("p")
@@ -250,7 +250,7 @@
                         console.error(xhttp.responseText)
                         // On Error Event
                         errorCode = "EEC_004"
-                        message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.responseText;
+                        message = "이미지 업로드 과정 중 에러 발생.\nhttp status=" + req.status + "\nserver response=\n" + xhttp.resp;
                         EXAMEditor.sendOnErrorMsg(errorCode, message, imageFileList);
                     }
                 }

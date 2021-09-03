@@ -19,11 +19,11 @@
     //Log Type 설명
     
     //- C : 일반로그 출력(System.out.println 로그 출력)
-    RAONKParameterVo parameterVo = new RAONKParameterVo();
-	parameterVo.setIsDebugMode(true);
-    parameterVo.setLogType("C");
-    parameterVo.setLogLevel("DEBUG");
-    upload.settingVo.setDebugMode(parameterVo);
+    // RAONKParameterVo parameterVo = new RAONKParameterVo();
+	// parameterVo.setIsDebugMode(true);
+    // parameterVo.setLogType("C");
+    // parameterVo.setLogLevel("DEBUG");
+    // upload.settingVo.setDebugMode(parameterVo);
     
     // - L : 1. Log4j 모듈에 의한 로그 출력(/handler/JAVA 폴더의 log4j.properties 파일을 WEB-INF/classes에 적용)
 	//       2. 기존 설정파일이 존재할 경우 /handler/JAVA 폴더의 log4j.properties 파일 내용 중 "# DEXT5 Upload Log" 항목을 기존 설정파일에 적용

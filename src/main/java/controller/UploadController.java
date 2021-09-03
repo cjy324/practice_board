@@ -245,7 +245,8 @@ public class UploadController {
 				File file = new File(path);
 				if(file.exists()) {
 					file.delete();
-					System.out.println("file 삭제 완료");
+					// (DevMode)
+					printLogInDevMode(request, guid, 247, "ResidualFile Delete Complete Message", "file 삭제 완료");
 				}
 			}catch (Exception e) {
 				if(isDevMode) {		// (DevMode)

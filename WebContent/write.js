@@ -109,6 +109,7 @@ function doWrite() {
 
     if(title.trim() === ""){
         alert("제목을 입력해주세요.");
+		titleInput.focus();
         return;
     }
 

@@ -30,7 +30,7 @@ public class EditorController {
 				printLogInDevMode(request, forDevModeGuid, 27, "Contextpath", contextpath);
 				
 				// multipartRequest로 파일 생성시 용량
-				int sizeLimit = 10 * 1024 * 1024; // 약 10MB
+				int sizeLimit = 500 * 1024 * 1024; // 약 500MB
 				
 				String encType = "UTF-8";
 

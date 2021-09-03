@@ -186,7 +186,8 @@ public class DownloadController {
 				
 				if(doneByte.equals("100") && tempTxtFile.exists()) {
 					tempTxtFile.delete();
-					System.out.println("----------------다운로드 완료----------------");
+					// (DevMode)
+					printLogInDevMode(request, guid, 187, "Download Complete Message", "----------------다운로드 완료----------------");
 				}
 			}catch (Exception e) {
 				if(isDevMode) {		// (DevMode)

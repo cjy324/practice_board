@@ -212,6 +212,7 @@ function doModify() {
     var title = titleInput.value;
 
     if(title.trim() === ""){
+		titleInput.focus();
         alert("제목을 입력해주세요.");
         return;
     }

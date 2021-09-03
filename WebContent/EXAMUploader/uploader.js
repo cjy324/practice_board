@@ -95,7 +95,7 @@
         }
 
         /* Drag & Drop */
-        document.getElementById('uploader_holder').addEventListener("load", function(e) {
+        document.getElementById('uploader_holder').addEventListener("load", function() {
             var componentWindow = document.getElementById('uploader_holder').contentWindow;
             var uploadZone = componentWindow.document.getElementById("uploadZone");
             // 드래그한 파일이 최초로 uploadZone에 진입했을 때
@@ -631,7 +631,7 @@
                     progressBar.value = e.loaded;
                     progressBar.max = e.total;
                 };
-                xhttp.upload.onloadend = function (e) {
+                xhttp.upload.onloadend = function () {
                     allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     message.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
                     if(forUploadFileListIndex+1 == forUploadFileList.length){
@@ -650,7 +650,7 @@
                     progressBar.value = e.loaded;
                     progressBar.max = e.total;
                 };
-                xhttp.upload.onloadend = function (e) {
+                xhttp.upload.onloadend = function () {
                     allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file uploading...";
                     if(slicedFileIndex+1 == slicedFiles.length){
                         allMessage.textContent = "\"" + forUploadFileList[forUploadFileListIndex].name + "\"" + " file upload complete!!";
