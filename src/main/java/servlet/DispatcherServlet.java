@@ -49,10 +49,6 @@ public abstract class DispatcherServlet extends HttpServlet {
 			doAfterAction(request, response, jspPath);
 		}
 		
-//		
-//		RequestDispatcher rd = request.getRequestDispatcher(jspPath + ".jsp");
-//		rd.forward(request, response);
-		
 	}
 
 	// 인터셉터
@@ -76,8 +72,8 @@ public abstract class DispatcherServlet extends HttpServlet {
 			return null;
 		}
 		
-		String controllerName = requestUriBits[3]; // upload or download
-		String requestName = requestUriBits[4]; // server
+		String controllerName = requestUriBits[3]; // ex) articlr or upload or download
+		String requestName = requestUriBits[4]; // ex) server
 	
 		//System.out.println(controllerName);
 
@@ -92,8 +88,7 @@ public abstract class DispatcherServlet extends HttpServlet {
 	private void doAfterAction(HttpServletRequest request, HttpServletResponse response, String jspPath)
 			throws ServletException, IOException {
 
-		// DB 서버 연결 종료
-//		MysqlUtil.closeConnection();
+		// .jsp 페이지 호출
 		RequestDispatcher rd = request.getRequestDispatcher("/jsp/" + jspPath + ".jsp");
 		
 		rd.forward(request, response);

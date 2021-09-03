@@ -22,7 +22,6 @@ import service.ArticleService;
 import service.ConfigService;
 import service.GenFileService;
 
-
 public class ArticleController {
 	
 		private ConfigService configService;
@@ -145,71 +144,6 @@ public class ArticleController {
 
 			return "notJspPath";
 		}
-		
-//		public String mappingFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//	
-//			int relId = Integer.parseInt(request.getParameter("relId"));
-//			
-//			//JSON Parsing
-//			StringBuffer data = new StringBuffer();
-//			String line = null;
-//			
-//			try {
-//				// BufferedReader로 request읽기
-//				BufferedReader reader = request.getReader();
-//				
-//				while ((line = reader.readLine()) != null) {
-//					data.append(line);
-//				};
-//				
-//				// JSONParser객체 생성
-//				JSONParser parser = new JSONParser();
-//				// JSONParser로 파싱 후
-//				// JSONObject에 JSON형태로 담기
-//				JSONArray files = (JSONArray) parser.parse(data.toString());
-//				JSONObject json = new JSONObject();
-//				
-//				// 업로더 제품 확인
-//				GenSet genSet = configService.getOptions();
-//				
-//				if(genSet.getUploaderNum() == 1) {  // EXAM 에디터
-//					for(int i = 0; i < files.size(); i++) {
-//						json = (JSONObject) files.get(i);
-//						
-//						String originName = json.get("name").toString();
-//						long originSize = Long.parseLong(json.get("size").toString());
-//						String path = json.get("path").toString();
-//						String originType = json.get("type").toString();
-//						
-//						// DB에 파일 정보 저장
-//						genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
-//					}
-//				}else if(genSet.getUploaderNum() == 2) {  // K 에디터
-//					for(int i = 0; i < files.size(); i++) {
-//						json = (JSONObject) files.get(i);
-//						
-//						String originName = json.get("originalName").toString();
-//						long originSize = Long.parseLong(json.get("size").toString());
-//						String path = "D:\\eclipse-workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Practice_board" + json.get("uploadPath").toString();
-//						String originType = json.get("mimeType").toString();
-//						
-//						// DB에 파일 정보 저장
-//						genFileService.saveGenFileInfo(relId, originName, originSize, path, originType);
-//					}
-//				}
-//
-//				
-//				
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			// 클라이언트로 완료 메시지 전달
-//			response.getWriter().append("DONE");
-//
-//			return "notJspPath";
-//		}
 		
 		/* 수정페이지(modify.jsp)로 리턴 */
 		public String modify(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -380,68 +314,5 @@ public class ArticleController {
 
 			return "notJspPath";
 		}
-
-//		// 관련 첨부파일 정보 DB상에서 삭제
-//		public String dlelateAttFiles(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//			int relId = Integer.parseInt(request.getParameter("relId"));
-//			
-//
-//			//JSON Parsing
-//			StringBuffer data = new StringBuffer();
-//			String line = null;
-//			
-//			try {
-//				// BufferedReader로 request읽기
-//				BufferedReader reader = request.getReader();
-//				
-//				while ((line = reader.readLine()) != null) {
-//					data.append(line);
-//				};
-//				
-//				// JSONParser객체 생성
-//				JSONParser parser = new JSONParser();
-//				// JSONParser로 파싱 후
-//				// JSONObject에 JSON형태로 담기
-//				JSONArray files = (JSONArray) parser.parse(data.toString());
-//				JSONObject json = new JSONObject();
-//
-//				// 업로더 제품 확인
-//				GenSet genSet = configService.getOptions();
-//				if(genSet.getUploaderNum() == 1) {  // EXAM 에디터
-//					for(int i = 0; i < files.size(); i++) {
-//						json = (JSONObject) files.get(i);
-//						
-//						String path = json.get("path").toString();
-//						
-//						// DB에서 관련 정보 삭제
-//						genFileService.deleteFileInfo(relId, path);
-//					}
-//				}else if(genSet.getUploaderNum() == 2) {  // K 에디터
-//					for(int i = 0; i < files.size(); i++) {
-//						json = (JSONObject) files.get(i);
-//						
-//						String path = json.get("uploadPath").toString();
-//						// 실제 파일 삭제
-//						File delFile = new File(path);
-//						if(delFile.exists()) {
-//							delFile.delete();
-//						}
-//						
-//						// DB에서 관련 정보 삭제
-//						genFileService.deleteFileInfo(relId, path);
-//					}
-//				}
-//
-//				
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			// 클라이언트로 완료 메시지 전달
-//			response.getWriter().append("DONE");
-//
-//			return "notJspPath";
-//		}
 		
 }

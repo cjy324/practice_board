@@ -16,22 +16,22 @@ public class GenFileService {
 		genFileDao = Container.genFileDao;
 	}
 	
-	// 파일 리스트 가져오기
+	/* 파일 리스트 가져오기 */
 	public List<GenFile> getGenFiles(){
 		return genFileDao.getGenFiles();
 	}
 
-	// 첨부파일 정보 저장
+	/* 첨부파일 정보 저장 */
 	public void saveGenFileInfo(int relId, String originName, long originSize, String path, String originType) {
 		genFileDao.saveGenFileInfo(relId, originName, originSize, path, originType);
 	}
 
-	// 게시물 ID관련 첨부파일 리스트 가져오기
+	/* 게시물 ID관련 첨부파일 리스트 가져오기 */
 	public List<GenFile> getGenFilesByRelId(int relId) {
 		return genFileDao.getGenFilesByRelId(relId);
 	}
 
-	// 첨부파일 수 리스트 가져오기
+	/* 첨부파일 수 리스트 가져오기 */
 	public List<Integer> getGenFileCounts(List<Article> articles) {
 		
 		List<Integer> genFileCounts = new ArrayList<>();
@@ -45,13 +45,12 @@ public class GenFileService {
 			}else {
 				count = genFiles.size();
 			}
-			
 			genFileCounts.add(count);
 		}
-		
 		return genFileCounts;
 	}
 
+	/* DB에서 첨부파일 정보 삭제 */
 	public void deleteFileInfo(int relId, String path) {
 		genFileDao.deleteFileInfo(relId, path);
 	}

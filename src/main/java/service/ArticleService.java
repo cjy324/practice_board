@@ -15,12 +15,12 @@ public class ArticleService {
 		articleDao = Container.articleDao;
 	}
 	
-	// 게시물 리스트 가져오기
+	/* 게시물 리스트 가져오기 */
 	public List<Article> getArticles(){
 		return articleDao.getArticles();
 	}
 
-	// 게시물 ID로 게시물 가져오기
+	/* 게시물 ID로 게시물 가져오기 */
 	public Article getArticleById(int id) {
 		List<Article> articles = articleDao.getArticles();
 		
@@ -35,12 +35,12 @@ public class ArticleService {
 		return article;
 	}
 
-	// 글 내용 저장
+	/* 글 내용 저장 */
 	public int saveContent(String title, String body) {
 		return articleDao.saveContent(title, body);
 	}
 
-	// 게시물 수정
+	/* 게시물 수정 */
 	public void modifyContent(int id, String title, String body) {
 		articleDao.modifyContent(id, title, body);
 	}

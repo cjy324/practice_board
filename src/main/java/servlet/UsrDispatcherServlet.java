@@ -23,19 +23,14 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 
 		String jspPath = null;
 
-		/*
-		 * if (controllerName.equals("home")) { HomeController homeController =
-		 * Container.homeController; jspPath = homeController.index(request, response);
-		 * }
-		 */
-		/* Editor */
+		/* EXAMEditor */
 		if (controllerName.equals("editor")) {
 			EditorController editorController = Container.editorController;
 			if(requestName.equals("server")) {
 				jspPath = editorController.server(request, response);
 			}
 		}
-		/* Uploader */
+		/* EXAMUploader */
 		if (controllerName.equals("upload")) {
 			UploadController uploadController = Container.uploadController;
 			if(requestName.equals("server")) {
@@ -44,7 +39,7 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 				jspPath = uploadController.deleteFile(request, response);
 			}
 		}
-		/* Downloader */
+		/* EXAMDownloader */
 		if (controllerName.equals("download")) {
 			DownloadController downloadController = Container.downloadController;
 			if(requestName.equals("server")) {
@@ -86,8 +81,8 @@ public class UsrDispatcherServlet extends DispatcherServlet {
 			}
 		}
 		
-
-		//System.out.println("jspPath: " + jspPath);
+		// (테스트용)
+		// System.out.println("jspPath: " + jspPath);
 		
 		return jspPath;
 

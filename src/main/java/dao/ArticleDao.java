@@ -17,7 +17,7 @@ public class ArticleDao {
 		sql = null;
 	}
 
-	// 게시물 리스트 가져오기
+	/* 게시물 리스트 가져오기 */
 	public List<Article> getArticles() {
 		
 		sql = "SELECT * FROM article";
@@ -34,7 +34,7 @@ public class ArticleDao {
 		return articles;
 	}
 
-	// 게시물 저장하기
+	/* 게시물 텍스트컨텐츠 저장하기 */
 	public int saveContent(String title, String body) {
 		
 		// query 전송 시 작은따옴표 입력으로 인한 에러 방지
@@ -56,10 +56,9 @@ public class ArticleDao {
 		}
 		
 		return id;
-		
 	}
 
-	// 게시물 수정하기
+	/* 게시물 수정하기 */
 	public void modifyContent(int id, String title, String body) {
 		// query 전송 시 작은따옴표 입력으로 인한 에러 방지
 		title = title.replace("'", "''");
@@ -78,7 +77,6 @@ public class ArticleDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 		
 }

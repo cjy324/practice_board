@@ -22,7 +22,7 @@ public class MsSqlUtil {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");  
     }
     
-    // SQLserver와 연결 시작
+    /* SQLserver와 연결 시작 */
     private void DBconnectionStart() throws SQLException {
     	// 참고: https://lab-502.tistory.com/4
     	String connectionUrl = "jdbc:sqlserver://127.0.0.1:1433;"  // TCP 포트
@@ -32,7 +32,7 @@ public class MsSqlUtil {
 		//System.out.println("MS-SQL 서버 접속에 성공했습니다.");
 	}
     
-    // SQLserver와 연결 종료
+    /* SQLserver와 연결 종료 */
     private void DBconnectionEnd() throws SQLException {
     	if(rs != null) {
     		rs.close();
@@ -42,7 +42,7 @@ public class MsSqlUtil {
         //System.out.println("MS-SQL 서버 연결을 종료했습니다.");
 	}
 
-    // 게시물 리스트 가져오기
+    /* 게시물 리스트 가져오기 */
 	public List<Article> selectArticles(String sql) throws SQLException {
 		DBconnectionStart();
         
@@ -72,7 +72,7 @@ public class MsSqlUtil {
 		return articles;	
 	}
 
-	// 게시물 or 첨부파일 정보 저장
+	/* 게시물 or 첨부파일 정보 저장 */
 	public int insert(String sql) throws SQLException {
 		DBconnectionStart();
 
@@ -93,7 +93,7 @@ public class MsSqlUtil {
     	return id;
 	}
 
-	// 파일리스트 가져오기
+	/* 파일리스트 가져오기 */
 	public List<GenFile> selectGenFiles(String sql) throws SQLException {
 		DBconnectionStart();
         
@@ -126,6 +126,7 @@ public class MsSqlUtil {
 		return genFiles;
 	}
 
+	/* 게시물 정보 or 환경설정값 수정 */
 	public void update(String sql) throws SQLException {
 		DBconnectionStart();
 
@@ -137,9 +138,9 @@ public class MsSqlUtil {
 		stmt.executeUpdate(sql);
     	
     	DBconnectionEnd();
-		
 	}
 
+	/* 첨부파일 정보 삭제 */
 	public void delete(String sql) throws SQLException {
 		DBconnectionStart();
 
@@ -151,9 +152,9 @@ public class MsSqlUtil {
 		stmt.executeUpdate(sql);
     	
     	DBconnectionEnd();
-		
 	}
-
+	
+	/* 환경설정값 조회 */
 	public GenSet selectGenSet(String sql) throws SQLException {
 		DBconnectionStart();
         

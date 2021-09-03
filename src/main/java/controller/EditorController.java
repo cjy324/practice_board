@@ -21,7 +21,7 @@ public class EditorController {
 			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
-		// 이미지 업로드 서버
+		/* 이미지 업로드 서버 */
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				String contextpath = request.getParameter("contextpath");
@@ -73,7 +73,7 @@ public class EditorController {
 			return "notJspPath";
 		}
 		
-		// isDevMode 로그 출력 유틸
+		/* isDevMode 로그 출력 유틸 */
 		private void printLogInDevMode(HttpServletRequest request, String guid, int lineNum, String infoTitle, String infoStr) {
 			if(isDevMode) {
 				// 현재시간 구하기

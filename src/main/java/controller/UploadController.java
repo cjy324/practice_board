@@ -24,7 +24,7 @@ public class UploadController {
 			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
-		// 파일 업로드 서버
+		/* 파일 업로드 서버 */
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			
 			try{
@@ -232,7 +232,7 @@ public class UploadController {
 			return "notJspPath";
 		}
 
-		// 서버에서 파일 삭제
+		/* 서버에서 파일 삭제 */
 		public String deleteFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				String guid = request.getParameter("guid");
@@ -259,7 +259,7 @@ public class UploadController {
 			return null;
 		}
 		
-		// isDevMode 로그 출력 유틸
+		/* isDevMode 로그 출력 유틸 */
 		private void printLogInDevMode(HttpServletRequest request, String guid, int lineNum, String infoTitle, String infoStr) {
 			if(isDevMode) {
 				// 현재시간 구하기
@@ -273,12 +273,11 @@ public class UploadController {
 			}
 		}
 		
-		/** 중복파일명 넘버링 유틸
-	     * 동일한 파일명의 파일이 존재하는지 확인하여 존재한다면 파일명 뒤에 "_숫자" 를 
-	     * 붙이고 "_숫자"가 존재한다면 "_숫자" +1 을 더한값을 재귀적으로 카운트
-	     * @author digimon1740
-	     * */
-		// 출처: https://devsh.tistory.com/entry/파일-존재여부확인하여-시퀀스번호를-붙이는-유틸 [날샘 코딩]
+		/* 중복파일명 넘버링 유틸 */
+	     // 동일한 파일명의 파일이 존재하는지 확인하여 존재한다면 파일명 뒤에 "_숫자" 를 
+	     // 붙이고 "_숫자"가 존재한다면 "_숫자" +1 을 더한값을 재귀적으로 카운트
+	     // @author digimon1740
+		 // 출처: https://devsh.tistory.com/entry/파일-존재여부확인하여-시퀀스번호를-붙이는-유틸 [날샘 코딩]
 	    public static String appendSuffixName(String orgFileName, int seq) {
 	        String retFileName = "";
 	        

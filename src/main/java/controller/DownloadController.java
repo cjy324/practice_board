@@ -24,7 +24,7 @@ public class DownloadController {
 			isDevMode = true;		// 디버깅 모드(OFF: false / ON: true)
 		}
 	
-		// 다운로드 서버
+		/* 다운로드 서버 */
 		public String server(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				// 파일에 대한 정보를 parameter로 받기
@@ -39,7 +39,7 @@ public class DownloadController {
 				printLogInDevMode(request, guid, 33, "OriginSize", String.valueOf(originSize));
 				printLogInDevMode(request, guid, 34, "OriginPath", originPath);
 
-				/* 파일 다운로드(브라우저로 전송) 시작 */
+				/* 파일 다운로드(브라우저로 전송) START */
 				// 다운로드 상태 임시저장 경로 설정
 				String tempPath = request.getServletContext().getRealPath("temp");
 				// (DevMode)
@@ -61,7 +61,7 @@ public class DownloadController {
 				
 				File file = new File(originPath);
 				if(file.exists()) {
-					/* HTTP 헤더 셋팅 시작 */
+					/* HTTP 헤더 셋팅 START */
 					response.reset();
 					// IE체크
 					if(request.getHeader("User-Agent").indexOf("MSIE5.0") > -1) {
@@ -73,7 +73,7 @@ public class DownloadController {
 					}
 					response.setHeader("Content-Disposition",
 			                "attachment; filename=\"" + URLEncoder.encode(originName, "UTF-8") + "\"");
-					/* HTTP 헤더 셋팅 끝 */
+					/* HTTP 헤더 셋팅 END */
 					
 					int read = 0;
 					long count = 0;
@@ -117,7 +117,7 @@ public class DownloadController {
 				}else {
 					fos.close();
 				}
-				/* 파일 다운로드(브라우저로 전송) 끝 */
+				/* 파일 다운로드(브라우저로 전송) END */
 			}catch (Exception e) {
 				if(isDevMode) {		// (DevMode)
 					System.out.println("ERROR { " + e + " }");
@@ -128,7 +128,7 @@ public class DownloadController {
 			
 			return "notJspPath";		}
 		
-		// 다운로드 진행률 모니터링
+		/* 다운로드 진행률 모니터링 */
 		public String progress(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			try {
 				// 파일에 대한 정보를 parameter로 받기
@@ -200,7 +200,7 @@ public class DownloadController {
 			return "notJspPath";
 		}
 		
-		// isDevMode 로그 출력 유틸
+		/* isDevMode 로그 출력 유틸 */
 		private void printLogInDevMode(HttpServletRequest request, String guid, int lineNum, String infoTitle, String infoStr) {
 			if(isDevMode) {
 				// 현재시간 구하기

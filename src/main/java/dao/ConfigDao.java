@@ -1,11 +1,7 @@
 package dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import dto.Article;
-import dto.GenFile;
 import dto.GenSet;
 import mssqlutil.MsSqlUtil;
 
@@ -18,7 +14,8 @@ public class ConfigDao {
 		msSqlUtil = new MsSqlUtil();
 		sql = null;
 	}
-
+	
+	/* 환경설정값 가져오기 */
 	public GenSet getOptions() {
 		sql = "SELECT * FROM genSet";
 		
@@ -34,6 +31,7 @@ public class ConfigDao {
 		return genSet;
 	}
 	
+	/* 환경설정값 저장하기 */
 	public void setOptions(int editorNum, int uploaderNum, int downloaderNum) {
 		// DB에 설정값 저장
 		sql = "UPDATE genSet "

@@ -4,7 +4,6 @@ import controller.ArticleController;
 import controller.ConfigController;
 import controller.DownloadController;
 import controller.EditorController;
-import controller.HomeController;
 import controller.UploadController;
 import dao.ArticleDao;
 import dao.ConfigDao;
@@ -15,7 +14,6 @@ import service.GenFileService;
 
 public class Container {
 
-	public static HomeController homeController;
 	public static ConfigController configController;
 	public static EditorController editorController;
 	public static UploadController uploadController;
@@ -38,7 +36,6 @@ public class Container {
 		genFileService = new GenFileService();
 		
 		configController = new ConfigController();
-		homeController = new HomeController();
 		editorController = new EditorController();
 		uploadController = new UploadController();
 		downloadController = new DownloadController();

@@ -250,6 +250,6 @@ function doModify() {
 
         // GetHtmlContents api로 요청을 보내고 콜백함수로 content값을 리턴 받는 방식(비동기)
         // 따라서 다음 로직에 content값이 들어가지 않고 넘어가버릴 수 있음
-        RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor")
+        RAONKEDITOR.GetHtmlContents({type: 'body', callback: fn_callback}, "K_Editor");
     }
 }

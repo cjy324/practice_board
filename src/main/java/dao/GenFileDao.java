@@ -17,7 +17,7 @@ public class GenFileDao {
 		sql = null;
 	}
 
-	// 게시물 리스트 가져오기
+	/* 첨부파일 리스트 가져오기 */
 	public List<GenFile> getGenFiles() {
 		
 		sql = "SELECT * FROM genFile";
@@ -34,7 +34,7 @@ public class GenFileDao {
 		return genFiles;
 	}
 
-	// 파일 정보 저장
+	/* 파일 정보 저장 */
 	public void saveGenFileInfo(int relId, String originName, long originSize, String path, String originType) {
 		
 		sql = "INSERT INTO genFile(regDate, updateDate, uploaded, relId, name, size, path, type)"
@@ -56,7 +56,7 @@ public class GenFileDao {
 		}
 	}
 	
-	// 게시물 ID관련 첨부파일 리스트 가져오기
+	/* 게시물 ID관련 첨부파일 리스트 가져오기 */
 	public List<GenFile> getGenFilesByRelId(int relId) {
 		sql = "SELECT * FROM genFile "
 			+ "WHERE relId = " + relId;
@@ -73,7 +73,7 @@ public class GenFileDao {
 		return genFiles;
 	}
 	
-	// 게시물 ID관련 첨부파일 삭제
+	/* 게시물 ID관련 첨부파일 삭제 */
 	public void deleteFileInfo(int relId, String path) {
 		sql = "DELETE genFile "
 			+ "WHERE relId = " + relId

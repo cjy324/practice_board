@@ -2,7 +2,6 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import container.Container;
-import dto.GenFile;
 import dto.GenSet;
 import service.ConfigService;
 
