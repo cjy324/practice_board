@@ -115,10 +115,13 @@ function doWrite() {
     // 콜백함수
     // body값을 요청하는 함수 응답 이후에 진행되는 함수
     var afterGetBodyContents = function(body) {
-        if(body.trim() === "<p><br></p>"){
+        
+        // 공백체크
+        if(isBodyEmpty(body)){
             alert("내용을 입력해주세요.");
             return;
         }
+
         // textContent 전역객체에 정보 담기
         textContent.title = title;
         textContent.body = body;

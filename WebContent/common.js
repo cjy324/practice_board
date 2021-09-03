@@ -204,6 +204,24 @@ function getIdByUrl(){
     return Number(url.split("?id=")[1]);
 }
 
+/* 공백여부 체크 유틸 함수 */
+function isBodyEmpty(body){
+    var answer = false;
+
+    // 공백제거
+    body = body.replace(/&nbsp;/g, "");
+    body = body.replace(/<(\/?)p>/gi,"");//p태그 제거 
+    body = body.replace(/<(\/?)br>/gi,"");//br태그 제거 
+    body = body.replace(/\s/gi,"");//공백제거 
+    body = body.replace(/&nbsp;/gi,"");//공백제거 
+    
+    if(body.trim() === ""){
+        answer = true;
+    }
+
+    return answer;
+}
+
 /* 게시물 상세페이지로 이동 */
 function goToDetailPage(id){
     // location.replace()와 location.href를 이용해서 페이지를 이동시킬 수 있다.
