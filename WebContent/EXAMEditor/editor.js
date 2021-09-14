@@ -136,7 +136,7 @@
         }
 
         /* select 버튼 */
-        document.getElementById("editor_holder").addEventListener("load", function(e) {
+        document.getElementById("editor_holder").addEventListener("load", function() {
             var editorHolderFrameWindow = document.getElementById("editor_holder").contentWindow;
 
             var btnFontType = editorHolderFrameWindow.document.getElementById("font_type");
